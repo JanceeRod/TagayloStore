@@ -41,22 +41,12 @@ import G_Package.customScrollBarUI;
 
 import newWindow_Package.paymentWindow;
 
-//import JiveInterface.JiveInterface.documentListen;
-//import JiveInterface.JiveInterface.focusListen;
-//import JiveInterface.JiveInterface.keyListen;
-//import JiveInterface.JiveInterface.menuButtons;
-//import JiveInterface.JiveInterface.menuTable;
-//import JiveInterface.JiveInterface.mouseListen;
-//import JiveInterface.JiveInterface.sideButtons;
-
 public class userInterface extends Definitions {
 
 	Double defaultNo = 0.00;
 	Double salesTax = 5.25;
 	DecimalFormat decimalFormat = new DecimalFormat("0.00");
 	String formattedDefaultNo  = String.format("%.2f", defaultNo);
-
-
 
 	JPanel panel4;
 	JPanel panel6;
@@ -66,8 +56,6 @@ public class userInterface extends Definitions {
 	RoundedPanel panel5s;
 	RoundedPanel roundedButtons1, roundedButtons2;
 	public static JLabel C2, C3;
-
-
 
 	userInterface() {
 		instantiate();
