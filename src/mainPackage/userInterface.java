@@ -1,10 +1,6 @@
 package mainPackage;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -57,37 +53,72 @@ public class userInterface extends Definitions {
 	RoundedPanel roundedButtons1, roundedButtons2;
 	public static JLabel C2, C3;
 
+	public JPanel createCustomPanel(int width, int height, Object backgroundSource, LayoutManager layout) {
+		JPanel customPanel = new JPanel();
+
+		customPanel.setPreferredSize(new Dimension(width, height));
+
+		if (backgroundSource instanceof JPanel) {
+			customPanel.setBackground(((JPanel) backgroundSource).getBackground());
+		} else if (backgroundSource instanceof Color) {
+			customPanel.setBackground((Color) backgroundSource);
+		}
+
+		customPanel.setLayout(new BorderLayout());
+
+		return customPanel;
+	}
+
+	public JLabel createCustomLabel(String text, Color fg, Font f, int x, int y, int w, int h, int tBorder, int lBorder, int bBorder, int rBorder, int horAl) {
+		JLabel label = new JLabel();
+
+		label.setText(text);
+		label.setForeground(fg);
+		label.setFont(f);
+		label.setBounds(x, y, w, h);
+		label.setBorder(new EmptyBorder(tBorder, lBorder, bBorder, rBorder));
+		label.setHorizontalAlignment(horAl);
+
+		return label;
+	}
+
+	public RoundedPanel createCustomRoundedPanel(int r, int tBorder, int lBorder, int bBorder, int rBorder, Object bgSrc, LayoutManager layout) {
+		RoundedPanel customPanel = new RoundedPanel(r);
+
+		customPanel.setBorder(BorderFactory.createEmptyBorder(tBorder, lBorder, bBorder, rBorder));
+		if (bgSrc instanceof JPanel) {
+			customPanel.setBackground(((JPanel) bgSrc).getBackground());
+		} else if (bgSrc instanceof Color) {
+			customPanel.setBackground((Color) bgSrc);
+		}
+
+		customPanel.setLayout(layout);
+
+		return customPanel;
+	}
+
 	userInterface() {
 		instantiate();
 
 		JFrame frame = new JFrame();
-    	frame.setTitle("Java Jive Cafe");
+    	frame.setTitle("Tagaylo Store - Point-of-Sales System");
     	frame.setSize(1100, 765);
     	frame.setLocationRelativeTo(null);
     	frame.setResizable(T);
-    	
-    	JPanel panel1 = new JPanel(); // Panel on the top
-    	panel1.setPreferredSize(new Dimension(1080, 60));
-    	panel1.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-    	panel1.setBackground(color.getHeader());
-    	panel1.setLayout(new BorderLayout());
-		
-		JPanel javaJivePanel = new JPanel();
-		javaJivePanel.setPreferredSize(new Dimension(650, 50));
+
+		JPanel topRibbonPanel;
+		topRibbonPanel = createCustomPanel(1080, 60, color.getHeader(), null);
+		topRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+		JPanel javaJivePanel;
+		javaJivePanel = createCustomPanel(650, 50, topRibbonPanel, null);
 		javaJivePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
-		javaJivePanel.setBackground(panel1.getBackground());
-		javaJivePanel.setLayout(new BorderLayout());
-		
-    	JLabel label1 = new JLabel();
-    	label1.setText("Java Jive POS");
-    	label1.setFont(font.getFG1());
-    	label1.setHorizontalAlignment(SwingConstants.RIGHT);
-    	label1.setForeground(color.getTitleColor());
-    	
-    	RoundedPanel tfPanel = new RoundedPanel(20);
-    	tfPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 1, 15));
-    	tfPanel.setBackground(color.getSearch());
-    	tfPanel.setLayout(new BorderLayout());
+
+		JLabel storePOSTitle;
+		storePOSTitle = createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getFG1(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.RIGHT);
+
+		RoundedPanel tfPanel;
+		tfPanel = createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
     	
     	textField1 = new JTextField("Search products...");
     	textField1.setPreferredSize(new Dimension(425, 29));
@@ -101,20 +132,15 @@ public class userInterface extends Definitions {
     	textField1.addFocusListener(new focusListen());
     	textField1.getDocument().addDocumentListener(new documentListen());
     	tfPanel.add(textField1);
-    	
-    	JPanel searchPanel = new JPanel();
-    	searchPanel.setPreferredSize(new Dimension(300, 50));
-    	searchPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-    	searchPanel.setBackground(panel1.getBackground());
-    	searchPanel.setLayout(new BorderLayout());
-    	
+
+		JPanel searchPanel;
+		searchPanel = createCustomPanel(300, 50, topRibbonPanel, new BorderLayout());
+		searchPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
     	searchPanel.add(tfPanel);
 
-    	JPanel timePanel = new JPanel();
-    	timePanel.setPreferredSize(new Dimension(500, 50));
-    	timePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 25));
-    	timePanel.setBackground(panel1.getBackground());
-    	timePanel.setLayout(new BorderLayout());
+		JPanel timePanel;
+		timePanel = createCustomPanel(500, 50, topRibbonPanel, new BorderLayout());
+		timePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 25));
     	
     	C2 = new JLabel();
     	C2.setText(null);
@@ -131,11 +157,11 @@ public class userInterface extends Definitions {
 		timePanel.add(C2, BorderLayout.EAST);
 //		timePanel.add(C3, BorderLayout.CENTER);
     	
-    	javaJivePanel.add(label1, BorderLayout.WEST);
+    	javaJivePanel.add(storePOSTitle, BorderLayout.WEST);
     	javaJivePanel.add(searchPanel, BorderLayout.CENTER);
     	
-    	panel1.add(javaJivePanel, BorderLayout.WEST);
-		panel1.add(timePanel, BorderLayout.EAST);
+    	topRibbonPanel.add(javaJivePanel, BorderLayout.WEST);
+		topRibbonPanel.add(timePanel, BorderLayout.EAST);
     	
     	JPanel panel2 = new JPanel(); //Panel on the left
     	panel2.setPreferredSize(new Dimension(85, 670));
@@ -333,7 +359,7 @@ public class userInterface extends Definitions {
 		}
     	
     	frame.getContentPane().setLayout(new BorderLayout());
-    	frame.add(panel1, BorderLayout.NORTH);
+    	frame.add(topRibbonPanel, BorderLayout.NORTH);
     	frame.add(panel3, BorderLayout.EAST);
     	frame.add(panel2, BorderLayout.WEST);
     	frame.add(panel4, BorderLayout.CENTER);
