@@ -6,7 +6,6 @@ import G_Package.colorPallete;
 import G_Package.fontGallery;
 
 import javax.swing.*;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +16,7 @@ import java.util.List;
 public class Definitions {
 
     public RoundedPanel[] panel5_;
-    public RoundedPanel[] panel6_;
+    public RoundedPanel[] mainPanelOnCenter_;
     public RoundedPanel[] curved1;
     public RoundedPanel[] pillShape;
     public JButton[] forPanel5_;
