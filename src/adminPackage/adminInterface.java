@@ -1,8 +1,6 @@
 package adminPackage;
-import G_Package.customPopupMenu;
 import G_Package.customTableUI;
 import mainPackage.Operations;
-import mainPackage.userInterface;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -23,14 +21,32 @@ public class adminInterface extends adminDefinitions {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(T);
 
-        instantiate();
+        JPanel topRibbonPanel;
+        topRibbonPanel = createCustomPanel(1080, 60, color.getHeader(), null);
+        topRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
-        topRibbon();
+        JLabel titlePOS = createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getTitleFont(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.RIGHT);
+
+        JPanel javaJivePanel;
+        javaJivePanel = createCustomPanel(650, 50, topRibbonPanel, null);
+        javaJivePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
+
+        //add layer
+        javaJivePanel.add(titlePOS, BorderLayout.WEST);
+        topRibbonPanel.add(javaJivePanel, BorderLayout.WEST);
+
+        JPanel leftRibbonPanel;
+        leftRibbonPanel = createCustomPanel(85, 670, color.getLeftSide(), null);
+        leftRibbonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 8));
+
+        JPanel centerContainerPanelUp;
+        centerContainerPanelUp = createCustomPanel(0, 0, color.getCenterPane(), new BorderLayout());
+        centerContainerPanelUp.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
 
         mainFrame.getContentPane().setLayout(new BorderLayout());
         mainFrame.add(topRibbonPanel, BorderLayout.NORTH);
-//        mainFrame.add(leftRibbonPanel, BorderLayout.WEST);
-//        mainFrame.add(centerContainerPanelUp, BorderLayout.CENTER);
+        mainFrame.add(leftRibbonPanel, BorderLayout.WEST);
+        mainFrame.add(centerContainerPanelUp, BorderLayout.CENTER);
         mainFrame.setResizable(F);
         mainFrame.setVisible(T);
         mainFrame.addWindowListener(new WindowAdapter() {
@@ -43,77 +59,22 @@ public class adminInterface extends adminDefinitions {
     }
 
     public void instantiate() {
+//        Operations.clearCSVFile(inventory);
+        beveragesMenu = saveToDataArray(beverages);
+        foodMenu = saveToDataArray(food);
 
-    }
+        arrayOf2DArrays.put("Food", foodMenu);
+        arrayOf2DArrays.put("Drinks", beveragesMenu);
 
-    public void topRibbon() {
+        inventoryMasterfile = saveToDataArray(masterfile);
 
-        topRibbonPanel = createCustomPanel(1080, 60, color.getHeader(), null);
-        topRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
+        writeArrayToCSV(foodMenu, masterfile);
+        writeArrayToCSV(beveragesMenu, masterfile);
+        writeArrayToCSV(inventoryMasterfile, inventory);
 
-        javaJivePanel = createCustomPanel(650, 50, topRibbonPanel, null);
-        javaJivePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
+        processArray(cafeInventory, inventoryMasterfile);
 
-        titlePOS = createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getTitleFont(), 0, 0, 0, 0, 0, 0, 0, 20, SwingConstants.LEFT);
-
-        tfPanel = createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
-
-        searchBox = new JTextField("Search products...");
-        searchBox.setPreferredSize(new Dimension(425, 29));
-        searchBox.setCaretPosition(0);
-        searchBox.setFont(font.getFG4());
-        searchBox.setBackground(tfPanel.getBackground());
-        searchBox.setForeground(Color.GRAY);
-        searchBox.setHorizontalAlignment(SwingConstants.LEFT);
-        searchBox.setBorder(BorderFactory.createEmptyBorder());
-        searchBox.addKeyListener(new userInterface.keyListen());
-        searchBox.addFocusListener(new userInterface.focusListen());
-        searchBox.getDocument().addDocumentListener(new userInterface.documentListen());
-        tfPanel.add(searchBox);
-
-        searchPanel = createCustomPanel(300, 50, topRibbonPanel, new BorderLayout());
-        searchPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-
-        timePanel = createCustomPanel(500, 50, topRibbonPanel, new BorderLayout());
-        timePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 25));
-
-        profileButtonPanel = createCustomPanel(50, 50, Color.RED, new BorderLayout());
-        profileButtonPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-
-        profileButton = new JButton();
-        profileButton.setBackground(Color.BLUE);
-        profileButton.setBorder(BorderFactory.createEmptyBorder());
-        profileButton.setLayout(new GridLayout(1,1));
-        profileButton.setEnabled(T);
-//		profileButton.addActionListener(new menuButtons(-1, null, null));
-
-        profileButtonPop = new customPopupMenu();
-        profileButtonPop.addMenuItem("Settings", e -> JOptionPane.showMessageDialog(mainFrame, "This is Settings"));
-        profileButtonPop.addMenuItem("About Us?", e -> JOptionPane.showMessageDialog(mainFrame, "This is about us!"));
-        profileButtonPop.addMenuItem("Log Out", e -> JOptionPane.showMessageDialog(mainFrame, "Logged out"));
-        profileButtonPop.addMenuItem("Help", e -> JOptionPane.showMessageDialog(mainFrame, "Help"));
-
-        profileButton.addActionListener(e -> {
-            int x = profileButton.getWidth() - profileButtonPop.getPreferredSize().width;
-            int y = profileButton.getHeight();
-            profileButtonPop.show(profileButton, x, y);
-        });
-
-        profileButtonPanel.add(profileButton, BorderLayout.CENTER);
-
-        TimeLabel = createCustomLabel(null, Color.GRAY, font.gettCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
-        DateLabel = createCustomLabel(null, Color.GRAY, font.getdCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
-
-        searchPanel.add(tfPanel);
-        timePanel.add(TimeLabel, BorderLayout.EAST); //timePanel.add(DateLabel, BorderLayout.CENTER);
-
-        javaJivePanel.add(titlePOS, BorderLayout.WEST);
-        javaJivePanel.add(searchPanel, BorderLayout.CENTER);
-
-        topRibbonPanel.add(javaJivePanel, BorderLayout.WEST);
-//		topRibbonPanel.add(timePanel, BorderLayout.EAST);
-        topRibbonPanel.add(profileButtonPanel, BorderLayout.EAST);
-
+        menuPrint(inventoryMasterfile);
     }
 
     public static void menuPrint(String[][] dataArray) {
