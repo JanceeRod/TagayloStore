@@ -53,7 +53,7 @@ public class userInterface extends Definitions {
 			}
 		});
 
-		gd.setFullScreenWindow(mainFrame);
+//		gd.setFullScreenWindow(mainFrame);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		systemTimeAndDate();
 
@@ -409,7 +409,7 @@ public class userInterface extends Definitions {
 			button2_[j].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			button2_[j].setEnabled(T);
 			button2_[j].setFocusPainted(F);
-			button2_[j].setPreferredSize(new Dimension(95, 34));
+			button2_[j].setPreferredSize(new Dimension(105, 34));
 			button2_[j].addActionListener(new userInterface.menuTable(j, arrayLengths[j]));
 
 			pillShape[j] = new customRoundedPanel(25);
@@ -445,7 +445,6 @@ public class userInterface extends Definitions {
 
 			if (buttonIndex >= 0 && buttonIndex < categoryKeys.size()) {
 				String selectedCategory = categoryKeys.get(buttonIndex);
-//				String formattedCategory = Operations.toTitleCase(selectedCategory);
 				String[][] categoryData = categoryDataMap.get(selectedCategory);
 
 				if (categoryData != null) {
@@ -489,7 +488,7 @@ public class userInterface extends Definitions {
 			if (lengthy <= 20) {
 				maxLength = lengthy;
 			} else {
-				maxLength = 50;
+				maxLength = 40;
 			}
 
 			JPanel mainPanelOnCenters = new JPanel();
@@ -506,7 +505,7 @@ public class userInterface extends Definitions {
 				forPanel5_[i].setBackground(mainPanelOnCenters.getBackground());
 				forPanel5_[i].setLayout(new BorderLayout(1,1));
 				forPanel5_[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-				forPanel5_[i].setPreferredSize(new Dimension(140, 175));
+				forPanel5_[i].setPreferredSize(new Dimension(175, 175));
 				forPanel5_[i].addActionListener(new menuButtons(i, menuArray, null));
 				forPanel5_[i].setEnabled(F);
 
