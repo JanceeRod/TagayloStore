@@ -9,6 +9,7 @@ import G_Package.customFontGallery;
 import G_Package.customPopupMenu;
 
 import javax.swing.*;
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,6 +22,8 @@ import java.util.Map;
 public class Definitions {
 
     JFrame mainFrame;
+
+    GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
     Double defaultNo = 0.00;
     Double salesTax = 5.25;

@@ -3,7 +3,10 @@ package adminPackage;
 import E_Package.Transaction;
 import G_Package.customColorPallete;
 import G_Package.customFontGallery;
+import G_Package.customPopupMenu;
+import G_Package.customRoundedPanel;
 
+import javax.swing.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -12,6 +15,33 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class adminDefinitions {
+
+
+
+    //TOP RIBBON
+    //Panel
+    JPanel topRibbonPanel;
+    JPanel javaJivePanel;
+    JPanel searchPanel;
+    JPanel timePanel;
+    JPanel profileButtonPanel;
+
+    //Rounded Panel
+    customRoundedPanel tfPanel;
+
+    //Label
+    JLabel titlePOS;
+    JLabel TimeLabel;
+    JLabel DateLabel;
+
+    //Text field
+    JTextField searchBox;
+
+    //Button
+    JButton profileButton;
+
+    //Extras
+    customPopupMenu profileButtonPop;
 
     //bool
     boolean T = true, F = false;

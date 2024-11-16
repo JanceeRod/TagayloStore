@@ -26,7 +26,7 @@ public class userInterface extends Definitions {
 	userInterface() {
 
 		mainFrame = new JFrame();
-		mainFrame.setTitle("Java Jive Cafe");
+		mainFrame.setTitle("Tagaylo Store - Point-of-Sales System | CSCC 14.1 Final Project");
 		mainFrame.setSize(1330, 765);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setResizable(T);
@@ -52,6 +52,8 @@ public class userInterface extends Definitions {
 				Operations.clearCSVFile(masterfile);
 			}
 		});
+
+		gd.setFullScreenWindow(mainFrame);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		systemTimeAndDate();
 
@@ -65,7 +67,7 @@ public class userInterface extends Definitions {
 		javaJivePanel = createCustomPanel(650, 50, topRibbonPanel, null);
 		javaJivePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
 
-		titlePOS = createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getFG1(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.RIGHT);
+		titlePOS = createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getTitleFont(), 0, 0, 0, 0, 0, 0, 0, 20, SwingConstants.LEFT);
 
 		tfPanel = createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
 
@@ -181,7 +183,7 @@ public class userInterface extends Definitions {
 		orderPaneTitleTab.setBackground(color.getCenterPiece());
 		orderPaneTitleTab.setLayout(new BorderLayout());
 
-		orderPaneLabel = createCustomLabel("CUSTOMER CART", Color.BLACK, font.getFG2(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
+		orderPaneLabel = createCustomLabel("CUSTOMER CART", Color.BLACK, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
 
 		orderPaneCen = createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
 
@@ -198,14 +200,14 @@ public class userInterface extends Definitions {
 			cartLabelsText[i].setText(cartLabels[i]);
 			cartLabelsText[i].setBorder(new EmptyBorder(0, 0, 15, 0));
 			cartLabelsText[i].setForeground(Color.GRAY);
-			cartLabelsText[i].setFont(font.getFG3());
+			cartLabelsText[i].setFont(font.getProductNameREGULAR());
 			cartLabelsText[i].setBounds(15, labelText1_[i], 120, 30);
 
 			cartLabelsNumbers[i] = new JLabel();
 			cartLabelsNumbers[i].setText(formattedDefaultNo);
 			cartLabelsNumbers[i].setBorder(new EmptyBorder(0, 0, 15, 0));
 			cartLabelsNumbers[i].setForeground(Color.GRAY);
-			cartLabelsNumbers[i].setFont(font.getFG3());
+			cartLabelsNumbers[i].setFont(font.getProductNameREGULAR());
 			cartLabelsNumbers[i].setHorizontalAlignment(SwingConstants.RIGHT);
 			cartLabelsNumbers[i].setBounds(200, labelText1_[i], 120, 30);
 
@@ -213,10 +215,10 @@ public class userInterface extends Definitions {
 			orderPaneBot.add(cartLabelsNumbers[i]);
 		}
 
-		cartLabelsText[2].setFont(font.getFG2());
+		cartLabelsText[2].setFont(font.getProductPriceBOLD());
 		cartLabelsText[2].setForeground(Color.DARK_GRAY);
 
-		cartLabelsNumbers[2].setFont(font.getFG2());
+		cartLabelsNumbers[2].setFont(font.getProductPriceBOLD());
 		cartLabelsNumbers[2].setForeground(Color.DARK_GRAY);
 
 		centerPaneOnRightPanel = new JPanel();
@@ -493,7 +495,7 @@ public class userInterface extends Definitions {
 					if (i == buttonIndex) {
 						pillShape[i].setBackground(color.getRightSide());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
-						pSLabel[i].setFont(font.getFG1());
+						pSLabel[i].setFont(font.getProductPriceBOLD());
 						pSLabel[i].setForeground(Color.DARK_GRAY);
 					} else {
 						pillShape[i].setBackground(centerPanelMainLayer.getBackground());
@@ -547,15 +549,16 @@ public class userInterface extends Definitions {
 
 				panel5_[i] = new customRoundedPanel(30);
 				panel5_[i].setBackground(color.getCenterPane());
-				panel5_[i].setBorder(BorderFactory.createEmptyBorder(120, 12, 13, 10));
+				panel5_[i].setBorder(BorderFactory.createEmptyBorder(111, 12, 13, 12));
 				panel5_[i].setLayout(new BorderLayout());
 
 				productName[i] = new JLabel();
-				productName[i].setFont(font.getFG5());
-				productName[i].setForeground(Color.RED);
+				productName[i].setFont(font.getProductNameREGULAR());
+				productName[i].setForeground(Color.BLACK);
 
 				productPrice[i] = new JLabel();
-				productPrice[i].setFont(font.getFG3());
+				productPrice[i].setFont(font.getProductPriceBOLD());
+				productPrice[i].setForeground(color.getHeader());
 
 				mainPanelOnCenters.add(forPanel5_[i]);
 
@@ -573,7 +576,7 @@ public class userInterface extends Definitions {
 				panel5_[i].setBackground(Color.WHITE);
 
 				productName[i].setText(menuArray[i][1]);
-				productPrice[i].setText("₱" + menuArray[i][2] + ".00");
+				productPrice[i].setText("PHP " + menuArray[i][2] + ".00");
 			}
 
 			customScrollBarUI scrollBarUI2 = new customScrollBarUI();
@@ -696,7 +699,7 @@ public class userInterface extends Definitions {
 					quantityLabel6s[i] = new JLabel();
 					quantityLabel6s[i].setText(null);
 					quantityLabel6s[i].setForeground(Color.DARK_GRAY);
-					quantityLabel6s[i].setFont(font.getFG3());
+					quantityLabel6s[i].setFont(font.getProductNameREGULAR());
 					quantityLabel6s[i].setPreferredSize(new Dimension(25, 15));
 
 					mainPanelOnCenter_[i].add(quantityLabel6s[i]);
@@ -704,7 +707,7 @@ public class userInterface extends Definitions {
 					productName6s[i] = new JLabel();
 					productName6s[i].setText(null);
 					productName6s[i].setForeground(Color.DARK_GRAY);
-					productName6s[i].setFont(font.getFG3());
+					productName6s[i].setFont(font.getProductNameREGULAR());
 					productName6s[i].setPreferredSize(new Dimension(170, 15));
 
 					mainPanelOnCenter_[i].add(productName6s[i]);
@@ -712,7 +715,7 @@ public class userInterface extends Definitions {
 					productPrice6s[i] = new JLabel();
 					productPrice6s[i].setText(null);
 					productPrice6s[i].setForeground(Color.DARK_GRAY);
-					productPrice6s[i].setFont(font.getFG3());
+					productPrice6s[i].setFont(font.getProductNameREGULAR());
 					productPrice6s[i].setHorizontalAlignment(SwingConstants.RIGHT);
 					productPrice6s[i].setPreferredSize(new Dimension(60, 15));
 				}
@@ -850,7 +853,7 @@ public class userInterface extends Definitions {
 		JLabel searchResult = new JLabel();
 		searchResult.setText("Search Results: ");
 		searchResult.setHorizontalAlignment(SwingConstants.LEFT);
-		searchResult.setFont(font.getFG3());
+		searchResult.setFont(font.getProductNameREGULAR());
 		searchResult.setForeground(Color.GRAY);
 
 		JButton closeSearch = new JButton();
@@ -878,7 +881,7 @@ public class userInterface extends Definitions {
 		JLabel pSLabel = new JLabel();
 		pSLabel.setText("close");
 		pSLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		pSLabel.setFont(font.getFG3());
+		pSLabel.setFont(font.getProductNameREGULAR());
 		pSLabel.setForeground(Color.GRAY);
 		pillShape.add(pSLabel);
 		closeSearch.add(pillShape);
@@ -921,19 +924,19 @@ public class userInterface extends Definitions {
 			productCode4s[i] = new JLabel();
 			productCode4s[i].setText(result[0]);
 			productCode4s[i].setForeground(Color.GRAY);
-			productCode4s[i].setFont(font.getFG3());
+			productCode4s[i].setFont(font.getProductNameREGULAR());
 			productCode4s[i].setPreferredSize(new Dimension(55, 15));
 
 			productName4s[i] = new JLabel();
 			productName4s[i].setText(result[1]);
 			productName4s[i].setForeground(Color.DARK_GRAY);
-			productName4s[i].setFont(font.getFG3());
+			productName4s[i].setFont(font.getProductNameREGULAR());
 			productName4s[i].setPreferredSize(new Dimension(350, 15));
 
 			productPrice4s[i] = new JLabel();
 			productPrice4s[i].setText("₱" + result[2] + ".00");
 			productPrice4s[i].setForeground(Color.GRAY);
-			productPrice4s[i].setFont(font.getFG3());
+			productPrice4s[i].setFont(font.getProductNameREGULAR());
 			productPrice4s[i].setHorizontalAlignment(SwingConstants.RIGHT);
 			productPrice4s[i].setPreferredSize(new Dimension(60, 15));
 
@@ -1036,7 +1039,7 @@ public class userInterface extends Definitions {
 
 		JLabel notice = new JLabel();
 		notice.setText("We're still working on this page :(");
-		notice.setFont(font.getFG2());
+		notice.setFont(font.getProductPriceBOLD());
 		notice.setForeground(Color.LIGHT_GRAY);
 		notice.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -1086,7 +1089,7 @@ public class userInterface extends Definitions {
 				pSLabel[j].setText(arrayName);
 			}
 			pSLabel[j].setHorizontalAlignment(SwingConstants.CENTER);
-			pSLabel[j].setFont(font.getFG3());
+			pSLabel[j].setFont(font.getProductNameREGULAR());
 			pSLabel[j].setForeground(Color.GRAY);
 
 			pillShape[j].add(pSLabel[j]);

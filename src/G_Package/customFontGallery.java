@@ -7,9 +7,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class customFontGallery {
-	private Font FG1;
-    private Font FG2;
-    private Font FG3;
+	private Font titleFont;
+    private Font productPriceREGULAR;
+    private Font productPriceBOLD;
+    private Font productNameREGULAR;
+    private Font productNameBOLD;
     private Font FG4;
     private Font FG5;
     private Font tCF;
@@ -20,33 +22,53 @@ public class customFontGallery {
     public customFontGallery() {
     	//Title
         try {
-            File font1 = new File("SFPRODISPLAYBOLD.OTF");
+            File font = new File("Inter_28pt-Bold.ttf");
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            Font SFProBold = Font.createFont(Font.TRUETYPE_FONT, font1);
-            ge.registerFont(SFProBold);
-            setFG1(SFProBold.deriveFont(Font.BOLD, 19));
+            Font InterFontBOLD = Font.createFont(Font.TRUETYPE_FONT, font);
+            ge.registerFont(InterFontBOLD);
+            setTitleFont(InterFontBOLD.deriveFont(Font.BOLD, 24));
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
-        
-        //Headers
+
+        //Product Price
         try {
-            File font2 = new File("SFPRODISPLAYREGULAR.OTF");
+            File font = new File("Inter_28pt-Regular.ttf");
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            Font SFProRegular = Font.createFont(Font.TRUETYPE_FONT, font2);
-            ge.registerFont(SFProRegular);
-            setFG2(SFProRegular.deriveFont(Font.BOLD, 15));
+            Font InterFontREGULAR = Font.createFont(Font.TRUETYPE_FONT, font);
+            ge.registerFont(InterFontREGULAR);
+            setProductPriceREGULAR(InterFontREGULAR.deriveFont(Font.TRUETYPE_FONT, 20));
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
-        
-        //Normal Text
+
         try {
-            File font2 = new File("SFPRODISPLAYREGULAR.OTF");
+            File font = new File("Inter_28pt-Bold.ttf");
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            Font SFProRegular = Font.createFont(Font.TRUETYPE_FONT, font2);
-            ge.registerFont(SFProRegular);
-            setFG3(SFProRegular.deriveFont(Font.BOLD, 15));
+            Font InterFontBOLD = Font.createFont(Font.TRUETYPE_FONT, font);
+            ge.registerFont(InterFontBOLD);
+            setProductPriceBOLD(InterFontBOLD.deriveFont(Font.TRUETYPE_FONT, 20));
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
+
+        //Product Name
+        try {
+            File font = new File("Inter_28pt-Regular.ttf");
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            Font InterFontREGULAR = Font.createFont(Font.TRUETYPE_FONT, font);
+            ge.registerFont(InterFontREGULAR);
+            setProductNameREGULAR(InterFontREGULAR.deriveFont(Font.TRUETYPE_FONT, 12));
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            File font = new File("Inter_28pt-Bold.ttf");
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            Font InterFontBOLD = Font.createFont(Font.TRUETYPE_FONT, font);
+            ge.registerFont(InterFontBOLD);
+            setProductNameBOLD(InterFontBOLD.deriveFont(Font.TRUETYPE_FONT, 12));
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
@@ -112,13 +134,37 @@ public class customFontGallery {
         }
     }
 
-	public Font getFG2() {
-		return FG2;
+    public void setTitleFont(Font font) {
+        titleFont = font;
+    }
+
+    public Font getTitleFont() {
+        return titleFont;
+    }
+
+    public void setProductPriceBOLD(Font font) {
+        productPriceBOLD = font;
+    }
+
+    public Font getProductPriceBOLD() {
+		return productPriceBOLD;
 	}
 
-	public void setFG2(Font fG2) {
-		FG2 = fG2;
-	}
+    public void setProductPriceREGULAR(Font font) {
+        productPriceREGULAR = font;
+    }
+
+    public Font getProductPriceREGULAR() {
+        return productPriceREGULAR;
+    }
+
+    private void setProductNameBOLD(Font font) {
+        productNameBOLD = font;
+    }
+
+    public Font getProductNameBOLD() {
+        return productNameBOLD;
+    }
 
 	public Font getvFG() {
 		return vFG;
@@ -126,14 +172,6 @@ public class customFontGallery {
 
 	public void setvFG(Font vFG) {
 		this.vFG = vFG;
-	}
-
-	public Font getFG1() {
-		return FG1;
-	}
-
-	public void setFG1(Font fG1) {
-		FG1 = fG1;
 	}
 
 	public Font getpFG() {
@@ -168,12 +206,12 @@ public class customFontGallery {
 		this.dCF = dCF;
 	}
 
-	public Font getFG3() {
-		return FG3;
+	public Font getProductNameREGULAR() {
+		return productNameREGULAR;
 	}
 
-	public void setFG3(Font fG3) {
-		FG3 = fG3;
+	public void setProductNameREGULAR(Font fG3) {
+		productNameREGULAR = fG3;
 	}
 
 	public Font getFG5() {

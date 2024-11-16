@@ -64,7 +64,7 @@ public class paymentWindow extends JFrame {
     	
     	JLabel label1 = new JLabel();
     	label1.setText("Java Jive - Payment Window");
-    	label1.setFont(font.getFG1());
+    	label1.setFont(font.getTitleFont());
     	label1.setHorizontalAlignment(SwingConstants.CENTER);
     	label1.setForeground(color.getTitleColor());
     	
@@ -141,7 +141,7 @@ public class paymentWindow extends JFrame {
     	
     	JLabel summaryLabel = new JLabel();
     	summaryLabel.setText("ORDER SUMMARY");
-    	summaryLabel.setFont(font.getFG2());
+    	summaryLabel.setFont(font.getProductPriceBOLD());
     	summaryLabel.setHorizontalAlignment(SwingConstants.CENTER);
     	summaryLabel.setForeground(Color.BLACK);
     	
