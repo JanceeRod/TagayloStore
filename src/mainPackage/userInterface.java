@@ -61,15 +61,15 @@ public class userInterface extends Definitions {
 
 	public void topRibbon() {
 
-		topRibbonPanel = createCustomPanel(1080, 60, color.getHeader(), null);
+		topRibbonPanel = Operations.createCustomPanel(1080, 60, color.getHeader(), null);
 		topRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
 
-		javaJivePanel = createCustomPanel(650, 50, topRibbonPanel, null);
+		javaJivePanel = Operations.createCustomPanel(650, 50, topRibbonPanel, null);
 		javaJivePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
 
-		titlePOS = createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getTitleFont(), 0, 0, 0, 0, 0, 0, 0, 20, SwingConstants.LEFT);
+		titlePOS = Operations.createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getTitleFont(), 0, 0, 0, 0, 0, 0, 0, 20, SwingConstants.LEFT);
 
-		tfPanel = createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
+		tfPanel = Operations.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
 
 		searchBox = new JTextField("Search products...");
 		searchBox.setPreferredSize(new Dimension(425, 29));
@@ -84,13 +84,13 @@ public class userInterface extends Definitions {
 		searchBox.getDocument().addDocumentListener(new documentListen());
 		tfPanel.add(searchBox);
 
-		searchPanel = createCustomPanel(300, 50, topRibbonPanel, new BorderLayout());
+		searchPanel = Operations.createCustomPanel(300, 50, topRibbonPanel, new BorderLayout());
 		searchPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-		timePanel = createCustomPanel(500, 50, topRibbonPanel, new BorderLayout());
+		timePanel = Operations.createCustomPanel(500, 50, topRibbonPanel, new BorderLayout());
 		timePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 25));
 
-		profileButtonPanel = createCustomPanel(50, 50, Color.RED, new BorderLayout());
+		profileButtonPanel = Operations.createCustomPanel(50, 50, Color.RED, new BorderLayout());
 		profileButtonPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
 
 		profileButton = new JButton();
@@ -114,8 +114,8 @@ public class userInterface extends Definitions {
 
 		profileButtonPanel.add(profileButton, BorderLayout.CENTER);
 
-		TimeLabel = createCustomLabel(null, Color.GRAY, font.gettCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
-		DateLabel = createCustomLabel(null, Color.GRAY, font.getdCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
+		TimeLabel = Operations.createCustomLabel(null, Color.GRAY, font.gettCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
+		DateLabel = Operations.createCustomLabel(null, Color.GRAY, font.getdCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
 
 		searchPanel.add(tfPanel);
 		timePanel.add(TimeLabel, BorderLayout.EAST); //timePanel.add(DateLabel, BorderLayout.CENTER);
@@ -131,7 +131,7 @@ public class userInterface extends Definitions {
 
 	public void leftPanel() {
 
-		leftRibbonPanel = createCustomPanel(85, 670, color.getLeftSide(), null);
+		leftRibbonPanel = Operations.createCustomPanel(85, 670, color.getLeftSide(), null);
 		leftRibbonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 8));
 
 		sideRibbonLabels = new String[]{"Home"};
@@ -173,21 +173,21 @@ public class userInterface extends Definitions {
 
 	public void rightPanel() {
 
-		rightRibbonPanel = createCustomPanel(360, 370, color.getRightSide(), new BorderLayout());
+		rightRibbonPanel = Operations.createCustomPanel(360, 370, color.getRightSide(), new BorderLayout());
 		rightRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-		orderPaneTop = createCustomPanel(340, 35, rightRibbonPanel, new BorderLayout());
+		orderPaneTop = Operations.createCustomPanel(340, 35, rightRibbonPanel, new BorderLayout());
 		orderPaneTop.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 15));
 
 		orderPaneTitleTab = new customRoundedPanel(20);
 		orderPaneTitleTab.setBackground(color.getCenterPiece());
 		orderPaneTitleTab.setLayout(new BorderLayout());
 
-		orderPaneLabel = createCustomLabel("CUSTOMER CART", Color.BLACK, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
+		orderPaneLabel = Operations.createCustomLabel("CUSTOMER CART", Color.BLACK, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
 
-		orderPaneCen = createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
+		orderPaneCen = Operations.createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
 
-		orderPaneBot = createCustomPanel(340, 150, color.getOrderPane(), null);
+		orderPaneBot = Operations.createCustomPanel(340, 150, color.getOrderPane(), null);
 		orderPaneBot.setLayout(null);
 
 		cartLabels = new String[]{"Subtotal", "Tax", "Payable Amount"};
@@ -297,13 +297,13 @@ public class userInterface extends Definitions {
 
 	public void centerPanel() {
 
-		centerContainerPanelUp = createCustomPanel(0, 0, color.getCenterPane(), new BorderLayout());
+		centerContainerPanelUp = Operations.createCustomPanel(0, 0, color.getCenterPane(), new BorderLayout());
 		centerContainerPanelUp.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
 
-		centerContainerPanelDown = createCustomPanel(600, 35, centerContainerPanelUp, new BorderLayout());
+		centerContainerPanelDown = Operations.createCustomPanel(600, 35, centerContainerPanelUp, new BorderLayout());
 		centerContainerPanelDown.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 
-		mainPanelOnCenter = createCustomPanel(0, 0, centerContainerPanelUp, new BorderLayout());
+		mainPanelOnCenter = Operations.createCustomPanel(0, 0, centerContainerPanelUp, new BorderLayout());
 		mainPanelOnCenter.setBorder(BorderFactory.createEmptyBorder(15, 5, 0, 0));
 
 		centerPanelMainLayer = new customRoundedPanel(15);
@@ -327,43 +327,6 @@ public class userInterface extends Definitions {
 //		Operations.menuPrint(globalInventory);
 		Operations.processArrayToHashMap(globalInventory, cafeInventory);
 	}
-
-	public JPanel createCustomPanel(int width, int height, Object backgroundSource, LayoutManager layout) {
-		JPanel customPanel = new JPanel();
-		customPanel.setPreferredSize(new Dimension(width, height));
-		if (backgroundSource instanceof JPanel) {
-			customPanel.setBackground(((JPanel) backgroundSource).getBackground());
-		} else if (backgroundSource instanceof Color) {
-			customPanel.setBackground((Color) backgroundSource);
-		}
-		customPanel.setLayout(new BorderLayout());
-		return customPanel;
-	}
-
-	public JLabel createCustomLabel(String text, Color foreground, Font font, int x, int y, int width, int height, int topBorder, int leftBorder, int bottomBorder, int rightBorder, int horizontalAlignment) {
-		JLabel label = new JLabel();
-		label.setText(text);
-		label.setForeground(foreground);
-		label.setFont(font);
-		label.setBounds(x, y, width, height);
-		label.setBorder(new EmptyBorder(topBorder, leftBorder, bottomBorder, rightBorder));
-		label.setHorizontalAlignment(horizontalAlignment);
-		return label;
-	}
-
-	public customRoundedPanel createCustomRoundedPanel(int radius, int borderTop, int borderLeft, int borderBottom, int borderRight, Object backgroundSource, LayoutManager layout) {
-		customRoundedPanel customPanel = new customRoundedPanel(radius);
-		customPanel.setBorder(BorderFactory.createEmptyBorder(borderTop, borderLeft, borderBottom, borderRight));
-		if (backgroundSource instanceof JPanel) {
-			customPanel.setBackground(((JPanel) backgroundSource).getBackground());
-		} else if (backgroundSource instanceof Color) {
-			customPanel.setBackground((Color) backgroundSource);
-		}
-		customPanel.setLayout(layout);
-		return customPanel;
-	}
-
-
 
 	private class sideButtons implements ActionListener { //for SideBar buttons
 		private int buttonIndex;
@@ -543,7 +506,7 @@ public class userInterface extends Definitions {
 				forPanel5_[i].setBackground(mainPanelOnCenters.getBackground());
 				forPanel5_[i].setLayout(new BorderLayout(1,1));
 				forPanel5_[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-				forPanel5_[i].setPreferredSize(new Dimension(140, 175));
+				forPanel5_[i].setPreferredSize(new Dimension(150, 150));
 				forPanel5_[i].addActionListener(new menuButtons(i, menuArray, null));
 				forPanel5_[i].setEnabled(F);
 

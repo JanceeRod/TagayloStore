@@ -7,7 +7,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
+
 public class customRoundedPanel extends JPanel{
 	private int radius;
 	 
