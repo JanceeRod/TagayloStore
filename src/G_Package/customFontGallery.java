@@ -6,7 +6,7 @@ import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 
-public class fontGallery {
+public class customFontGallery {
 	private Font FG1;
     private Font FG2;
     private Font FG3;
@@ -17,7 +17,7 @@ public class fontGallery {
     private Font vFG;
     private Font pFG;
 
-    public fontGallery() {
+    public customFontGallery() {
     	//Title
         try {
             File font1 = new File("SFPRODISPLAYBOLD.OTF");

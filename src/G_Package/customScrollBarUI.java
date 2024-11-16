@@ -13,7 +13,7 @@ import javax.swing.JScrollBar;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
 public class customScrollBarUI extends BasicScrollBarUI {
-	colorPallete color = new colorPallete();
+	customColorPallete color = new customColorPallete();
 	
 	private Color trackColor = Color.DARK_GRAY;
 	private Color thumbColor = Color.GRAY;

@@ -2,12 +2,11 @@ package mainPackage;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.Map.Entry;
 
@@ -16,25 +15,316 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import G_Package.RoundedPanel;
+import G_Package.customRoundedPanel;
+import G_Package.customPopupMenu;
 import G_Package.customScrollBarUI;
 
 import newWindow_Package.paymentWindow;
 
 public class userInterface extends Definitions {
 
-	Double defaultNo = 0.00;
-	Double salesTax = 5.25;
-	DecimalFormat decimalFormat = new DecimalFormat("0.00");
-	String formattedDefaultNo  = String.format("%.2f", defaultNo);
+	userInterface() {
 
-	JPanel centerContainerPanelUp, centerContainerPanelDown, mainPanelOnCenter;
-	JPanel sidePanel;
-	JButton cancelButton, proceedButton;
-	JTextField textField1;
-	RoundedPanel panel5s;
-	RoundedPanel roundedPanelForCancelButton, roundedPanelForProceedButton;
-	public static JLabel TimeLabel, DateLabel;
+		mainFrame = new JFrame();
+		mainFrame.setTitle("Java Jive Cafe");
+		mainFrame.setSize(1330, 765);
+		mainFrame.setLocationRelativeTo(null);
+		mainFrame.setResizable(T);
+
+		instantiate();
+
+		topRibbon();
+		leftPanel();
+		rightPanel();
+		centerPanel();
+
+		sideRibbonButtons[0].doClick();
+
+		mainFrame.getContentPane().setLayout(new BorderLayout());
+		mainFrame.add(topRibbonPanel, BorderLayout.NORTH);
+		mainFrame.add(rightRibbonPanel, BorderLayout.EAST);
+		mainFrame.add(leftRibbonPanel, BorderLayout.WEST);
+		mainFrame.add(centerContainerPanelUp, BorderLayout.CENTER);
+		mainFrame.setVisible(T);
+		mainFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.out.println("Program is closing. Do cleanup or save data if needed.");
+				Operations.clearCSVFile(masterfile);
+			}
+		});
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		systemTimeAndDate();
+
+	}
+
+	public void topRibbon() {
+
+		topRibbonPanel = createCustomPanel(1080, 60, color.getHeader(), null);
+		topRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
+
+		javaJivePanel = createCustomPanel(650, 50, topRibbonPanel, null);
+		javaJivePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
+
+		titlePOS = createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getFG1(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.RIGHT);
+
+		tfPanel = createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
+
+		searchBox = new JTextField("Search products...");
+		searchBox.setPreferredSize(new Dimension(425, 29));
+		searchBox.setCaretPosition(0);
+		searchBox.setFont(font.getFG4());
+		searchBox.setBackground(tfPanel.getBackground());
+		searchBox.setForeground(Color.GRAY);
+		searchBox.setHorizontalAlignment(SwingConstants.LEFT);
+		searchBox.setBorder(BorderFactory.createEmptyBorder());
+		searchBox.addKeyListener(new keyListen());
+		searchBox.addFocusListener(new focusListen());
+		searchBox.getDocument().addDocumentListener(new documentListen());
+		tfPanel.add(searchBox);
+
+		searchPanel = createCustomPanel(300, 50, topRibbonPanel, new BorderLayout());
+		searchPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+
+		timePanel = createCustomPanel(500, 50, topRibbonPanel, new BorderLayout());
+		timePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 25));
+
+		profileButtonPanel = createCustomPanel(50, 50, Color.RED, new BorderLayout());
+		profileButtonPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+
+		profileButton = new JButton();
+		profileButton.setBackground(Color.BLUE);
+		profileButton.setBorder(BorderFactory.createEmptyBorder());
+		profileButton.setLayout(new GridLayout(1,1));
+		profileButton.setEnabled(T);
+//		profileButton.addActionListener(new menuButtons(-1, null, null));
+
+		profileButtonPop = new customPopupMenu();
+		profileButtonPop.addMenuItem("Settings", e -> JOptionPane.showMessageDialog(mainFrame, "This is Settings"));
+		profileButtonPop.addMenuItem("About Us?", e -> JOptionPane.showMessageDialog(mainFrame, "This is about us!"));
+		profileButtonPop.addMenuItem("Log Out", e -> JOptionPane.showMessageDialog(mainFrame, "Logged out"));
+		profileButtonPop.addMenuItem("Help", e -> JOptionPane.showMessageDialog(mainFrame, "Help"));
+
+		profileButton.addActionListener(e -> {
+			int x = profileButton.getWidth() - profileButtonPop.getPreferredSize().width;
+			int y = profileButton.getHeight();
+			profileButtonPop.show(profileButton, x, y);
+		});
+
+		profileButtonPanel.add(profileButton, BorderLayout.CENTER);
+
+		TimeLabel = createCustomLabel(null, Color.GRAY, font.gettCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
+		DateLabel = createCustomLabel(null, Color.GRAY, font.getdCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
+
+		searchPanel.add(tfPanel);
+		timePanel.add(TimeLabel, BorderLayout.EAST); //timePanel.add(DateLabel, BorderLayout.CENTER);
+
+		javaJivePanel.add(titlePOS, BorderLayout.WEST);
+		javaJivePanel.add(searchPanel, BorderLayout.CENTER);
+
+		topRibbonPanel.add(javaJivePanel, BorderLayout.WEST);
+//		topRibbonPanel.add(timePanel, BorderLayout.EAST);
+		topRibbonPanel.add(profileButtonPanel, BorderLayout.EAST);
+
+	}
+
+	public void leftPanel() {
+
+		leftRibbonPanel = createCustomPanel(85, 670, color.getLeftSide(), null);
+		leftRibbonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 8));
+
+		sideRibbonLabels = new String[]{"Home"};
+		sideRibbonRoundedPanels = new customRoundedPanel[sideRibbonLabels.length];
+		sideRibbonButtons = new JButton[sideRibbonLabels.length];
+		label2_ = new JLabel[sideRibbonLabels.length];
+
+		for (int i = 0; i < sideRibbonButtons.length; i++) {
+			sideRibbonButtons[i] = new JButton();
+			sideRibbonButtons[i].setBackground(leftRibbonPanel.getBackground());
+			sideRibbonButtons[i].setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+			sideRibbonButtons[i].setEnabled(T);
+			sideRibbonButtons[i].setFocusPainted(F);
+			sideRibbonButtons[i].setLayout(new BorderLayout(1,1));
+			sideRibbonButtons[i].setPreferredSize(new Dimension(85, 65));
+
+			sideRibbonRoundedPanels[i] = new customRoundedPanel(20);
+			sideRibbonRoundedPanels[i].setBackground(color.getRightSide());
+			sideRibbonRoundedPanels[i].setBorder(BorderFactory.createEmptyBorder());
+
+			label2_[i] = new JLabel();
+			label2_[i].setText(sideRibbonLabels[i]);
+			label2_[i].setBorder(new EmptyBorder(0, 0, 20, 0));
+//			label2_[i].setForeground(color.getSideTitle());
+			label2_[i].setForeground(Color.GREEN);
+			label2_[i].setFont(font.getFG4());
+
+			leftRibbonPanel.add(sideRibbonButtons[i]);
+			sideRibbonButtons[i].add(sideRibbonRoundedPanels[i]);
+			leftRibbonPanel.add(label2_[i]);
+
+			sideRibbonButtons[i].setVisible(T);
+			label2_[i].setVisible(T);
+
+			sideRibbonButtons[i].addActionListener(new sideButtons(i, sideRibbonLabels[i]));
+		}
+
+	}
+
+	public void rightPanel() {
+
+		rightRibbonPanel = createCustomPanel(360, 370, color.getRightSide(), new BorderLayout());
+		rightRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+
+		orderPaneTop = createCustomPanel(340, 35, rightRibbonPanel, new BorderLayout());
+		orderPaneTop.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 15));
+
+		orderPaneTitleTab = new customRoundedPanel(20);
+		orderPaneTitleTab.setBackground(color.getCenterPiece());
+		orderPaneTitleTab.setLayout(new BorderLayout());
+
+		orderPaneLabel = createCustomLabel("CUSTOMER CART", Color.BLACK, font.getFG2(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
+
+		orderPaneCen = createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
+
+		orderPaneBot = createCustomPanel(340, 150, color.getOrderPane(), null);
+		orderPaneBot.setLayout(null);
+
+		cartLabels = new String[]{"Subtotal", "Tax", "Payable Amount"};
+		labelText1_ = new int[]{18, 41, 69};
+		cartLabelsText = new JLabel[cartLabels.length];
+		cartLabelsNumbers = new JLabel[cartLabels.length];
+
+		for (int i = 0; i < 3; i++) {
+			cartLabelsText[i] = new JLabel();
+			cartLabelsText[i].setText(cartLabels[i]);
+			cartLabelsText[i].setBorder(new EmptyBorder(0, 0, 15, 0));
+			cartLabelsText[i].setForeground(Color.GRAY);
+			cartLabelsText[i].setFont(font.getFG3());
+			cartLabelsText[i].setBounds(15, labelText1_[i], 120, 30);
+
+			cartLabelsNumbers[i] = new JLabel();
+			cartLabelsNumbers[i].setText(formattedDefaultNo);
+			cartLabelsNumbers[i].setBorder(new EmptyBorder(0, 0, 15, 0));
+			cartLabelsNumbers[i].setForeground(Color.GRAY);
+			cartLabelsNumbers[i].setFont(font.getFG3());
+			cartLabelsNumbers[i].setHorizontalAlignment(SwingConstants.RIGHT);
+			cartLabelsNumbers[i].setBounds(200, labelText1_[i], 120, 30);
+
+			orderPaneBot.add(cartLabelsText[i]);
+			orderPaneBot.add(cartLabelsNumbers[i]);
+		}
+
+		cartLabelsText[2].setFont(font.getFG2());
+		cartLabelsText[2].setForeground(Color.DARK_GRAY);
+
+		cartLabelsNumbers[2].setFont(font.getFG2());
+		cartLabelsNumbers[2].setForeground(Color.DARK_GRAY);
+
+		centerPaneOnRightPanel = new JPanel();
+		centerPaneOnRightPanel.setBorder(new EmptyBorder(0, 10, 0, 0));
+		centerPaneOnRightPanel.setBackground(rightRibbonPanel.getBackground());
+		centerPaneOnRightPanel.setLayout(new GridLayout(0, 1));
+
+		scrollBarForCart = new customScrollBarUI();
+		scrollBarForCart.setCustomUI(color.getLeftSide(), Color.LIGHT_GRAY, centerPaneOnRightPanel.getBackground());
+
+		scrollPane = new JScrollPane(centerPaneOnRightPanel);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.getVerticalScrollBar().setUI(scrollBarForCart);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+		cancelButton = new JButton();
+		cancelButton.setBounds(10, 98, 155, 40);
+		cancelButton.setBackground(orderPaneBot.getBackground());
+		cancelButton.setBorder(BorderFactory.createEmptyBorder());
+		cancelButton.setLayout(new GridLayout(1,1));
+		cancelButton.setEnabled(F);
+		cancelButton.addActionListener(new menuButtons(-1, null, null));
+
+		cancelLabel = new JLabel();
+		cancelLabel.setText("Cancel Order");
+		cancelLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		cancelLabel.setFont(font.getFG5());
+
+		proceedButton = new JButton();
+		proceedButton.setBounds(175, 98, 155, 40);
+		proceedButton.setBackground(orderPaneBot.getBackground());
+		proceedButton.setBorder(BorderFactory.createEmptyBorder());
+		proceedButton.setLayout(new GridLayout(1,1));
+		proceedButton.setEnabled(F);
+		proceedButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (orderRecord != null) {
+					new paymentWindow(orderRecord, calculations);
+				}
+			}
+		});
+
+		proceedLabel = new JLabel();
+		proceedLabel.setText("Proceed to Payment");
+		proceedLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		proceedLabel.setFont(font.getFG5());
+
+		roundedPanelForCancelButton = new customRoundedPanel(20);
+		roundedPanelForCancelButton.setBackground(color.getInactiveButton());
+		roundedPanelForCancelButton.setLayout(new GridLayout(1,1));
+		roundedPanelForCancelButton.add(cancelLabel);
+
+		roundedPanelForProceedButton = new customRoundedPanel(20);
+		roundedPanelForProceedButton.setBackground(color.getInactiveButton());
+		roundedPanelForProceedButton.setLayout(new GridLayout(1,1));
+		roundedPanelForProceedButton.add(proceedLabel);
+
+		orderPaneTitleTab.add(orderPaneLabel);
+		orderPaneTop.add(orderPaneTitleTab);
+
+		cancelButton.add(roundedPanelForCancelButton);
+		proceedButton.add(roundedPanelForProceedButton);
+
+		orderPaneCen.add(scrollPane);
+
+		orderPaneBot.add(cancelButton);
+		orderPaneBot.add(proceedButton);
+
+		rightRibbonPanel.add(orderPaneTop, BorderLayout.NORTH);
+		rightRibbonPanel.add(orderPaneBot, BorderLayout.SOUTH);
+		rightRibbonPanel.add(orderPaneCen, BorderLayout.CENTER);
+
+	}
+
+	public void centerPanel() {
+
+		centerContainerPanelUp = createCustomPanel(0, 0, color.getCenterPane(), new BorderLayout());
+		centerContainerPanelUp.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
+
+		centerContainerPanelDown = createCustomPanel(600, 35, centerContainerPanelUp, new BorderLayout());
+		centerContainerPanelDown.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+
+		mainPanelOnCenter = createCustomPanel(0, 0, centerContainerPanelUp, new BorderLayout());
+		mainPanelOnCenter.setBorder(BorderFactory.createEmptyBorder(15, 5, 0, 0));
+
+		centerPanelMainLayer = new customRoundedPanel(15);
+		centerPanelMainLayer.setBackground(color.getCenterPiece());
+
+		centerContainerPanelDown.add(centerPanelMainLayer);
+
+		centerContainerPanelUp.add(mainPanelOnCenter, BorderLayout.CENTER);
+		centerContainerPanelUp.add(centerContainerPanelDown, BorderLayout.NORTH);
+
+	}
+
+	public void instantiate() {
+		Operations.clearCSVFile(inventory);
+
+		categoryDataMap = Operations.convertCategoriesToArrays(categories);
+
+		Operations.writeAllArraysToMasterFile(categoryDataMap, masterfile);
+		globalInventory = Operations.saveToDataArray(masterfile);
+
+//		Operations.menuPrint(globalInventory);
+		Operations.processArrayToHashMap(globalInventory, cafeInventory);
+	}
 
 	public JPanel createCustomPanel(int width, int height, Object backgroundSource, LayoutManager layout) {
 		JPanel customPanel = new JPanel();
@@ -59,9 +349,8 @@ public class userInterface extends Definitions {
 		return label;
 	}
 
-
-	public RoundedPanel createCustomRoundedPanel(int radius, int borderTop, int borderLeft, int borderBottom, int borderRight, Object backgroundSource, LayoutManager layout) {
-		RoundedPanel customPanel = new RoundedPanel(radius);
+	public customRoundedPanel createCustomRoundedPanel(int radius, int borderTop, int borderLeft, int borderBottom, int borderRight, Object backgroundSource, LayoutManager layout) {
+		customRoundedPanel customPanel = new customRoundedPanel(radius);
 		customPanel.setBorder(BorderFactory.createEmptyBorder(borderTop, borderLeft, borderBottom, borderRight));
 		if (backgroundSource instanceof JPanel) {
 			customPanel.setBackground(((JPanel) backgroundSource).getBackground());
@@ -70,298 +359,6 @@ public class userInterface extends Definitions {
 		}
 		customPanel.setLayout(layout);
 		return customPanel;
-	}
-
-	userInterface() {
-		instantiate();
-
-		JFrame frame = new JFrame();
-		frame.setTitle("Java Jive Cafe");
-		frame.setSize(1100, 765);
-		frame.setLocationRelativeTo(null);
-		frame.setResizable(T);
-
-		JPanel TopRibbonPanel = createCustomPanel(1080, 60, color.getHeader(), null); TopRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-		JPanel javaJivePanel = createCustomPanel(650, 50, TopRibbonPanel, null); javaJivePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
-
-		JLabel label1 = createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getFG1(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.RIGHT);
-
-		RoundedPanel tfPanel = createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
-
-		textField1 = new JTextField("Search products...");
-		textField1.setPreferredSize(new Dimension(425, 29));
-		textField1.setCaretPosition(0);
-		textField1.setFont(font.getFG4());
-		textField1.setBackground(tfPanel.getBackground());
-		textField1.setForeground(Color.GRAY);
-		textField1.setHorizontalAlignment(SwingConstants.LEFT);
-		textField1.setBorder(BorderFactory.createEmptyBorder());
-		textField1.addKeyListener(new keyListen());
-		textField1.addFocusListener(new focusListen());
-		textField1.getDocument().addDocumentListener(new documentListen());
-		tfPanel.add(textField1);
-
-		JPanel searchPanel = createCustomPanel(300, 50, TopRibbonPanel, new BorderLayout()); searchPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-		JPanel timePanel = createCustomPanel(500, 50, TopRibbonPanel, new BorderLayout()); timePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 25));
-
-		TimeLabel = createCustomLabel(null, Color.GRAY, font.gettCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
-		DateLabel = createCustomLabel(null, Color.GRAY, font.getdCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
-
-
-		searchPanel.add(tfPanel);
-		timePanel.add(TimeLabel, BorderLayout.EAST); //timePanel.add(DateLabel, BorderLayout.CENTER);
-
-		javaJivePanel.add(label1, BorderLayout.WEST);
-		javaJivePanel.add(searchPanel, BorderLayout.CENTER);
-
-		TopRibbonPanel.add(javaJivePanel, BorderLayout.WEST);
-		TopRibbonPanel.add(timePanel, BorderLayout.EAST);
-
-		JPanel LeftRibbonPanel = createCustomPanel(85, 670, color.getLeftSide(), null); LeftRibbonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 8));
-		JPanel RightRibbonPanel = createCustomPanel(360, 370, color.getRightSide(), new BorderLayout()); RightRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-
-		JPanel orderPaneTop = createCustomPanel(340, 35, RightRibbonPanel, new BorderLayout()); orderPaneTop.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 15));
-
-		curved1 = new RoundedPanel[5];
-		button1_ = new JButton[5];
-		JLabel[] label2_ = new JLabel[5];
-		String[] labelText = {"Home", "Inventory", "Customers", "Cashier", "Sales"};
-
-		RoundedPanel orderPane1s = new RoundedPanel(20);
-		orderPane1s.setBackground(color.getCenterPiece());
-		orderPane1s.setLayout(new BorderLayout());
-
-		JLabel orderPaneLabel = createCustomLabel("Order List", Color.BLACK, font.getFG2(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
-
-		orderPane1s.add(orderPaneLabel);
-		orderPaneTop.add(orderPane1s);
-
-		JPanel orderPaneCen = createCustomPanel(8, 0, RightRibbonPanel.getBackground(), new BorderLayout());
-		JPanel orderPaneBot = createCustomPanel(340, 150, color.getOrderPane(), null); orderPaneBot.setLayout(null);
-
-		String[] labelText1 = {"Subtotal", "Tax", "Payable Amount"};
-		int[] labelText1_ = {18, 41, 69};
-		JLabel[] label3_ = new JLabel[labelText1.length];
-		label4_ = new JLabel[labelText1.length];
-		for (int i = 0; i < 3; i++) {
-			label3_[i] = new JLabel();
-			label3_[i].setText(labelText1[i]);
-			label3_[i].setBorder(new EmptyBorder(0, 0, 15, 0));
-			label3_[i].setForeground(Color.GRAY);
-			label3_[i].setFont(font.getFG3());
-			label3_[i].setBounds(15, labelText1_[i], 120, 30);
-
-			label4_[i] = new JLabel();
-			label4_[i].setText(formattedDefaultNo);
-			label4_[i].setBorder(new EmptyBorder(0, 0, 15, 0));
-			label4_[i].setForeground(Color.GRAY);
-			label4_[i].setFont(font.getFG3());
-			label4_[i].setHorizontalAlignment(SwingConstants.RIGHT);
-			label4_[i].setBounds(200, labelText1_[i], 120, 30);
-
-			orderPaneBot.add(label3_[i]);
-			orderPaneBot.add(label4_[i]);
-		}
-
-		label3_[2].setFont(font.getFG2());
-		label4_[2].setFont(font.getFG2());
-		label3_[2].setForeground(Color.DARK_GRAY);
-		label4_[2].setForeground(Color.DARK_GRAY);
-
-		RightRibbonPanel.add(orderPaneTop, BorderLayout.NORTH);
-		RightRibbonPanel.add(orderPaneBot, BorderLayout.SOUTH);
-		RightRibbonPanel.add(orderPaneCen, BorderLayout.CENTER);
-
-		sidePanel = new JPanel();
-		sidePanel.setBorder(new EmptyBorder(0, 10, 0, 0));
-		sidePanel.setBackground(RightRibbonPanel.getBackground());
-		sidePanel.setLayout(new GridLayout(0, 1));
-
-		customScrollBarUI scrollBarUI1 = new customScrollBarUI();
-		scrollBarUI1.setCustomUI(color.getLeftSide(), Color.LIGHT_GRAY, sidePanel.getBackground());
-
-		JScrollPane scrollPane = new JScrollPane(sidePanel);
-		scrollPane.setBorder(BorderFactory.createEmptyBorder());
-		scrollPane.getVerticalScrollBar().setUI(scrollBarUI1);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-		orderPaneCen.add(scrollPane);
-
-		cancelButton = new JButton();
-		cancelButton.setBounds(10, 98, 155, 40);
-		cancelButton.setBackground(orderPaneBot.getBackground());
-		cancelButton.setBorder(BorderFactory.createEmptyBorder());
-		cancelButton.setLayout(new GridLayout(1,1));
-		cancelButton.setEnabled(F);
-		cancelButton.addActionListener(new menuButtons(-1, null, null));
-
-		JLabel cancelLabel = new JLabel();
-		cancelLabel.setText("Cancel Order");
-		cancelLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		cancelLabel.setFont(font.getFG5());
-
-		proceedButton = new JButton();
-		proceedButton.setBounds(175, 98, 155, 40);
-		proceedButton.setBackground(orderPaneBot.getBackground());
-		proceedButton.setBorder(BorderFactory.createEmptyBorder());
-		proceedButton.setLayout(new GridLayout(1,1));
-		proceedButton.setEnabled(F);
-		proceedButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (orderRecord != null) {
-					new paymentWindow(orderRecord, calculations);
-				}
-			}
-		});
-
-		JLabel proceedLabel = new JLabel();
-		proceedLabel.setText("Proceed to Payment");
-		proceedLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		proceedLabel.setFont(font.getFG5());
-
-		roundedPanelForCancelButton = new RoundedPanel(20);
-		roundedPanelForCancelButton.setBackground(color.getInactiveButton());
-		roundedPanelForCancelButton.setLayout(new GridLayout(1,1));
-		roundedPanelForCancelButton.add(cancelLabel);
-
-		roundedPanelForProceedButton = new RoundedPanel(20);
-		roundedPanelForProceedButton.setBackground(color.getInactiveButton());
-		roundedPanelForProceedButton.setLayout(new GridLayout(1,1));
-		roundedPanelForProceedButton.add(proceedLabel);
-
-		cancelButton.add(roundedPanelForCancelButton);
-		proceedButton.add(roundedPanelForProceedButton);
-
-		orderPaneBot.add(cancelButton);
-		orderPaneBot.add(proceedButton);
-
-		//----- Panels
-		centerContainerPanelUp = createCustomPanel(0, 0, color.getCenterPane(), new BorderLayout()); centerContainerPanelUp.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
-		centerContainerPanelDown = createCustomPanel(600, 35, centerContainerPanelUp, new BorderLayout()); centerContainerPanelDown.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-		mainPanelOnCenter = createCustomPanel(0, 0, centerContainerPanelUp, new BorderLayout()); mainPanelOnCenter.setBorder(BorderFactory.createEmptyBorder(15, 5, 0, 0));
-
-		panel5s = new RoundedPanel(15);
-		panel5s.setBackground(color.getCenterPiece());
-
-		centerContainerPanelUp.add(mainPanelOnCenter, BorderLayout.CENTER);
-		centerContainerPanelUp.add(centerContainerPanelDown, BorderLayout.NORTH);
-		centerContainerPanelDown.add(panel5s);
-
-		for (int i = 0; i < button1_.length; i++) {
-			button1_[i] = new JButton();
-			button1_[i].setBackground(LeftRibbonPanel.getBackground());
-			button1_[i].setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-			button1_[i].setEnabled(T);
-			button1_[i].setFocusPainted(F);
-			button1_[i].setLayout(new BorderLayout(1,1));
-			button1_[i].setPreferredSize(new Dimension(85, 65));
-
-			curved1[i] = new RoundedPanel(20);
-			curved1[i].setBackground(color.getRightSide());
-			curved1[i].setBorder(BorderFactory.createEmptyBorder());
-
-			label2_[i] = new JLabel();
-			label2_[i].setText(labelText[i]);
-			label2_[i].setBorder(new EmptyBorder(0, 0, 20, 0));
-//			label2_[i].setForeground(color.getSideTitle());
-			label2_[i].setForeground(Color.GREEN);
-			label2_[i].setFont(font.getFG4());
-
-			LeftRibbonPanel.add(button1_[i]);
-			button1_[i].add(curved1[i]);
-			LeftRibbonPanel.add(label2_[i]);
-
-			button1_[i].setVisible(T);
-			label2_[i].setVisible(T);
-
-			button1_[i].addActionListener(new sideButtons(i, labelText[i]));
-		}
-
-		frame.getContentPane().setLayout(new BorderLayout());
-		frame.add(TopRibbonPanel, BorderLayout.NORTH);
-		frame.add(RightRibbonPanel, BorderLayout.EAST);
-		frame.add(LeftRibbonPanel, BorderLayout.WEST);
-		frame.add(centerContainerPanelUp, BorderLayout.CENTER);
-		frame.setVisible(T);
-		frame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				System.out.println("Program is closing. Do cleanup or save data if needed.");
-				Operations.clearCSVFile(masterfile);
-			}
-		});
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		button1_[0].doClick();
-		systemTimeAndDate();
-
-	}
-
-
-
-	public void instantiate() {
-		Operations.clearCSVFile(inventory);
-		beveragesMenu = saveToDataArray(beverages);
-		foodMenu = saveToDataArray(food);
-
-		arrayOf2DArrays.put("Food", foodMenu);
-		arrayOf2DArrays.put("Drinks", beveragesMenu);
-
-		writeArrayToCSV(foodMenu, masterfile);
-		writeArrayToCSV(beveragesMenu, masterfile);
-
-		inventoryMasterfile = saveToDataArray(masterfile);
-		writeArrayToCSV(inventoryMasterfile, inventory);
-		processArray(cafeInventory, inventoryMasterfile);
-
-//    	menuPrint(inventoryMasterfile);
-	}
-
-	public static void processArray(LinkedHashMap<String, Integer> resultMap, String[][] array) {
-		for (String[] row : array) {
-			if (row.length > 0) {
-				String key = row[0];
-				int value = 20;
-				resultMap.put(key, value);
-			}
-		}
-	}
-
-	public static void writeArrayToCSV(String[][] array, String filePath) {
-		try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, true))) {
-			for (String[] row : array) {
-				for (int i = 0; i < row.length - 1; i++) {
-					writer.print(row[i] + ",");
-				}
-				writer.println(row[row.length - 1]);
-			}
-
-			System.out.println("CSV file updated successfully.");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static String[][] saveToDataArray(String a) {
-		try (BufferedReader reader = new BufferedReader(new FileReader(a))) {
-			long lineCount = reader.lines().count();
-			BufferedReader reader1 = new BufferedReader(new FileReader(a));
-
-			String[][] dataArray = new String[(int) lineCount][];
-			reader.close();
-
-			int index = 0;
-			String line;
-			while ((line = reader1.readLine()) != null) {
-				dataArray[index++] = line.split(",");
-			}
-
-			return dataArray;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new String[0][];
-		}
 	}
 
 
@@ -380,23 +377,23 @@ public class userInterface extends Definitions {
 				case 0 -> {
 					homeButtonToggle();
 					button2_[0].doClick();
-					buttonColorReset(curved1, buttonIndex, color.getInactiveButton(), color.getChoice());
+					buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
 				}
 				case 1 -> {
 					inventoryButtonToggle();
-					buttonColorReset(curved1, buttonIndex, color.getInactiveButton(), color.getChoice());
+					buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
 				}
 				case 2 -> {
 					customersButtonToggle();
-					buttonColorReset(curved1, buttonIndex, color.getInactiveButton(), color.getChoice());
+					buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
 				}
 				case 3 -> {
 					cashierButtonToggle();
-					buttonColorReset(curved1, buttonIndex, color.getInactiveButton(), color.getChoice());
+					buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
 				}
 				case 4 -> {
 					salesButtonToggle();
-					buttonColorReset(curved1, buttonIndex, color.getInactiveButton(), color.getChoice());
+					buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
 				}
 			}
 		}
@@ -420,16 +417,16 @@ public class userInterface extends Definitions {
 	}
 
 	public void homeButtonToggle() {
-		panel5s.removeAll();
+		centerPanelMainLayer.removeAll();
 		mainPanelOnCenter.removeAll();
 
-		panel5s.setBackground(color.getCenterPiece());
-		panel5s.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		panel5s.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+		centerPanelMainLayer.setBackground(color.getLeftSide());
+		centerPanelMainLayer.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		centerPanelMainLayer.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 0));
 
-		int[] arrayLengths = new int[arrayOf2DArrays.size()];
+		int[] arrayLengths = new int[categoryDataMap.size()];
 		int i = 0;
-		for (Entry<String, String[][]> entry : arrayOf2DArrays.entrySet()) {
+		for (Entry<String, String[][]> entry : categoryDataMap.entrySet()) {
 			String[][] array2D = entry.getValue();
 
 			int length = array2D.length;
@@ -437,36 +434,36 @@ public class userInterface extends Definitions {
 			i++;
 		}
 
-		int size = arrayOf2DArrays.size();
+		int size = categoryDataMap.size();
 		button2_ = new JButton[size];
-		pillShape = new RoundedPanel[size];
+		pillShape = new customRoundedPanel[size];
 		pSLabel = new JLabel[size];
 		for (int j = 0; j < button2_.length; j++) {
 			button2_[j] = new JButton();
-			button2_[j].setBackground(panel5s.getBackground());
+			button2_[j].setBackground(centerPanelMainLayer.getBackground());
 			button2_[j].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			button2_[j].setEnabled(T);
 			button2_[j].setFocusPainted(F);
-			button2_[j].setPreferredSize(new Dimension(75, 34));
+			button2_[j].setPreferredSize(new Dimension(95, 34));
 			button2_[j].addActionListener(new userInterface.menuTable(j, arrayLengths[j]));
 
-			pillShape[j] = new RoundedPanel(25);
+			pillShape[j] = new customRoundedPanel(25);
 			pillShape[j].setLayout(new GridLayout(1,1));
 			button2_[j].add(pillShape[j]);
 
 			pSLabel[j] = new JLabel();
-			Set<String> arrayNames = arrayOf2DArrays.keySet();
+			Set<String> arrayNames = categoryDataMap.keySet();
 			if (j < arrayNames.size()) {
 				String arrayName = (String) arrayNames.toArray()[j];
 				pSLabel[j].setText(arrayName);
 			}
 			pSLabel[j].setHorizontalAlignment(SwingConstants.CENTER);
-			pSLabel[j].setFont(font.getFG3());
+			pSLabel[j].setFont(font.getFG4());
 			pSLabel[j].setForeground(Color.GRAY);
 
 			pillShape[j].add(pSLabel[j]);
 
-			panel5s.add(button2_[j]);
+			centerPanelMainLayer.add(button2_[j]);
 		}
 		panelFinisher(centerContainerPanelUp);
 	}
@@ -478,24 +475,38 @@ public class userInterface extends Definitions {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) { //subject for revision as this is not final
-			switch (buttonIndex) {
-				case 0:
-					tableModifier(foodMenu);
-					pillShape[1].setBackground(panel5s.getBackground());
-					pillShape[0].setBackground(color.getRightSide());
-					pSLabel[0].setForeground(Color.DARK_GRAY);
-					pSLabel[1].setForeground(Color.GRAY);
-					break;
-				case 1:
-					tableModifier(beveragesMenu);
-					pillShape[0].setBackground(panel5s.getBackground());
-					pillShape[1].setBackground(color.getRightSide());
-					pSLabel[1].setForeground(Color.DARK_GRAY);
-					pSLabel[0].setForeground(Color.GRAY);
-					break;
+		public void actionPerformed(ActionEvent e) {
+			List<String> categoryKeys = new ArrayList<>(categoryDataMap.keySet());
+
+			if (buttonIndex >= 0 && buttonIndex < categoryKeys.size()) {
+				String selectedCategory = categoryKeys.get(buttonIndex);
+//				String formattedCategory = Operations.toTitleCase(selectedCategory);
+				String[][] categoryData = categoryDataMap.get(selectedCategory);
+
+				if (categoryData != null) {
+					tableModifier(categoryData);
+				} else {
+					System.out.println("No data found for category: " + selectedCategory);
+				}
+
+				for (int i = 0; i < categoryKeys.size(); i++) {
+					if (i == buttonIndex) {
+						pillShape[i].setBackground(color.getRightSide());
+						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
+						pSLabel[i].setFont(font.getFG1());
+						pSLabel[i].setForeground(Color.DARK_GRAY);
+					} else {
+						pillShape[i].setBackground(centerPanelMainLayer.getBackground());
+						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
+						pSLabel[i].setFont(font.getFG4());
+						pSLabel[i].setForeground(Color.GRAY);
+					}
+				}
+			} else {
+				System.out.println("Invalid button index: " + buttonIndex);
 			}
 		}
+
 		@SuppressWarnings("unused")
 		public int getButtonIndex() {
 			return buttonIndex;
@@ -520,7 +531,7 @@ public class userInterface extends Definitions {
 			mainPanelOnCenters.setBackground(mainPanelOnCenter.getBackground());
 			mainPanelOnCenters.setLayout(new GridLayout(0, 4, 0, 0));
 
-			panel5_ = new RoundedPanel[maxLength];
+			panel5_ = new customRoundedPanel[maxLength];
 			forPanel5_ = new JButton[maxLength];
 			productName = new JLabel[maxLength];
 			productPrice = new JLabel[maxLength];
@@ -534,8 +545,8 @@ public class userInterface extends Definitions {
 				forPanel5_[i].addActionListener(new menuButtons(i, menuArray, null));
 				forPanel5_[i].setEnabled(F);
 
-				panel5_[i] = new RoundedPanel(30);
-				panel5_[i].setBackground(mainPanelOnCenters.getBackground());
+				panel5_[i] = new customRoundedPanel(30);
+				panel5_[i].setBackground(color.getCenterPane());
 				panel5_[i].setBorder(BorderFactory.createEmptyBorder(120, 12, 13, 10));
 				panel5_[i].setLayout(new BorderLayout());
 
@@ -559,7 +570,7 @@ public class userInterface extends Definitions {
 				forPanel5_[i].setEnabled(T);
 				forPanel5_[i].setFocusPainted(F);
 				forPanel5_[i].addMouseListener(new mouseListen(panel5_[i], forPanel5_[i]));
-				panel5_[i].setBackground(color.getLeftSide());
+				panel5_[i].setBackground(Color.WHITE);
 
 				productName[i].setText(menuArray[i][1]);
 				productPrice[i].setText("₱" + menuArray[i][2] + ".00");
@@ -637,12 +648,12 @@ public class userInterface extends Definitions {
 					System.err.println("Invalid button index for array access.");
 				}
 			} else if (buttonIndex == -1){
-				for (int i = 0; i < label4_.length; i++) {
-					label4_[i].setText(formattedDefaultNo);
+				for (int i = 0; i < cartLabelsNumbers.length; i++) {
+					cartLabelsNumbers[i].setText(formattedDefaultNo);
 				}
-				sidePanel.removeAll();
-				sidePanel.repaint();
-				sidePanel.revalidate();
+				centerPaneOnRightPanel.removeAll();
+				centerPaneOnRightPanel.repaint();
+				centerPaneOnRightPanel.revalidate();
 
 				roundedPanelForCancelButton.setBackground(Color.GRAY);
 				roundedPanelForProceedButton.setBackground(Color.GRAY);
@@ -661,26 +672,26 @@ public class userInterface extends Definitions {
 			int number = orderRecord.size();
 			int maxCount = 9; //modify here
 			if (number != 0) {
-				sidePanel.removeAll();
+				centerPaneOnRightPanel.removeAll();
 				if (number > maxCount) {
 					number = orderRecord.size();
 				} else {
 					number = maxCount;
 				}
 
-				mainPanelOnCenter_ = new RoundedPanel[number];
+				mainPanelOnCenter_ = new customRoundedPanel[number];
 				quantityLabel6s = new JLabel[mainPanelOnCenter_.length];
 				productName6s = new JLabel[mainPanelOnCenter_.length];
 				productPrice6s = new JLabel[mainPanelOnCenter_.length];
 
 				for (int i = 0; i < mainPanelOnCenter_.length; i++) {
-					mainPanelOnCenter_[i] = new RoundedPanel(12);
+					mainPanelOnCenter_[i] = new customRoundedPanel(12);
 					mainPanelOnCenter_[i].setBorder(new EmptyBorder(8, 10, 0, 10));
-					mainPanelOnCenter_[i].setBackground(sidePanel.getBackground());
+					mainPanelOnCenter_[i].setBackground(centerPaneOnRightPanel.getBackground());
 					mainPanelOnCenter_[i].setLayout(new FlowLayout(FlowLayout.LEFT, 12, 11));
 					mainPanelOnCenter_[i].setPreferredSize(new Dimension(310, 50));
 
-					sidePanel.add(mainPanelOnCenter_[i]);
+					centerPaneOnRightPanel.add(mainPanelOnCenter_[i]);
 
 					quantityLabel6s[i] = new JLabel();
 					quantityLabel6s[i].setText(null);
@@ -726,10 +737,10 @@ public class userInterface extends Definitions {
 				roundedPanelForCancelButton.setBackground(color.getLeftSide());
 				roundedPanelForProceedButton.setBackground(color.getLeftSide());
 
-				sidePanel.repaint();
-				sidePanel.revalidate();
+				centerPaneOnRightPanel.repaint();
+				centerPaneOnRightPanel.revalidate();
 
-				sidePanelPaymentHandling(label4_);
+				sidePanelPaymentHandling(cartLabelsNumbers);
 			}
 		}
 
@@ -830,11 +841,11 @@ public class userInterface extends Definitions {
 	}
 
 	public void whenSearched() {
-		panel5s.removeAll();
+		centerPanelMainLayer.removeAll();
 		mainPanelOnCenter.removeAll();
 
-		panel5s.setLayout(new BorderLayout());
-		panel5s.setBorder(BorderFactory.createEmptyBorder(0, 15, 1, 10));
+		centerPanelMainLayer.setLayout(new BorderLayout());
+		centerPanelMainLayer.setBorder(BorderFactory.createEmptyBorder(0, 15, 1, 10));
 
 		JLabel searchResult = new JLabel();
 		searchResult.setText("Search Results: ");
@@ -843,7 +854,7 @@ public class userInterface extends Definitions {
 		searchResult.setForeground(Color.GRAY);
 
 		JButton closeSearch = new JButton();
-		closeSearch.setBackground(panel5s.getBackground());
+		closeSearch.setBackground(centerPanelMainLayer.getBackground());
 		closeSearch.setForeground(Color.GRAY);
 		closeSearch.setBorder(BorderFactory.createEmptyBorder());
 		closeSearch.setBorder(new EmptyBorder(5, 0, 5, 0));
@@ -852,13 +863,13 @@ public class userInterface extends Definitions {
 		closeSearch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				textField1.setText("Search products...");
-				textField1.addKeyListener(new keyListen());
-				button1_[0].doClick();
+				searchBox.setText("Search products...");
+				searchBox.addKeyListener(new keyListen());
+				sideRibbonButtons[0].doClick();
 			}
 		});
 
-		RoundedPanel pillShape = new RoundedPanel(25);
+		customRoundedPanel pillShape = new customRoundedPanel(25);
 		pillShape.setBackground(color.getInactiveButton());
 		pillShape.setBorder(new EmptyBorder(0, 0, 0, 0));
 		pillShape.setLayout(new GridLayout(1,1));
@@ -872,8 +883,8 @@ public class userInterface extends Definitions {
 		pillShape.add(pSLabel);
 		closeSearch.add(pillShape);
 
-		panel5s.add(searchResult, BorderLayout.WEST);
-		panel5s.add(closeSearch, BorderLayout.EAST);
+		centerPanelMainLayer.add(searchResult, BorderLayout.WEST);
+		centerPanelMainLayer.add(closeSearch, BorderLayout.EAST);
 
 		JPanel resultPanel = new JPanel();
 		resultPanel.setBackground(mainPanelOnCenter.getBackground());
@@ -883,7 +894,7 @@ public class userInterface extends Definitions {
 		int size = searchResults.size();
 
 		JButton[] results = new JButton[size];
-		RoundedPanel[] resultsPane = new RoundedPanel[size];
+		customRoundedPanel[] resultsPane = new customRoundedPanel[size];
 		JLabel[] productCode4s = new JLabel[size];
 		JLabel[] productName4s = new JLabel[size];
 		JLabel[] productPrice4s = new JLabel[size];
@@ -899,7 +910,7 @@ public class userInterface extends Definitions {
 			results[i].setLayout(new GridLayout(1, 1));
 			results[i].addActionListener(new menuButtons(i, null, result[0]));
 
-			resultsPane[i] = new RoundedPanel(15);
+			resultsPane[i] = new customRoundedPanel(15);
 			resultsPane[i].setBackground(panelColor);
 			resultsPane[i].setBorder(new EmptyBorder(0, 40, 0, 40));
 			resultsPane[i].setLayout(new BorderLayout());
@@ -950,61 +961,61 @@ public class userInterface extends Definitions {
 		@Override
 		public void insertUpdate(DocumentEvent e) {
 			whenSearched();
-			Operations.searchProducts(inventoryMasterfile, textField1.getText());
+			Operations.searchProducts(searchBox.getText());
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
 			whenSearched();
-			Operations.searchProducts(inventoryMasterfile, textField1.getText());
+			Operations.searchProducts(searchBox.getText());
 		}
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
 			whenSearched();
-			Operations.searchProducts(inventoryMasterfile, textField1.getText());
+			Operations.searchProducts(searchBox.getText());
 		}
 	}
 
 	private class focusListen implements FocusListener {
 		@Override
 		public void focusGained(FocusEvent e) {
-			textField1.setCaretPosition(0);
+			searchBox.setCaretPosition(0);
 		}
 
 		@Override
 		public void focusLost(FocusEvent e) {
-			textField1.addKeyListener(new keyListen());
-			textField1.setForeground(Color.GRAY);
+			searchBox.addKeyListener(new keyListen());
+			searchBox.setForeground(Color.GRAY);
 		}
 	}
 
 	public class keyListen implements KeyListener {
 		@Override
 		public void keyTyped(KeyEvent e) {
-			textField1.setText("");
-			textField1.removeKeyListener(this);
-			textField1.setForeground(Color.DARK_GRAY);
+			searchBox.setText("");
+			searchBox.removeKeyListener(this);
+			searchBox.setForeground(Color.DARK_GRAY);
 			//addition: Recent Searches and Recommendations
 		}
 
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_A) {
-				textField1.setText("");
-				textField1.setCaretPosition(0);
+				searchBox.setText("");
+				searchBox.setCaretPosition(0);
 			}
 			if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
 				e.consume();
-				textField1.setCaretPosition(0);
+				searchBox.setCaretPosition(0);
 			}
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			textField1.setText("Search products...");
-			textField1.setCaretPosition(0);
-			textField1.addKeyListener(this);
+			searchBox.setText("Search products...");
+			searchBox.setCaretPosition(0);
+			searchBox.addKeyListener(this);
 		}
 	}
 
@@ -1033,12 +1044,12 @@ public class userInterface extends Definitions {
 	}
 
 	public void inventoryButtonToggle() {
-		panel5s.removeAll();
+		centerPanelMainLayer.removeAll();
 		mainPanelOnCenter.removeAll();
 
-		panel5s.setBackground(color.getCenterPiece());
-		panel5s.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		panel5s.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+		centerPanelMainLayer.setBackground(color.getCenterPiece());
+		centerPanelMainLayer.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		centerPanelMainLayer.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
 		int[] arrayLengths = new int[arrayOf2DArrays.size()];
 		int i = 0;
@@ -1052,18 +1063,18 @@ public class userInterface extends Definitions {
 
 		int size = arrayOf2DArrays.size();
 		button2_ = new JButton[size];
-		pillShape = new RoundedPanel[size];
+		pillShape = new customRoundedPanel[size];
 		pSLabel = new JLabel[size];
 		for (int j = 0; j < button2_.length; j++) {
 			button2_[j] = new JButton();
-			button2_[j].setBackground(panel5s.getBackground());
+			button2_[j].setBackground(centerPanelMainLayer.getBackground());
 			button2_[j].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			button2_[j].setEnabled(T);
 			button2_[j].setPreferredSize(new Dimension(75, 34));
 			button2_[j].addActionListener(new userInterface.menuTable(j, arrayLengths[j]));
 
-			pillShape[j] = new RoundedPanel(25);
-			pillShape[j].setBackground(panel5s.getBackground());
+			pillShape[j] = new customRoundedPanel(25);
+			pillShape[j].setBackground(centerPanelMainLayer.getBackground());
 			pillShape[j].setBorder(new EmptyBorder(0, 0, 0, 0));
 			pillShape[j].setLayout(new GridLayout(1,1));
 			button2_[j].add(pillShape[j]);
@@ -1080,46 +1091,40 @@ public class userInterface extends Definitions {
 
 			pillShape[j].add(pSLabel[j]);
 
-			panel5s.add(button2_[j]);
+			centerPanelMainLayer.add(button2_[j]);
 		}
 
 		updateIndicator();
-
-		int masterLength = inventoryMasterfile.length;
-		for (int j = 0; j < masterLength; j++) {
-
-		}
-
 		panelFinisher(centerContainerPanelUp);
 	}
 
 	public void customersButtonToggle() {
-		panel5s.removeAll();
+		centerPanelMainLayer.removeAll();
 		mainPanelOnCenter.removeAll();
 
 		updateIndicator();
 
-		panel5s.setBackground(Color.MAGENTA);
+		centerPanelMainLayer.setBackground(Color.MAGENTA);
 		panelFinisher(centerContainerPanelUp);
 	}
 
 	public void cashierButtonToggle() {
-		panel5s.removeAll();
+		centerPanelMainLayer.removeAll();
 		mainPanelOnCenter.removeAll();
 
 		updateIndicator();
 
-		panel5s.setBackground(Color.BLUE);
+		centerPanelMainLayer.setBackground(Color.BLUE);
 		panelFinisher(centerContainerPanelUp);
 	}
 
 	public void salesButtonToggle() {
-		panel5s.removeAll();
+		centerPanelMainLayer.removeAll();
 		mainPanelOnCenter.removeAll();
 
 		updateIndicator();
 
-		panel5s.setBackground(Color.ORANGE);
+		centerPanelMainLayer.setBackground(Color.ORANGE);
 		panelFinisher(centerContainerPanelUp);
 	}
 }

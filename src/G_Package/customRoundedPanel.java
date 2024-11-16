@@ -8,10 +8,10 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class RoundedPanel extends JPanel{
+public class customRoundedPanel extends JPanel{
 	private int radius;
 	 
-	 public RoundedPanel(int radius) {
+	 public customRoundedPanel(int radius) {
 		 this.radius = radius;
 		 setOpaque(false);
 	 }
