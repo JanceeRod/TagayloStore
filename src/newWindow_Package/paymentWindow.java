@@ -28,23 +28,21 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import G_Package.RoundedPanel;
-import G_Package.colorPallete;
+import G_Package.customRoundedPanel;
+import G_Package.customColorPallete;
 import G_Package.customScrollBarUI;
-import G_Package.fontGallery;
+import G_Package.customFontGallery;
 
 import mainPackage.Operations;
-import mainPackage.charitism;
-
 
 
 public class paymentWindow extends JFrame {
-	colorPallete color = new colorPallete();
-	fontGallery font = new fontGallery();
+	customColorPallete color = new customColorPallete();
+	customFontGallery font = new customFontGallery();
 	
 	boolean T = true, F = false;
 	
-	RoundedPanel[] orders;
+	customRoundedPanel[] orders;
 	JLabel[] quantityPrice6s;
 	JPanel[] basePanel;
 	
@@ -66,7 +64,7 @@ public class paymentWindow extends JFrame {
     	
     	JLabel label1 = new JLabel();
     	label1.setText("Java Jive - Payment Window");
-    	label1.setFont(font.getFG1());
+    	label1.setFont(font.getTitleFont());
     	label1.setHorizontalAlignment(SwingConstants.CENTER);
     	label1.setForeground(color.getTitleColor());
     	
@@ -103,14 +101,14 @@ public class paymentWindow extends JFrame {
     	optionPanel.setLayout(new GridLayout(1, size));
     	
     	JButton[] forOptions = new JButton[size];
-    	RoundedPanel[] options = new RoundedPanel[size];
+    	customRoundedPanel[] options = new customRoundedPanel[size];
     	for (int i = 0; i < size; i++) {
     		forOptions[i] = new JButton();
     		forOptions[i].setBackground(optionPanel.getBackground());
     		forOptions[i].setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
     		forOptions[i].addActionListener(new paymentListener(i));
     		
-    		options[i] = new RoundedPanel(20);
+    		options[i] = new customRoundedPanel(20);
     		options[i].setBackground(Color.GREEN);
     		
     		forOptions[i].add(options[i]);
@@ -137,13 +135,13 @@ public class paymentWindow extends JFrame {
     	summaryPanel2s.setBackground(Color.WHITE);
     	summaryPanel2s.setLayout(new BorderLayout());
     	
-    	RoundedPanel summaryPanel2v = new RoundedPanel(20);
+    	customRoundedPanel summaryPanel2v = new customRoundedPanel(20);
     	summaryPanel2v.setBackground(panel3t.getBackground());
     	summaryPanel2v.setLayout(new BorderLayout());
     	
     	JLabel summaryLabel = new JLabel();
     	summaryLabel.setText("ORDER SUMMARY");
-    	summaryLabel.setFont(font.getFG2());
+    	summaryLabel.setFont(font.getProductPriceBOLD());
     	summaryLabel.setHorizontalAlignment(SwingConstants.CENTER);
     	summaryLabel.setForeground(Color.BLACK);
     	
@@ -167,7 +165,7 @@ public class paymentWindow extends JFrame {
     	JLabel[] productPrice6s = new JLabel[number];
     	quantityPrice6s = new JLabel[number];
     	basePanel = new JPanel[number];
-    	orders = new RoundedPanel[number];
+    	orders = new customRoundedPanel[number];
     	
     	for (int i = 0; i < orders.length; i++) {
     		basePanel[i] = new JPanel();
@@ -176,7 +174,7 @@ public class paymentWindow extends JFrame {
     		basePanel[i].setPreferredSize(new Dimension(230, 40));
     		basePanel[i].setLayout(new GridLayout(1, 1));
     		
-    		orders[i] = new RoundedPanel(25);
+    		orders[i] = new customRoundedPanel(25);
     		orders[i].setBorder(new EmptyBorder(7, 10, 0, 10));
     		orders[i].setBackground(Color.WHITE);
     		orders[i].setLayout(new FlowLayout(FlowLayout.LEFT, 0, 1));
@@ -288,11 +286,11 @@ public class paymentWindow extends JFrame {
 	}
 	
 	private class mouseListen extends MouseAdapter {
-		private RoundedPanel panel;
+		private customRoundedPanel panel;
 		private JButton button;
 		private int index;
 		
-		public mouseListen(int index, RoundedPanel panel) {
+		public mouseListen(int index, customRoundedPanel panel) {
 			this.setIndex(index);
 			this.setPanel(panel);
 			this.setButton(button);
@@ -321,7 +319,7 @@ public class paymentWindow extends JFrame {
 		public JPanel getPanel() {
 			return panel;
 		}
-		public void setPanel(RoundedPanel panel) {
+		public void setPanel(customRoundedPanel panel) {
 			this.panel = panel;
 		}
 	}

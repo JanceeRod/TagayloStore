@@ -2,15 +2,7 @@ package G_Package;
 
 import java.awt.Color;
 
-public class colorPallete {
-//  protected Color PC1;
-//  protected Color PC2;
-//  protected Color PC3;
-//  protected Color PC4;
-//  protected Color PC5;
-//  protected Color PC6;
-//  protected Color forHover;
-
+public class customColorPallete {
   //new Pallete
   private Color search; //249 249 250   - secondary panel color     - SP
   private Color rightSide; //236 238 239   - primary panel color       - PP
@@ -19,34 +11,24 @@ public class colorPallete {
   private Color inactiveButton; //191 197 201   - inactive buttons          - IB
   private Color centerPiece; //173 180 185   - side panel                - SPC
   private Color choice; //152 161 168   - secondary font color      - SFC
-  protected Color gray_7; //127 139 147   - tertiary font color       - TFC 
+  protected Color gray_7; //127 139 147   - tertiary font color       - TFC
   private Color centerPane; //96 110 121    - primary font color        - PFC
   private Color header;
   private Color titleColor;
   private Color sideTitle; 
   
-  public colorPallete() {
-//      PC1 = new Color(245,245,245);
-//      PC2 = new Color(192,192,192);
-//      PC3 = new Color(128,128,128);
-//      PC4 = new Color(220,220,220);
-//      PC5 = new Color(211,211,211);
-//      PC6 = new Color(255,228,225);
-//      forHover = new Color(205,205,205);
-
-//  	header = new Color(79, 94, 232);
-//  	header = Color.BLACK;
+  public customColorPallete() {
   	  setTitleColor(Color.WHITE);
   	  setSideTitle(Color.LIGHT_GRAY);
       setSearch(new Color(243, 244, 248)); 	// 100
-      setRightSide(new Color(210, 212, 218)); 	// 200
+      setRightSide(new Color(236, 226, 210)); 	// 200
       setChoice(new Color(179, 181, 189));	// 300 
       setOrderPane(new Color(148, 150, 161)); 	// 400
       setInactiveButton(new Color(119, 121, 134)); 	// 500
       setCenterPiece(new Color(91, 93, 107)); 	// 600
-      setLeftSide(new Color(64, 66, 82)); 	// 700
-      setHeader(new Color(40, 42, 58)); 	// 800
-      setCenterPane(new Color(16, 18, 35)); 	// 900
+      setLeftSide(new Color(236, 226, 210)); 	// 700
+      setHeader(new Color(217, 100, 30)); 	// 800
+      setCenterPane(new Color(235, 235, 235)); 	// 900
       
   }
 

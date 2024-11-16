@@ -1,36 +1,167 @@
 package mainPackage;
 
-import javax.swing.*;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import E_Package.Category;
+
+import java.io.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Operations extends Definitions {
 
-    /**
-     * i have no idea what this function actually
-     * does but i will pretend that i do for the sake
-     * of this comment test hehe
-     *
-     * @param productsArray and searchQuery
-     */
-    public static void searchProducts(String[][] productsArray, String searchQuery) {
+
+    //utility method
+    public static String toTitleCase(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        String lowerCased = input.toLowerCase();
+        return Character.toUpperCase(lowerCased.charAt(0)) + lowerCased.substring(1);
+    }
+
+
+    //To Array[][] conversion
+    public static Map<String, String[][]> convertCategoriesToArrays(List<Category> categories) {
+        Map<String, String[][]> dataArrays = new HashMap<>();
+
+        for (Category category : categories) {
+            String fileName = category.getFileName();
+            String categoryName = fileName.substring(0, fileName.lastIndexOf('.'));
+
+            String[][] dataArray = saveToDataArray(fileName);
+            if (dataArray.length > 0) {
+                System.out.println("Loaded data for category: " + categoryName);
+            } else {
+                System.out.println("No data found in: " + fileName);
+            }
+            dataArrays.put(categoryName, dataArray);
+        }
+        return dataArrays;
+    }
+
+
+    //for Categories
+    public static void createFilesFromCategories(List<Category> categories) {
+        for (Category category : categories) {
+            String fileName = category.getFileName();
+            File file = new File(fileName);
+
+            if (!file.exists()) {
+                try {
+                    if (file.createNewFile()) {
+                        System.out.println("File created: " + fileName);
+                    } else {
+                        System.out.println("File already exists: " + fileName);
+                    }
+                } catch (IOException e) {
+                    System.out.println("An error occurred while creating the file: " + fileName);
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("File already exists: " + fileName);
+            }
+        }
+    }
+
+    public static void deleteFiles(List<Category> categories) {
+        for (Category category : categories) {
+            String fileName = category.getFileName();
+            File file = new File(fileName);
+
+            if (file.exists()) {
+                if (file.delete()) {
+                    System.out.println("File deleted: " + fileName);
+                } else {
+                    System.out.println("Failed to delete file: " + fileName);
+                }
+            } else {
+                System.out.println("File not found: " + fileName);
+            }
+        }
+    }
+
+
+    //Data Structure Modifiers
+    public static void processArrayToHashMap(String[][] array, LinkedHashMap<String, Integer> resultMap) {
+        for (String[] row : array) {
+            if (row.length > 0) {
+                String key = row[0];
+                int value = 20;
+                resultMap.put(key, value);
+            }
+        }
+    }
+
+    public static void writeAllArraysToMasterFile(Map<String, String[][]> dataArrays, String masterFilePath) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(masterFilePath))) {
+            for (Map.Entry<String, String[][]> entry : dataArrays.entrySet()) {
+                String categoryName = entry.getKey();
+                String[][] dataArray = entry.getValue();
+                writeArrayToCSV(dataArray, writer);
+            }
+            System.out.println("Master file updated successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void writeArrayToCSV(String[][] array, PrintWriter writer) {
+        for (String[] row : array) {
+            for (int i = 0; i < row.length - 1; i++) {
+                writer.print(row[i] + ",");
+            }
+            writer.println(row[row.length - 1]);
+        }
+    }
+
+    public static String[][] saveToDataArray(String a) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(a))) {
+            long lineCount = reader.lines().count();
+            BufferedReader reader1 = new BufferedReader(new FileReader(a));
+
+            String[][] dataArray = new String[(int) lineCount][];
+            reader.close();
+
+            int index = 0;
+            String line;
+            while ((line = reader1.readLine()) != null) {
+                dataArray[index++] = line.split(",");
+            }
+
+            return dataArray;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new String[0][];
+        }
+    }
+
+    public static void searchProducts(String searchQuery) {
         searchResults.clear();
         boolean found = false;
 
         System.out.println("Query: " + searchQuery);
-        for (String[] product : productsArray) {
-            String productCode = product[0];
-            String productName = product[1];
-            String productPrice = product[2];
 
-            if (productName.toLowerCase().contains(searchQuery.toLowerCase()) || productCode.contains(searchQuery) || productPrice.contains(searchQuery)) {
-                System.out.println("Product found: " + productCode + "   " + productName + " - ₱" + productPrice);
-                searchResults.add(product);
-                found = true;
+        for (Map.Entry<String, String[][]> entry : categoryDataMap.entrySet()) {
+            String[][] productsArray = entry.getValue();
+
+            for (String[] product : productsArray) {
+                String productCode = product[0];
+                String productName = product[1];
+                String productPrice = product[2];
+
+                if (productName.toLowerCase().contains(searchQuery.toLowerCase()) ||
+                        productCode.contains(searchQuery) ||
+                        productPrice.contains(searchQuery)) {
+
+                    System.out.println("Product found in " + entry.getKey() + ": " + productCode + "   " + productName + " - ₱" + productPrice);
+                    searchResults.add(product);
+                    found = true;
+                }
             }
+        }
+        if (!found) {
+            System.out.println("No products found for the query: " + searchQuery);
         }
     }
 
@@ -43,16 +174,16 @@ public class Operations extends Definitions {
         }
     }
 
-    public static String getProductName(String productCode) {
-        for (String[] product : beveragesMenu) {
-            if (product[0].equals(productCode)) {
-                return product[1];
-            }
-        }
 
-        for (String[] product : foodMenu) {
-            if (product[0].equals(productCode)) {
-                return product[1];
+    //Inventory Info
+    public static String getProductName(String productCode) {
+        for (Map.Entry<String, String[][]> entry : categoryDataMap.entrySet()) {
+            String[][] categoryArray = entry.getValue();
+
+            for (String[] product : categoryArray) {
+                if (product[0].equals(productCode)) {
+                    return product[1];
+                }
             }
         }
         return "Unknown Product";
@@ -69,30 +200,26 @@ public class Operations extends Definitions {
     }
 
     public static String getProductPrice(String productCode) {
-        for (String[] product : beveragesMenu) {
-            if (product[0].equals(productCode)) {
-                return product[2];
-            }
-        }
+        for (Map.Entry<String, String[][]> entry : categoryDataMap.entrySet()) {
+            String[][] categoryArray = entry.getValue();
 
-        for (String[] product : foodMenu) {
-            if (product[0].equals(productCode)) {
-                return product[2];
+            for (String[] product : categoryArray) {
+                if (product[0].equals(productCode)) {
+                    return product[2];
+                }
             }
         }
         return "0.0";
     }
 
     public static String getProductCode(String productName) {
-        for (String[] product : beveragesMenu) {
-            if (product[1].equals(productName)) {
-                return product[0];
-            }
-        }
+        for (Map.Entry<String, String[][]> entry : categoryDataMap.entrySet()) {
+            String[][] categoryArray = entry.getValue();
 
-        for (String[] product : foodMenu) {
-            if (product[1].equals(productName)) {
-                return product[0];
+            for (String[] product : categoryArray) {
+                if (product[1].equalsIgnoreCase(productName)) {
+                    return product[0];
+                }
             }
         }
         return "Unknown Product";
@@ -106,14 +233,8 @@ public class Operations extends Definitions {
     }
 
     public static void menuPrint(String[][] dataArray) {
-        for (int i = 0; i < dataArray.length; i++) {
-            System.out.printf("+      "+ "%-8s%-25s%-5s\n", dataArray[i][0], dataArray[i][1], dataArray[i][2] + "      +");
-        }
-    }
-
-    public static void inventoryPrinter(String[][] a) {
-        for (int i = 0; i < a.length; i++) {
-            System.out.printf("+       "+ "%-8s%-25s%-11s\n", a[i][0], a[i][2], a[i][3] + "      +");
+        for (String[] strings : dataArray) {
+            System.out.printf("+      " + "%-8s%-45s%-5s\n", strings[0], strings[1], strings[2]);
         }
     }
 }
