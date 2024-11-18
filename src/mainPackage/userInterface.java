@@ -161,6 +161,9 @@ public class userInterface extends Definitions {
 			sideRibbonRoundedPanels[i].setBackground(color.getRightSide());
 			sideRibbonRoundedPanels[i].setBorder(BorderFactory.createEmptyBorder());
 
+			JLabel imageLabel = new JLabel(new ImageIcon("images/ui/home.png"));
+			sideRibbonRoundedPanels[i].add(imageLabel, BorderLayout.CENTER);
+
 			label2_[i] = new JLabel();
 			label2_[i].setText(sideRibbonLabels[i]);
 			label2_[i].setBorder(new EmptyBorder(0, 0, 20, 0));
@@ -350,7 +353,6 @@ public class userInterface extends Definitions {
 			switch (buttonIndex) {
 				case 0 -> {
 					homeButtonToggle();
-//					button2_[0].setIcon(new ImageIcon("images/ui/home.png"));
 					button2_[0].doClick();
 					buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
 				}
