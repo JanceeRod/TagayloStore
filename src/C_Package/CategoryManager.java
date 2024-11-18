@@ -1,4 +1,4 @@
-package mainPackage;
+package C_Package;
 
 import E_Package.Category;
 

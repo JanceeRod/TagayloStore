@@ -1,4 +1,4 @@
-package mainPackage;
+package M_Package;
 
 import E_Package.Category;
 import G_Package.customRoundedPanel;

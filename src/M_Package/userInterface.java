@@ -1,4 +1,4 @@
-package mainPackage;
+package M_Package;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -164,6 +164,7 @@ public class userInterface extends Definitions {
 			leftRibbonPanel.add(label2_[i]);
 
 			sideRibbonButtons[i].setVisible(T);
+			label2_[i].setVisible(T);
 			label2_[i].setVisible(T);
 
 			sideRibbonButtons[i].addActionListener(new sideButtons(i, sideRibbonLabels[i]));
@@ -410,7 +411,7 @@ public class userInterface extends Definitions {
 			button2_[j].setEnabled(T);
 			button2_[j].setFocusPainted(F);
 			button2_[j].setPreferredSize(new Dimension(105, 34));
-			button2_[j].addActionListener(new userInterface.menuTable(j, arrayLengths[j]));
+			button2_[j].addActionListener(new M_Package.userInterface.menuTable(j, arrayLengths[j]));
 
 			pillShape[j] = new customRoundedPanel(25);
 			pillShape[j].setLayout(new GridLayout(1,1));
@@ -1036,7 +1037,7 @@ public class userInterface extends Definitions {
 			button2_[j].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			button2_[j].setEnabled(T);
 			button2_[j].setPreferredSize(new Dimension(75, 34));
-			button2_[j].addActionListener(new userInterface.menuTable(j, arrayLengths[j]));
+			button2_[j].addActionListener(new M_Package.userInterface.menuTable(j, arrayLengths[j]));
 
 			pillShape[j] = new customRoundedPanel(25);
 			pillShape[j].setBackground(centerPanelMainLayer.getBackground());

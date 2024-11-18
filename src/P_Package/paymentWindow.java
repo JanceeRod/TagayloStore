@@ -33,7 +33,7 @@ import G_Package.customColorPallete;
 import G_Package.customScrollBarUI;
 import G_Package.customFontGallery;
 
-import mainPackage.Operations;
+import M_Package.Operations;
 
 
 public class paymentWindow extends JFrame {

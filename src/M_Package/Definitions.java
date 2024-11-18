@@ -1,5 +1,6 @@
-package mainPackage;
+package M_Package;
 
+import C_Package.CategoryManager;
 import E_Package.Category;
 import E_Package.Transaction;
 import G_Package.customRoundedPanel;
@@ -10,7 +11,6 @@ import G_Package.customPopupMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
