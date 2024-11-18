@@ -350,6 +350,7 @@ public class userInterface extends Definitions {
 			switch (buttonIndex) {
 				case 0 -> {
 					homeButtonToggle();
+//					button2_[0].setIcon(new ImageIcon("images/ui/home.png"));
 					button2_[0].doClick();
 					buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
 				}
@@ -515,7 +516,7 @@ public class userInterface extends Definitions {
 				forPanel5_[i].setBackground(mainPanelOnCenters.getBackground());
 				forPanel5_[i].setLayout(new BorderLayout(1,1));
 				forPanel5_[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-				forPanel5_[i].setPreferredSize(new Dimension(150, 150));
+				forPanel5_[i].setPreferredSize(new Dimension(300, 300));
 				forPanel5_[i].addActionListener(new menuButtons(i, menuArray, null));
 				forPanel5_[i].setEnabled(F);
 
