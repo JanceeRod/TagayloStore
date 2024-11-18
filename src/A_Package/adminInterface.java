@@ -1,5 +1,4 @@
-package adminPackage;
-import G_Package.customTableUI;
+package A_Package;
 import mainPackage.Operations;
 
 import javax.swing.*;
