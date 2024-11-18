@@ -505,12 +505,12 @@ public class userInterface extends Definitions {
 			mainPanelOnCenters.setBackground(mainPanelOnCenter.getBackground());
 			mainPanelOnCenters.setLayout(new GridLayout(0, 4, 0, 0));
 
-			panel5_ = new customRoundedPanel[lengthy];
-			forPanel5_ = new JButton[lengthy];
-			productName = new JLabel[lengthy];
-			productPrice = new JLabel[lengthy];
+			panel5_ = new customRoundedPanel[maxLength];
+			forPanel5_ = new JButton[maxLength];
+			productName = new JLabel[maxLength];
+			productPrice = new JLabel[maxLength];
 
-			for (int i = 0; i < lengthy; i++) {
+			for (int i = 0; i < maxLength; i++) {
 				forPanel5_[i] = new JButton();
 				forPanel5_[i].setBackground(mainPanelOnCenters.getBackground());
 				forPanel5_[i].setLayout(new BorderLayout(1,1));
@@ -521,22 +521,24 @@ public class userInterface extends Definitions {
 
 				panel5_[i] = new customRoundedPanel(30);
 				panel5_[i].setBackground(color.getCenterPane());
-				panel5_[i].setBorder(BorderFactory.createEmptyBorder(111, 12, 13, 12));
-				panel5_[i].setLayout(new BorderLayout());
+				panel5_[i].setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+				panel5_[i].setLayout(new BorderLayout(1,1));
 
 				productName[i] = new JLabel();
 				productName[i].setFont(font.getProductNameREGULAR());
 				productName[i].setForeground(Color.BLACK);
+//				productName[i].setBounds(30, 30, 300, 100);
 
 				productPrice[i] = new JLabel();
 				productPrice[i].setFont(font.getProductPriceBOLD());
 				productPrice[i].setForeground(color.getHeader());
+//				productPrice[i].setBounds(30, 50, 300, 100);
 
 				mainPanelOnCenters.add(forPanel5_[i]);
 
 				forPanel5_[i].add(panel5_[i]);
 
-				panel5_[i].add(productName[i], BorderLayout.NORTH);
+				panel5_[i].add(productName[i], BorderLayout.CENTER);
 				panel5_[i].add(productPrice[i], BorderLayout.SOUTH);
 			}
 
@@ -630,8 +632,8 @@ public class userInterface extends Definitions {
 				centerPaneOnRightPanel.repaint();
 				centerPaneOnRightPanel.revalidate();
 
-				roundedPanelForCancelButton.setBackground(Color.GRAY);
-				roundedPanelForProceedButton.setBackground(Color.GRAY);
+				roundedPanelForCancelButton.setBackground(color.getRightSide());
+				roundedPanelForProceedButton.setBackground(color.getRightSide());
 				cancelButton.setEnabled(F);
 				proceedButton.setEnabled(F);
 				orderRecord.clear();
