@@ -510,7 +510,7 @@ public class userInterface extends Definitions {
 			productName = new JLabel[maxLength];
 			productPrice = new JLabel[maxLength];
 
-			for (int i = 0; i < maxLength; i++) {
+			for (int i = 0; i < 12; i++) {
 				forPanel5_[i] = new JButton();
 				forPanel5_[i].setBackground(mainPanelOnCenters.getBackground());
 				forPanel5_[i].setLayout(new BorderLayout(1,1));
@@ -538,6 +538,7 @@ public class userInterface extends Definitions {
 
 				forPanel5_[i].add(panel5_[i]);
 
+
 				panel5_[i].add(productName[i], BorderLayout.CENTER);
 				panel5_[i].add(productPrice[i], BorderLayout.SOUTH);
 			}
@@ -548,6 +549,10 @@ public class userInterface extends Definitions {
 				forPanel5_[i].setFocusPainted(F);
 				forPanel5_[i].addMouseListener(new mouseListen(panel5_[i], forPanel5_[i]));
 				panel5_[i].setBackground(Color.WHITE);
+
+				ImageIcon imageIcon = new ImageIcon(new ImageIcon("images/groceries/canton.png").getImage().getScaledInstance(panel5_[i].getWidth(), panel5_[i].getHeight() / 2, Image.SCALE_SMOOTH));
+				JLabel imageLabel = new JLabel(imageIcon);
+				panel5_[i].add(imageLabel, BorderLayout.NORTH);
 
 				productName[i].setText(menuArray[i][1]);
 				productPrice[i].setText("PHP " + menuArray[i][2] + ".00");
