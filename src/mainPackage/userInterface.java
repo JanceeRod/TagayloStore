@@ -18,6 +18,7 @@ import javax.swing.event.DocumentListener;
 import G_Package.customRoundedPanel;
 import G_Package.customPopupMenu;
 import G_Package.customScrollBarUI;
+import G_Package.customColorPallete;
 
 import newWindow_Package.paymentWindow;
 
@@ -103,7 +104,15 @@ public class userInterface extends Definitions {
 		profileButtonPop = new customPopupMenu();
 		profileButtonPop.addMenuItem("Settings", e -> JOptionPane.showMessageDialog(mainFrame, "This is Settings"));
 		profileButtonPop.addMenuItem("About Us?", e -> JOptionPane.showMessageDialog(mainFrame, "This is about us!"));
-		profileButtonPop.addMenuItem("Log Out", e -> JOptionPane.showMessageDialog(mainFrame, "Logged out"));
+		profileButtonPop.addMenuItem("Log Out",
+				e -> {
+					System.out.println("Program is closing. Do cleanup or save data if needed.");
+					Operations.clearCSVFile(masterfile);
+					JOptionPane.showMessageDialog(mainFrame, "Logged out");
+					mainFrame.dispose();
+					System.exit(0);
+				});
+
 		profileButtonPop.addMenuItem("Help", e -> JOptionPane.showMessageDialog(mainFrame, "Help"));
 
 		profileButton.addActionListener(e -> {
@@ -156,7 +165,7 @@ public class userInterface extends Definitions {
 			label2_[i].setText(sideRibbonLabels[i]);
 			label2_[i].setBorder(new EmptyBorder(0, 0, 20, 0));
 //			label2_[i].setForeground(color.getSideTitle());
-			label2_[i].setForeground(Color.GREEN);
+			label2_[i].setForeground(Color.black);
 			label2_[i].setFont(font.getFG4());
 
 			leftRibbonPanel.add(sideRibbonButtons[i]);
@@ -180,17 +189,17 @@ public class userInterface extends Definitions {
 		orderPaneTop.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 15));
 
 		orderPaneTitleTab = new customRoundedPanel(20);
-		orderPaneTitleTab.setBackground(color.getCenterPiece());
+		orderPaneTitleTab.setBackground(color.getOrderPane());
 		orderPaneTitleTab.setLayout(new BorderLayout());
 
-		orderPaneLabel = Operations.createCustomLabel("CUSTOMER CART", Color.BLACK, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
+		orderPaneLabel = Operations.createCustomLabel("CUSTOMER CART", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
 
 		orderPaneCen = Operations.createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
 
 		orderPaneBot = Operations.createCustomPanel(340, 150, color.getOrderPane(), null);
 		orderPaneBot.setLayout(null);
 
-		cartLabels = new String[]{"Subtotal", "Tax", "Payable Amount"};
+		cartLabels = new String[]{"Subtotal", "Tax", "Total:"};
 		labelText1_ = new int[]{18, 41, 69};
 		cartLabelsText = new JLabel[cartLabels.length];
 		cartLabelsNumbers = new JLabel[cartLabels.length];
@@ -199,14 +208,14 @@ public class userInterface extends Definitions {
 			cartLabelsText[i] = new JLabel();
 			cartLabelsText[i].setText(cartLabels[i]);
 			cartLabelsText[i].setBorder(new EmptyBorder(0, 0, 15, 0));
-			cartLabelsText[i].setForeground(Color.GRAY);
+			cartLabelsText[i].setForeground(Color.white);
 			cartLabelsText[i].setFont(font.getProductNameREGULAR());
 			cartLabelsText[i].setBounds(15, labelText1_[i], 120, 30);
 
 			cartLabelsNumbers[i] = new JLabel();
 			cartLabelsNumbers[i].setText(formattedDefaultNo);
 			cartLabelsNumbers[i].setBorder(new EmptyBorder(0, 0, 15, 0));
-			cartLabelsNumbers[i].setForeground(Color.GRAY);
+			cartLabelsNumbers[i].setForeground(Color.white);
 			cartLabelsNumbers[i].setFont(font.getProductNameREGULAR());
 			cartLabelsNumbers[i].setHorizontalAlignment(SwingConstants.RIGHT);
 			cartLabelsNumbers[i].setBounds(200, labelText1_[i], 120, 30);
@@ -216,10 +225,10 @@ public class userInterface extends Definitions {
 		}
 
 		cartLabelsText[2].setFont(font.getProductPriceBOLD());
-		cartLabelsText[2].setForeground(Color.DARK_GRAY);
+		cartLabelsText[2].setForeground(Color.white);
 
 		cartLabelsNumbers[2].setFont(font.getProductPriceBOLD());
-		cartLabelsNumbers[2].setForeground(Color.DARK_GRAY);
+		cartLabelsNumbers[2].setForeground(Color.white);
 
 		centerPaneOnRightPanel = new JPanel();
 		centerPaneOnRightPanel.setBorder(new EmptyBorder(0, 10, 0, 0));
@@ -456,15 +465,15 @@ public class userInterface extends Definitions {
 
 				for (int i = 0; i < categoryKeys.size(); i++) {
 					if (i == buttonIndex) {
-						pillShape[i].setBackground(color.getRightSide());
+						pillShape[i].setBackground(color.getChoice());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
-						pSLabel[i].setFont(font.getProductPriceBOLD());
-						pSLabel[i].setForeground(Color.DARK_GRAY);
+						pSLabel[i].setFont(font.getFG4());
+						pSLabel[i].setForeground(Color.white);
 					} else {
 						pillShape[i].setBackground(centerPanelMainLayer.getBackground());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
 						pSLabel[i].setFont(font.getFG4());
-						pSLabel[i].setForeground(Color.GRAY);
+						pSLabel[i].setForeground(customColorPallete.medyo_black);
 					}
 				}
 			} else {
@@ -496,12 +505,12 @@ public class userInterface extends Definitions {
 			mainPanelOnCenters.setBackground(mainPanelOnCenter.getBackground());
 			mainPanelOnCenters.setLayout(new GridLayout(0, 4, 0, 0));
 
-			panel5_ = new customRoundedPanel[maxLength];
-			forPanel5_ = new JButton[maxLength];
-			productName = new JLabel[maxLength];
-			productPrice = new JLabel[maxLength];
+			panel5_ = new customRoundedPanel[lengthy];
+			forPanel5_ = new JButton[lengthy];
+			productName = new JLabel[lengthy];
+			productPrice = new JLabel[lengthy];
 
-			for (int i = 0; i < maxLength; i++) {
+			for (int i = 0; i < lengthy; i++) {
 				forPanel5_[i] = new JButton();
 				forPanel5_[i].setBackground(mainPanelOnCenters.getBackground());
 				forPanel5_[i].setLayout(new BorderLayout(1,1));
