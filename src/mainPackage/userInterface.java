@@ -54,7 +54,7 @@ public class userInterface extends Definitions {
 			}
 		});
 
-		gd.setFullScreenWindow(mainFrame);
+//		gd.setFullScreenWindow(mainFrame);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		systemTimeAndDate();
 
