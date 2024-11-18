@@ -54,7 +54,7 @@ public class userInterface extends Definitions {
 			}
 		});
 
-//		gd.setFullScreenWindow(mainFrame);
+		gd.setFullScreenWindow(mainFrame);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		systemTimeAndDate();
 
@@ -510,7 +510,7 @@ public class userInterface extends Definitions {
 			productName = new JLabel[maxLength];
 			productPrice = new JLabel[maxLength];
 
-			for (int i = 0; i < 12; i++) {
+			for (int i = 0; i < maxLength; i++) {
 				forPanel5_[i] = new JButton();
 				forPanel5_[i].setBackground(mainPanelOnCenters.getBackground());
 				forPanel5_[i].setLayout(new BorderLayout(1,1));
@@ -539,7 +539,7 @@ public class userInterface extends Definitions {
 				forPanel5_[i].add(panel5_[i]);
 
 
-				panel5_[i].add(productName[i], BorderLayout.CENTER);
+				panel5_[i].add(productName[i], BorderLayout.NORTH);
 				panel5_[i].add(productPrice[i], BorderLayout.SOUTH);
 			}
 
@@ -550,15 +550,9 @@ public class userInterface extends Definitions {
 				forPanel5_[i].addMouseListener(new mouseListen(panel5_[i], forPanel5_[i]));
 				panel5_[i].setBackground(Color.WHITE);
 
-//				ImageIcon imageIcon = new ImageIcon(new ImageIcon("images/groceries/canton.png").getImage().getScaledInstance(panel5_[i].getWidth(), panel5_[i].getHeight() / 2, Image.SCALE_SMOOTH));
-//				JLabel imageLabel = new JLabel(imageIcon);
-
-				int width = panel5_[i].getWidth() > 0 ? panel5_[i].getWidth() : 200; // default width
-				int height = panel5_[i].getHeight() > 0 ? panel5_[i].getHeight() / 2 : 200; // default height
-				ImageIcon imageIcon = new ImageIcon(new ImageIcon("images/groceries/canton.png").getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
+				ImageIcon imageIcon = new ImageIcon("images/groceries/canton.png");
 				JLabel imageLabel = new JLabel(imageIcon);
-
-				panel5_[i].add(imageLabel, BorderLayout.NORTH);
+				panel5_[i].add(imageLabel, BorderLayout.CENTER);
 
 				productName[i].setText(menuArray[i][1]);
 				productPrice[i].setText("PHP " + menuArray[i][2] + ".00");
