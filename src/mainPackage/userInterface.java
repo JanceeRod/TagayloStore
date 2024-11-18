@@ -550,8 +550,14 @@ public class userInterface extends Definitions {
 				forPanel5_[i].addMouseListener(new mouseListen(panel5_[i], forPanel5_[i]));
 				panel5_[i].setBackground(Color.WHITE);
 
-				ImageIcon imageIcon = new ImageIcon(new ImageIcon("images/groceries/canton.png").getImage().getScaledInstance(panel5_[i].getWidth(), panel5_[i].getHeight() / 2, Image.SCALE_SMOOTH));
+//				ImageIcon imageIcon = new ImageIcon(new ImageIcon("images/groceries/canton.png").getImage().getScaledInstance(panel5_[i].getWidth(), panel5_[i].getHeight() / 2, Image.SCALE_SMOOTH));
+//				JLabel imageLabel = new JLabel(imageIcon);
+
+				int width = panel5_[i].getWidth() > 0 ? panel5_[i].getWidth() : 200; // default width
+				int height = panel5_[i].getHeight() > 0 ? panel5_[i].getHeight() / 2 : 200; // default height
+				ImageIcon imageIcon = new ImageIcon(new ImageIcon("images/groceries/canton.png").getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
 				JLabel imageLabel = new JLabel(imageIcon);
+
 				panel5_[i].add(imageLabel, BorderLayout.NORTH);
 
 				productName[i].setText(menuArray[i][1]);
