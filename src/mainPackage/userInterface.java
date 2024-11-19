@@ -18,6 +18,7 @@ import javax.swing.event.DocumentListener;
 import G_Package.customRoundedPanel;
 import G_Package.customPopupMenu;
 import G_Package.customScrollBarUI;
+import G_Package.customColorPallete;
 
 import newWindow_Package.paymentWindow;
 
@@ -103,7 +104,15 @@ public class userInterface extends Definitions {
 		profileButtonPop = new customPopupMenu();
 		profileButtonPop.addMenuItem("Settings", e -> JOptionPane.showMessageDialog(mainFrame, "This is Settings"));
 		profileButtonPop.addMenuItem("About Us?", e -> JOptionPane.showMessageDialog(mainFrame, "This is about us!"));
-		profileButtonPop.addMenuItem("Log Out", e -> JOptionPane.showMessageDialog(mainFrame, "Logged out"));
+		profileButtonPop.addMenuItem("Log Out",
+				e -> {
+					System.out.println("Program is closing. Do cleanup or save data if needed.");
+					Operations.clearCSVFile(masterfile);
+					JOptionPane.showMessageDialog(mainFrame, "Logged out");
+					mainFrame.dispose();
+					System.exit(0);
+				});
+
 		profileButtonPop.addMenuItem("Help", e -> JOptionPane.showMessageDialog(mainFrame, "Help"));
 
 		profileButton.addActionListener(e -> {
@@ -152,11 +161,14 @@ public class userInterface extends Definitions {
 			sideRibbonRoundedPanels[i].setBackground(color.getRightSide());
 			sideRibbonRoundedPanels[i].setBorder(BorderFactory.createEmptyBorder());
 
+			JLabel imageLabel = new JLabel(new ImageIcon("images/ui/home.png"));
+			sideRibbonRoundedPanels[i].add(imageLabel, BorderLayout.CENTER);
+
 			label2_[i] = new JLabel();
 			label2_[i].setText(sideRibbonLabels[i]);
 			label2_[i].setBorder(new EmptyBorder(0, 0, 20, 0));
 //			label2_[i].setForeground(color.getSideTitle());
-			label2_[i].setForeground(Color.GREEN);
+			label2_[i].setForeground(Color.black);
 			label2_[i].setFont(font.getFG4());
 
 			leftRibbonPanel.add(sideRibbonButtons[i]);
@@ -180,17 +192,17 @@ public class userInterface extends Definitions {
 		orderPaneTop.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 15));
 
 		orderPaneTitleTab = new customRoundedPanel(20);
-		orderPaneTitleTab.setBackground(color.getCenterPiece());
+		orderPaneTitleTab.setBackground(color.getOrderPane());
 		orderPaneTitleTab.setLayout(new BorderLayout());
 
-		orderPaneLabel = Operations.createCustomLabel("CUSTOMER CART", Color.BLACK, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
+		orderPaneLabel = Operations.createCustomLabel("CUSTOMER CART", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
 
 		orderPaneCen = Operations.createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
 
 		orderPaneBot = Operations.createCustomPanel(340, 150, color.getOrderPane(), null);
 		orderPaneBot.setLayout(null);
 
-		cartLabels = new String[]{"Subtotal", "Tax", "Payable Amount"};
+		cartLabels = new String[]{"Subtotal", "Tax", "Total:"};
 		labelText1_ = new int[]{18, 41, 69};
 		cartLabelsText = new JLabel[cartLabels.length];
 		cartLabelsNumbers = new JLabel[cartLabels.length];
@@ -199,14 +211,14 @@ public class userInterface extends Definitions {
 			cartLabelsText[i] = new JLabel();
 			cartLabelsText[i].setText(cartLabels[i]);
 			cartLabelsText[i].setBorder(new EmptyBorder(0, 0, 15, 0));
-			cartLabelsText[i].setForeground(Color.GRAY);
+			cartLabelsText[i].setForeground(Color.white);
 			cartLabelsText[i].setFont(font.getProductNameREGULAR());
 			cartLabelsText[i].setBounds(15, labelText1_[i], 120, 30);
 
 			cartLabelsNumbers[i] = new JLabel();
 			cartLabelsNumbers[i].setText(formattedDefaultNo);
 			cartLabelsNumbers[i].setBorder(new EmptyBorder(0, 0, 15, 0));
-			cartLabelsNumbers[i].setForeground(Color.GRAY);
+			cartLabelsNumbers[i].setForeground(Color.white);
 			cartLabelsNumbers[i].setFont(font.getProductNameREGULAR());
 			cartLabelsNumbers[i].setHorizontalAlignment(SwingConstants.RIGHT);
 			cartLabelsNumbers[i].setBounds(200, labelText1_[i], 120, 30);
@@ -216,10 +228,10 @@ public class userInterface extends Definitions {
 		}
 
 		cartLabelsText[2].setFont(font.getProductPriceBOLD());
-		cartLabelsText[2].setForeground(Color.DARK_GRAY);
+		cartLabelsText[2].setForeground(Color.white);
 
 		cartLabelsNumbers[2].setFont(font.getProductPriceBOLD());
-		cartLabelsNumbers[2].setForeground(Color.DARK_GRAY);
+		cartLabelsNumbers[2].setForeground(Color.white);
 
 		centerPaneOnRightPanel = new JPanel();
 		centerPaneOnRightPanel.setBorder(new EmptyBorder(0, 10, 0, 0));
@@ -456,15 +468,15 @@ public class userInterface extends Definitions {
 
 				for (int i = 0; i < categoryKeys.size(); i++) {
 					if (i == buttonIndex) {
-						pillShape[i].setBackground(color.getRightSide());
+						pillShape[i].setBackground(color.getChoice());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
-						pSLabel[i].setFont(font.getProductPriceBOLD());
-						pSLabel[i].setForeground(Color.DARK_GRAY);
+						pSLabel[i].setFont(font.getFG4());
+						pSLabel[i].setForeground(Color.white);
 					} else {
 						pillShape[i].setBackground(centerPanelMainLayer.getBackground());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
 						pSLabel[i].setFont(font.getFG4());
-						pSLabel[i].setForeground(Color.GRAY);
+						pSLabel[i].setForeground(customColorPallete.medyo_black);
 					}
 				}
 			} else {
@@ -506,26 +518,29 @@ public class userInterface extends Definitions {
 				forPanel5_[i].setBackground(mainPanelOnCenters.getBackground());
 				forPanel5_[i].setLayout(new BorderLayout(1,1));
 				forPanel5_[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-				forPanel5_[i].setPreferredSize(new Dimension(150, 150));
+				forPanel5_[i].setPreferredSize(new Dimension(300, 300));
 				forPanel5_[i].addActionListener(new menuButtons(i, menuArray, null));
 				forPanel5_[i].setEnabled(F);
 
 				panel5_[i] = new customRoundedPanel(30);
 				panel5_[i].setBackground(color.getCenterPane());
-				panel5_[i].setBorder(BorderFactory.createEmptyBorder(111, 12, 13, 12));
-				panel5_[i].setLayout(new BorderLayout());
+				panel5_[i].setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+				panel5_[i].setLayout(new BorderLayout(1,1));
 
 				productName[i] = new JLabel();
 				productName[i].setFont(font.getProductNameREGULAR());
 				productName[i].setForeground(Color.BLACK);
+//				productName[i].setBounds(30, 30, 300, 100);
 
 				productPrice[i] = new JLabel();
 				productPrice[i].setFont(font.getProductPriceBOLD());
 				productPrice[i].setForeground(color.getHeader());
+//				productPrice[i].setBounds(30, 50, 300, 100);
 
 				mainPanelOnCenters.add(forPanel5_[i]);
 
 				forPanel5_[i].add(panel5_[i]);
+
 
 				panel5_[i].add(productName[i], BorderLayout.NORTH);
 				panel5_[i].add(productPrice[i], BorderLayout.SOUTH);
@@ -537,6 +552,10 @@ public class userInterface extends Definitions {
 				forPanel5_[i].setFocusPainted(F);
 				forPanel5_[i].addMouseListener(new mouseListen(panel5_[i], forPanel5_[i]));
 				panel5_[i].setBackground(Color.WHITE);
+
+				ImageIcon imageIcon = new ImageIcon("images/groceries/canton.png");
+				JLabel imageLabel = new JLabel(imageIcon);
+				panel5_[i].add(imageLabel, BorderLayout.CENTER);
 
 				productName[i].setText(menuArray[i][1]);
 				productPrice[i].setText("PHP " + menuArray[i][2] + ".00");
@@ -621,8 +640,8 @@ public class userInterface extends Definitions {
 				centerPaneOnRightPanel.repaint();
 				centerPaneOnRightPanel.revalidate();
 
-				roundedPanelForCancelButton.setBackground(Color.GRAY);
-				roundedPanelForProceedButton.setBackground(Color.GRAY);
+				roundedPanelForCancelButton.setBackground(color.getRightSide());
+				roundedPanelForProceedButton.setBackground(color.getRightSide());
 				cancelButton.setEnabled(F);
 				proceedButton.setEnabled(F);
 				orderRecord.clear();

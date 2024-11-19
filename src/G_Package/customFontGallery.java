@@ -78,7 +78,7 @@ public class customFontGallery {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             Font SFProRegular = Font.createFont(Font.TRUETYPE_FONT, font2);
             ge.registerFont(SFProRegular);
-            setFG4(SFProRegular.deriveFont(Font.PLAIN, 13));
+            setFG4(SFProRegular.deriveFont(Font.BOLD, 15));
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
