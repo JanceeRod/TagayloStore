@@ -5,6 +5,9 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+
+//import F_Package;
 
 public class customFontGallery {
 	private Font titleFont;
@@ -22,57 +25,83 @@ public class customFontGallery {
     public customFontGallery() {
     	//Title
         try {
-            File font = new File("Inter_28pt-Bold.ttf");
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            Font InterFontBOLD = Font.createFont(Font.TRUETYPE_FONT, font);
-            ge.registerFont(InterFontBOLD);
-            setTitleFont(InterFontBOLD.deriveFont(Font.BOLD, 24));
+            InputStream InterFontBOLDFile = getClass().getResourceAsStream("/F_Package/Inter_28pt-Bold.ttf");
+            if (InterFontBOLDFile != null) {
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                Font InterFontBOLD = Font.createFont(Font.TRUETYPE_FONT, InterFontBOLDFile);
+                ge.registerFont(InterFontBOLD);
+                setTitleFont(InterFontBOLD.deriveFont(Font.BOLD, 24));
+            } else {
+                System.err.println("Font file not found in the package.");
+            }
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
 
         //Product Price
         try {
-            File font = new File("Inter_28pt-Regular.ttf");
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            Font InterFontREGULAR = Font.createFont(Font.TRUETYPE_FONT, font);
-            ge.registerFont(InterFontREGULAR);
-            setProductPriceREGULAR(InterFontREGULAR.deriveFont(Font.TRUETYPE_FONT, 20));
+            InputStream InterFontREGULARFile = getClass().getResourceAsStream("/F_Package/Inter_28pt-Regular.ttf");
+            if (InterFontREGULARFile != null) {
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                Font InterFontREGULAR = Font.createFont(Font.TRUETYPE_FONT, InterFontREGULARFile);
+                ge.registerFont(InterFontREGULAR);
+                setProductPriceREGULAR(InterFontREGULAR.deriveFont(Font.PLAIN, 20));
+            } else {
+                System.err.println("Font file not found in the package.");
+            }
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
 
         try {
-            File font = new File("Inter_28pt-Bold.ttf");
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            Font InterFontBOLD = Font.createFont(Font.TRUETYPE_FONT, font);
-            ge.registerFont(InterFontBOLD);
-            setProductPriceBOLD(InterFontBOLD.deriveFont(Font.TRUETYPE_FONT, 20));
+            InputStream InterFontBOLDFile = getClass().getResourceAsStream("/F_Package/Inter_28pt-Bold.ttf");
+            if (InterFontBOLDFile != null) {
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                Font InterFontBOLD = Font.createFont(Font.TRUETYPE_FONT, InterFontBOLDFile);
+                ge.registerFont(InterFontBOLD);
+                setProductPriceBOLD(InterFontBOLD.deriveFont(Font.PLAIN, 20));
+            } else {
+                System.err.println("Font file not found in the package.");
+            }
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
 
         //Product Name
         try {
-            File font = new File("Inter_28pt-Regular.ttf");
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            Font InterFontREGULAR = Font.createFont(Font.TRUETYPE_FONT, font);
-            ge.registerFont(InterFontREGULAR);
-            setProductNameREGULAR(InterFontREGULAR.deriveFont(Font.TRUETYPE_FONT, 12));
+            InputStream InterFontREGULARFile = getClass().getResourceAsStream("/F_Package/Inter_28pt-Regular.ttf");
+            if (InterFontREGULARFile != null) {
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                Font InterFontREGULAR = Font.createFont(Font.TRUETYPE_FONT, InterFontREGULARFile);
+                ge.registerFont(InterFontREGULAR);
+                setProductNameREGULAR(InterFontREGULAR.deriveFont(Font.PLAIN, 12));
+            } else {
+                System.err.println("Font file not found in the package.");
+            }
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
 
         try {
-            File font = new File("Inter_28pt-Bold.ttf");
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            Font InterFontBOLD = Font.createFont(Font.TRUETYPE_FONT, font);
-            ge.registerFont(InterFontBOLD);
-            setProductNameBOLD(InterFontBOLD.deriveFont(Font.TRUETYPE_FONT, 12));
+            InputStream InterFontBOLDFile = getClass().getResourceAsStream("/F_Package/Inter_28pt-Bold.ttf");
+            if (InterFontBOLDFile != null) {
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                Font InterFontBOLD = Font.createFont(Font.TRUETYPE_FONT, InterFontBOLDFile);
+                ge.registerFont(InterFontBOLD);
+                setProductNameBOLD(InterFontBOLD.deriveFont(Font.PLAIN, 12));
+            } else {
+                System.err.println("Font file not found in the package.");
+            }
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
-        
+
+
+
+
+
+
+        //-------------------------------------
         try {
             File font2 = new File("SFPRODISPLAYREGULAR.OTF");
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();

@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class Operations extends Definitions {
 
-
     public static JPanel createCustomPanel(int width, int height, Object backgroundSource, LayoutManager layout) {
         JPanel customPanel = new JPanel();
         customPanel.setPreferredSize(new Dimension(width, height));
