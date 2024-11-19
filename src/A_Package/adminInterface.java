@@ -1,4 +1,4 @@
-package adminPackage;
+package A_Package;
 import M_Package.Operations;
 
 import javax.swing.*;

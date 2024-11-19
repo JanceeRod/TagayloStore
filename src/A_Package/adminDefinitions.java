@@ -1,4 +1,4 @@
-package adminPackage;
+package A_Package;
 
 import E_Package.Transaction;
 import G_Package.customColorPallete;
