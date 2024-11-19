@@ -1,6 +1,4 @@
-package mainPackage;
-
-import adminPackage.adminInterface;
+package M_Package;
 
 public class Main {
 	public static void main(String[] args) {

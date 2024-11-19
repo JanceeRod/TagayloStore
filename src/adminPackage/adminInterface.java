@@ -1,6 +1,5 @@
 package adminPackage;
-import G_Package.customTableUI;
-import mainPackage.Operations;
+import M_Package.Operations;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

@@ -1,4 +1,4 @@
-package mainPackage;
+package M_Package;
 
 import G_Package.customRoundedPanel;
 import G_Package.customColorPallete;
