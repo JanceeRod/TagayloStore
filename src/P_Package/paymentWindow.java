@@ -1,4 +1,4 @@
-package newWindow_Package;
+package P_Package;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
