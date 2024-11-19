@@ -188,14 +188,14 @@ public class adminInterface extends adminDefinitions {
         orderPaneTop.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 15));
 
         orderPaneTitleTab = new customRoundedPanel(20);
-        orderPaneTitleTab.setBackground(color.getHeader());
+        orderPaneTitleTab.setBackground(color.getChoice());
         orderPaneTitleTab.setLayout(new BorderLayout());
 
         orderPaneLabel = customSwingCreate.createCustomLabel("QUICK ACTIONS", Color.BLACK, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
 
         orderPaneCen = customSwingCreate.createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
 
-        orderPaneBot = customSwingCreate.createCustomPanel(340, 150, color.getHeader(), null);
+        orderPaneBot = customSwingCreate.createCustomPanel(340, 150, color.getChoice(), null);
         orderPaneBot.setLayout(null);
 
         centerPaneOnRightPanel = new JPanel();
@@ -227,7 +227,7 @@ public class adminInterface extends adminDefinitions {
         mainPanelOnCenter.setBorder(BorderFactory.createEmptyBorder(15, 5, 0, 0));
 
         centerPanelMainLayer = new customRoundedPanel(15);
-        centerPanelMainLayer.setBackground(color.getCenterPiece());
+        centerPanelMainLayer.setBackground(color.getChoice());
 
         centerContainerPanelDown.add(centerPanelMainLayer);
 
@@ -262,23 +262,23 @@ public class adminInterface extends adminDefinitions {
                 case 0 -> {
                     homeButtonToggle();
                     button2_[0].doClick();
-                    buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getHeader());
+                    buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
                 }
                 case 1 -> {
                     inventoryButtonToggle();
-                    buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getHeader());
+                    buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
                 }
                 case 2 -> {
                     customersButtonToggle();
-                    buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getHeader());
+                    buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
                 }
                 case 3 -> {
                     cashierButtonToggle();
-                    buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getHeader());
+                    buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
                 }
                 case 4 -> {
                     salesButtonToggle();
-                    buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getHeader());
+                    buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
                 }
             }
         }
@@ -375,7 +375,7 @@ public class adminInterface extends adminDefinitions {
 
                 for (int i = 0; i < categoryKeys.size(); i++) {
                     if (i == buttonIndex) {
-                        pillShape[i].setBackground(color.getRightSide());
+                        pillShape[i].setBackground(color.getChoice());
                         pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
                         pSLabel[i].setFont(font.getProductPriceBOLD());
                         pSLabel[i].setForeground(Color.DARK_GRAY);
