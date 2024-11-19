@@ -841,7 +841,7 @@ public class adminInterface extends adminDefinitions {
         mainPanelOnCenter.setLayout(new BorderLayout());
 
         JLabel notice = new JLabel();
-        notice.setText("We're still working on this page :(");
+        notice.setText("We're still working on this page 🙁");
         notice.setFont(font.getProductPriceBOLD());
         notice.setForeground(Color.LIGHT_GRAY);
         notice.setHorizontalAlignment(SwingConstants.CENTER);

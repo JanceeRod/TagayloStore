@@ -4,6 +4,7 @@ import G_Package.customRoundedPanel;
 import G_Package.customColorPallete;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -21,13 +22,13 @@ public class mouseListen extends MouseAdapter {
     }
     @Override
     public void mouseEntered(MouseEvent e) {
-        getPanel().setBackground(color.getInactiveButton());
+        getPanel().setBackground(Color.white);
         button.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        getPanel().setBackground(color.getLeftSide());
+        getPanel().setBackground(Color.white);
         button.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
     public JPanel getPanel() {

@@ -15,10 +15,12 @@ public class customColorPallete {
   private Color centerPane; //96 110 121    - primary font color        - PFC
   private Color header;
   private Color titleColor;
-  private Color sideTitle; 
+  private Color sideTitle;
+
+  public static Color light_orange = new Color(255,152, 73);
+  public static Color medyo_black = new Color(65, 66, 58);
   
   public customColorPallete() {
-
       setTitleColor(Color.WHITE);
       setSideTitle(Color.LIGHT_GRAY);
       setSearch(new Color(243, 244, 248)); 	// 100
