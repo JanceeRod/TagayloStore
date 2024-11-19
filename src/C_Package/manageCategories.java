@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class CategoryManager {
+public class manageCategories {
     private static final String CSV_FILE_PATH = "categories.csv";
     private static List<Category> categories = new ArrayList<>();
 

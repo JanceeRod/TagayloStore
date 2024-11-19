@@ -24,11 +24,11 @@ public class customColorPallete {
       setRightSide(new Color(236, 226, 210)); 	// 200
       setChoice(new Color(179, 181, 189));	// 300 
       setOrderPane(new Color(148, 150, 161)); 	// 400
-      setInactiveButton(new Color(119, 121, 134)); 	// 500
+      setInactiveButton(new Color(189, 148, 116)); 	// 500
       setCenterPiece(new Color(91, 93, 107)); 	// 600
       setLeftSide(new Color(236, 226, 210)); 	// 700
       setHeader(new Color(217, 100, 30)); 	// 800
-      setCenterPane(new Color(235, 235, 235)); 	// 900
+      setCenterPane(new Color(235, 235, 235));// 900
       
   }
 

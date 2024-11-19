@@ -1,6 +1,6 @@
 package M_Package;
 
-import C_Package.CategoryManager;
+import C_Package.manageCategories;
 import E_Package.Category;
 import E_Package.Transaction;
 import G_Package.customRoundedPanel;
@@ -166,7 +166,7 @@ public class Definitions {
 
     //new files
     static Map<String, String[][]> categoryDataMap;
-    static List<Category> categories = CategoryManager.getCategories();
+    static List<Category> categories = manageCategories.getCategories();
     static String[][] globalInventory;
 
 
