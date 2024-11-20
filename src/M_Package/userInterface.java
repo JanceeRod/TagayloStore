@@ -553,10 +553,11 @@ public class userInterface extends Definitions {
 				forPanel5_[i].addMouseListener(new mouseListen(panel5_[i], forPanel5_[i]));
 				panel5_[i].setBackground(Color.WHITE);
 
-				ImageIcon imageIcon = new ImageIcon("images/groceries/canton.png");
+				ImageIcon imageIcon = new ImageIcon("images/groceries/" + menuArray[i][3]);
 				JLabel imageLabel = new JLabel(imageIcon);
 				panel5_[i].add(imageLabel, BorderLayout.CENTER);
 
+				System.out.println(menuArray[i][3]);
 				productName[i].setText(menuArray[i][1]);
 				productPrice[i].setText("PHP " + menuArray[i][2] + ".00");
 			}
