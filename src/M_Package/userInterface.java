@@ -24,7 +24,7 @@ import P_Package.paymentWindow;
 
 public class userInterface extends Definitions {
 
-	userInterface() {
+	public userInterface() {
 
 		mainFrame = new JFrame();
 		mainFrame.setTitle("Tagaylo Store - Point-of-Sales System | CSCC 14.1 Final Project");
@@ -75,7 +75,7 @@ public class userInterface extends Definitions {
 		searchBox = new JTextField("Search products...");
 		searchBox.setPreferredSize(new Dimension(425, 29));
 		searchBox.setCaretPosition(0);
-		searchBox.setFont(font.getFG4());
+		searchBox.setFont(font.getProductNameREGULAR());
 		searchBox.setBackground(tfPanel.getBackground());
 		searchBox.setForeground(Color.GRAY);
 		searchBox.setHorizontalAlignment(SwingConstants.LEFT);
@@ -133,7 +133,7 @@ public class userInterface extends Definitions {
 		javaJivePanel.add(searchPanel, BorderLayout.CENTER);
 
 		topRibbonPanel.add(javaJivePanel, BorderLayout.WEST);
-//		topRibbonPanel.add(timePanel, BorderLayout.EAST);
+		topRibbonPanel.add(timePanel, BorderLayout.EAST);
 		topRibbonPanel.add(profileButtonPanel, BorderLayout.EAST);
 
 	}
@@ -169,7 +169,7 @@ public class userInterface extends Definitions {
 			label2_[i].setBorder(new EmptyBorder(0, 0, 20, 0));
 //			label2_[i].setForeground(color.getSideTitle());
 			label2_[i].setForeground(Color.black);
-			label2_[i].setFont(font.getFG4());
+			label2_[i].setFont(font.getProductNameREGULAR());
 
 			leftRibbonPanel.add(sideRibbonButtons[i]);
 			sideRibbonButtons[i].add(sideRibbonRoundedPanels[i]);
@@ -421,7 +421,7 @@ public class userInterface extends Definitions {
 			button2_[j].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			button2_[j].setEnabled(T);
 			button2_[j].setFocusPainted(F);
-			button2_[j].setPreferredSize(new Dimension(95, 34));
+			button2_[j].setPreferredSize(new Dimension(105, 34));
 			button2_[j].addActionListener(new userInterface.menuTable(j, arrayLengths[j]));
 
 			pillShape[j] = new customRoundedPanel(25);
@@ -435,7 +435,7 @@ public class userInterface extends Definitions {
 				pSLabel[j].setText(arrayName);
 			}
 			pSLabel[j].setHorizontalAlignment(SwingConstants.CENTER);
-			pSLabel[j].setFont(font.getFG4());
+			pSLabel[j].setFont(font.getProductNameREGULAR());
 			pSLabel[j].setForeground(Color.GRAY);
 
 			pillShape[j].add(pSLabel[j]);
@@ -470,12 +470,12 @@ public class userInterface extends Definitions {
 					if (i == buttonIndex) {
 						pillShape[i].setBackground(color.getChoice());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
-						pSLabel[i].setFont(font.getFG4());
+						pSLabel[i].setFont(font.getProductNameBOLD());
 						pSLabel[i].setForeground(Color.white);
 					} else {
 						pillShape[i].setBackground(centerPanelMainLayer.getBackground());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
-						pSLabel[i].setFont(font.getFG4());
+						pSLabel[i].setFont(font.getProductNameREGULAR());
 						pSLabel[i].setForeground(customColorPallete.medyo_black);
 					}
 				}

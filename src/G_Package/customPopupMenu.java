@@ -35,7 +35,7 @@ public class customPopupMenu extends JPopupMenu {
         menuItem.setBackground(Color.WHITE);
         menuItem.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         menuItem.setHorizontalAlignment(SwingConstants.LEFT);
-        menuItem.setFont(font.getFG4());
+        menuItem.setFont(font.getProductNameREGULAR());
 
         int buttonWidth = 180;
         int buttonHeight = 30;

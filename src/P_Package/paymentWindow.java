@@ -51,7 +51,7 @@ public class paymentWindow extends JFrame {
 	JPanel afterOptions;
 	
 	public paymentWindow(HashMap<String, Integer> hashMap, String[] calculations) {
-		setTitle("Java Jive Cafe - Payment Window");
+		setTitle("Tagaylo Store POS - Payment Window");
 		setSize(720, 490);
 		setLocationRelativeTo(null);
 		setResizable(T);
@@ -63,7 +63,7 @@ public class paymentWindow extends JFrame {
     	panel1.setLayout(new BorderLayout());
     	
     	JLabel label1 = new JLabel();
-    	label1.setText("Java Jive - Payment Window");
+    	label1.setText("Tagaylo Store POS - Payment Window");
     	label1.setFont(font.getTitleFont());
     	label1.setHorizontalAlignment(SwingConstants.CENTER);
     	label1.setForeground(color.getTitleColor());
