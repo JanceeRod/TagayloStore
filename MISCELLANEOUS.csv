@@ -1,10 +1,10 @@
-M1,Snowbear candy,2
-M2,Vfresh mint gum,2
-M3,Judge Mint Gum,2
-M4,Mani Cheese,5
-M5,Mani Roasted,5
-M6,Happy Peanut,2
-M7,Yumshots,2
-M8,Nagaraya,9
-M9,Ding Dong Mixed Nuts,2
-M10,iCool,2
+M1,Snowbear candy,2,snowbear.png
+M2,Vfresh mint gum,2,vfresh.png
+M3,Judge Mint Gum,2,judge.png
+M4,Mani Cheese,5,mani.png
+M5,Mani Roasted,5,mani.png
+M6,Happy Peanut,2,happy.png
+M7,Yumshots,2,yumshots.png
+M8,Nagaraya,9,nagaraya.png
+M9,Ding Dong Mixed Nuts,2,dingdong.png
+M10,iCool,2,icool.png

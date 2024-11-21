@@ -421,7 +421,7 @@ public class userInterface extends Definitions {
 			button2_[j].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			button2_[j].setEnabled(T);
 			button2_[j].setFocusPainted(F);
-			button2_[j].setPreferredSize(new Dimension(95, 34));
+			button2_[j].setPreferredSize(new Dimension(105, 34));
 			button2_[j].addActionListener(new userInterface.menuTable(j, arrayLengths[j]));
 
 			pillShape[j] = new customRoundedPanel(25);
@@ -470,12 +470,12 @@ public class userInterface extends Definitions {
 					if (i == buttonIndex) {
 						pillShape[i].setBackground(color.getChoice());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
-						pSLabel[i].setFont(font.getFG4());
+						pSLabel[i].setFont(font.getProductNameBOLD());
 						pSLabel[i].setForeground(Color.white);
 					} else {
 						pillShape[i].setBackground(centerPanelMainLayer.getBackground());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
-						pSLabel[i].setFont(font.getFG4());
+						pSLabel[i].setFont(font.getProductNameREGULAR());
 						pSLabel[i].setForeground(customColorPallete.medyo_black);
 					}
 				}
