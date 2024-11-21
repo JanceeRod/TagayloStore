@@ -11,28 +11,28 @@ import A_Package.adminInterface;
 import M_Package.userInterface;
 
 public class logMain extends logDefinitions {
-    public static void main(String[] args) {
-        try {
-            List<Map<String, String>> users = new ArrayList<>();
-            Map<String, String> admin = new HashMap<>();
-            admin.put("username", "admin");
-            admin.put("password", logDefinitions.hashPassword("admin123", "random_salt"));
-            admin.put("role", "Admin");
-            users.add(admin);
-
-            Map<String, String> cashier = new HashMap<>();
-            cashier.put("username", "cashier1");
-            cashier.put("password", logDefinitions.hashPassword("cashier123", "random_salt"));
-            cashier.put("role", "Cashier");
-            users.add(cashier);
-
-            logDefinitions.writeCredentials("credentials.txt", users);
-
-            createLoginGUI();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+//            List<Map<String, String>> users = new ArrayList<>();
+//            Map<String, String> admin = new HashMap<>();
+//            admin.put("username", "admin");
+//            admin.put("password", logDefinitions.hashPassword("admin123", "random_salt"));
+//            admin.put("role", "Admin");
+//            users.add(admin);
+//
+//            Map<String, String> cashier = new HashMap<>();
+//            cashier.put("username", "cashier1");
+//            cashier.put("password", logDefinitions.hashPassword("cashier123", "random_salt"));
+//            cashier.put("role", "Cashier");
+//            users.add(cashier);
+//
+//            logDefinitions.writeCredentials("credentials.txt", users);
+//
+//            createLoginGUI();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private static void createLoginGUI() {
         JFrame frame = new JFrame("Login");

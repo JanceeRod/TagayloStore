@@ -550,10 +550,10 @@ public class userInterface extends Definitions {
 			for (int i = 0; i < length; i++) {
 				forPanel5_[i].setEnabled(T);
 				forPanel5_[i].setFocusPainted(F);
-				forPanel5_[i].addMouseListener(new mouseListen(panel5_[i], forPanel5_[i]));
+				forPanel5_[i].addMouseListener(new mouseListen(panel5_[i], forPanel5_[i], Color.WHITE, Color.WHITE));
 				panel5_[i].setBackground(Color.WHITE);
 
-				ImageIcon imageIcon = new ImageIcon("images/groceries/canton.png");
+				ImageIcon imageIcon = new ImageIcon("images/g.png");
 				JLabel imageLabel = new JLabel(imageIcon);
 				panel5_[i].add(imageLabel, BorderLayout.CENTER);
 

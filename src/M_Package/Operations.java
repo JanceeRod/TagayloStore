@@ -153,10 +153,10 @@ public class Operations extends Definitions {
         }
     }
 
-    public static String[][] saveToDataArray(String a) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(a))) {
+    public static String[][] saveToDataArray(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             long lineCount = reader.lines().count();
-            BufferedReader reader1 = new BufferedReader(new FileReader(a));
+            BufferedReader reader1 = new BufferedReader(new FileReader(fileName));
 
             String[][] dataArray = new String[(int) lineCount][];
             reader.close();
