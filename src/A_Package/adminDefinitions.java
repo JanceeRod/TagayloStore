@@ -94,7 +94,7 @@ public class adminDefinitions {
     //RIGHT PANEL
     //Panel
     JPanel rightRibbonPanel;
-    JPanel orderPaneCen;
+    static JPanel orderPaneCen;
     JPanel orderPaneTop;
     JPanel orderPaneBot;
     static JPanel centerPaneOnRightPanel;
@@ -126,12 +126,13 @@ public class adminDefinitions {
 
     //Rounded Panel
     static customRoundedPanel centerPanelMainLayer;
+    static customRoundedPanel[] perOrder;
 
     //Label
-    JLabel orderPaneLabel;
+    static JLabel orderPaneLabel;
 
     //Button
-
+    static JButton[] perOrderButtons;
 
     //Extras
 

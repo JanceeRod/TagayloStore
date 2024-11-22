@@ -79,6 +79,13 @@ public class adminInterface extends adminDefinitions {
         //convertCSVtoArray
         transactionHistory2D = Operations.saveToDataArray(transactions);
 
+        //reverse the array
+        for (int i = 0; i < transactionHistory2D.length / 2; i++) {
+            String[] temp = transactionHistory2D[i];
+            transactionHistory2D[i] = transactionHistory2D[transactionHistory2D.length - 1 - i];
+            transactionHistory2D[transactionHistory2D.length - 1 - i] = temp;
+        }
+
 //		Operations.menuPrint(globalInventory);
         Operations.processArrayToHashMap(globalInventory, cafeInventory);
     }
@@ -214,7 +221,7 @@ public class adminInterface extends adminDefinitions {
 
         orderPaneLabel = customSwingCreate.createCustomLabel("QUICK ACTIONS", Color.BLACK, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
 
-        orderPaneCen = customSwingCreate.createCustomPanel(8, 0, Color.RED, new BorderLayout());
+        orderPaneCen = customSwingCreate.createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
 
         orderPaneBot = customSwingCreate.createCustomPanel(340, 150, color.getChoice(), null);
         orderPaneBot.setLayout(null);
@@ -231,7 +238,7 @@ public class adminInterface extends adminDefinitions {
         orderPaneTop.add(orderPaneTitleTab);
 
         rightRibbonPanel.add(orderPaneTop, BorderLayout.NORTH);
-        rightRibbonPanel.add(orderPaneBot, BorderLayout.SOUTH);
+//        rightRibbonPanel.add(orderPaneBot, BorderLayout.SOUTH);
         rightRibbonPanel.add(orderPaneCen, BorderLayout.CENTER);
 
     }

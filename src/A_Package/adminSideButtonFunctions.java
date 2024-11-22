@@ -29,6 +29,8 @@ public class adminSideButtonFunctions extends adminDefinitions {
         centerPanelMainLayer.removeAll();
         mainPanelOnCenter.removeAll();
 
+        orderPaneLabel.setText("VIEW TRANSACTION");
+
         centerPanelMainLayer.setBackground(color.getCenterPiece());
 //        centerPanelMainLayer.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
 
@@ -37,27 +39,23 @@ public class adminSideButtonFunctions extends adminDefinitions {
 
         int size = transactionHistory2D.length;
         int orderWidth = centerPanelMainLayer.getWidth();
-        int orderHeight = 160;
-        JButton[] perOrderButtons = new JButton[size];
-        customRoundedPanel[] perOrder = new customRoundedPanel[size];
+        int orderHeight = 58;
+        perOrderButtons = new JButton[size];
+        perOrder = new customRoundedPanel[size];
 
         JLabel[] orderID = new JLabel[size];
         JLabel[] dateAndTime = new JLabel[size];
-        JLabel[] productName = new JLabel[size];
-        JLabel[] productPrice = new JLabel[size];
-        JLabel[] productQuantity = new JLabel[size];
-        JLabel[] purchaseSubtotal = new JLabel[size];
         JLabel[] purchaseGrandTotal = new JLabel[size];
-        JLabel[] purchaseChange = new JLabel[size];
         JLabel[] customerType = new JLabel[size];
 
         SpringLayout SL = new SpringLayout();
         mainPanelOnCenters = new JPanel();
-        mainPanelOnCenters.setBackground(Color.BLUE);
+        mainPanelOnCenters.setBackground(mainPanelOnCenter.getBackground());
         mainPanelOnCenters.setLayout(SL);
         mainPanelOnCenters.setPreferredSize(new Dimension(orderWidth, size * (orderHeight + 10)));
 
         for (int i = 0; i < size; i++) {
+
             perOrderButtons[i] = new JButton();
             perOrderButtons[i].setForeground(Color.RED);
             perOrderButtons[i].setBackground(mainPanelOnCenters.getBackground());
@@ -65,7 +63,8 @@ public class adminSideButtonFunctions extends adminDefinitions {
             perOrderButtons[i].setEnabled(T);
             perOrderButtons[i].setFocusPainted(F);
             perOrderButtons[i].setLayout(new BorderLayout(1,1));
-            perOrderButtons[i].setPreferredSize(new Dimension(555, 150));
+            perOrderButtons[i].setPreferredSize(new Dimension(555, orderHeight));
+            perOrderButtons[i].addActionListener(new adminActionManager.viewTransaction(transactionHistory2D[i][0]));
 
             perOrder[i] = new customRoundedPanel(25);
             perOrder[i].setBackground(Color.WHITE);
@@ -93,88 +92,43 @@ public class adminSideButtonFunctions extends adminDefinitions {
         }
 
         for (int i = 0; i < size; i++) {
+            customerType[i] = new JLabel(transactionHistory2D[i][8]);
+            customerType[i].setFont(font.getProductNameBOLD());
+            customerType[i].setForeground(color.getHeader());
+
+            dateAndTime[i] = new JLabel(transactionHistory2D[i][1]);
+            dateAndTime[i].setFont(font.getProductNameREGULAR());
+
             orderID[i] = new JLabel("Transaction ID: " + transactionHistory2D[i][0]);
             orderID[i].setFont(font.getProductNameREGULAR());
 
-            dateAndTime[i] = new JLabel(transactionHistory2D[i][1]);
-            dateAndTime[i].setFont(font.getProductNameBOLD());
-
-            productName[i] = new JLabel(transactionHistory2D[i][2]);
-            productName[i].setFont(font.getTitleFont());
-
-            productPrice[i] = new JLabel("PHP " + transactionHistory2D[i][3]);
-            productPrice[i].setFont(font.getProductPriceBOLD());
-
-            productQuantity[i] = new JLabel(transactionHistory2D[i][4] + "x");
-            productQuantity[i].setFont(font.getProductPriceBOLD());
-
-            purchaseSubtotal[i] = new JLabel("PHP " + transactionHistory2D[i][5]);
-            purchaseSubtotal[i].setFont(font.getProductPriceBOLD());
-
-            purchaseGrandTotal[i] = new JLabel("PHP " + transactionHistory2D[i][6]);
+            purchaseGrandTotal[i] = new JLabel("PHP " + transactionHistory2D[i][5]);
             purchaseGrandTotal[i].setFont(font.getProductPriceBOLD());
-
-            purchaseChange[i] = new JLabel("Change: PHP " + transactionHistory2D[i][7]);
-            purchaseChange[i].setFont(font.getProductNameREGULAR());
-
-            customerType[i] = new JLabel(transactionHistory2D[i][8]);
-            customerType[i].setFont(font.getProductNameREGULAR());
 
             SpringLayout layout = new SpringLayout();
             perOrder[i].setLayout(layout);
 
             perOrder[i].add(orderID[i]);
             perOrder[i].add(dateAndTime[i]);
-            perOrder[i].add(productName[i]);
-            perOrder[i].add(productPrice[i]);
-            perOrder[i].add(productQuantity[i]);
-            perOrder[i].add(purchaseSubtotal[i]);
             perOrder[i].add(purchaseGrandTotal[i]);
-            perOrder[i].add(purchaseChange[i]);
             perOrder[i].add(customerType[i]);
 
-            // Constraints
-            // 1. Top Row
-            layout.putConstraint(SpringLayout.WEST, productName[i], 10, SpringLayout.WEST, perOrder[i]);
-            layout.putConstraint(SpringLayout.NORTH, productName[i], 10, SpringLayout.NORTH, perOrder[i]);
+            layout.putConstraint(SpringLayout.WEST, customerType[i], 10, SpringLayout.WEST, perOrder[i]);
+            layout.putConstraint(SpringLayout.NORTH, customerType[i], 10, SpringLayout.NORTH, perOrder[i]);
 
-            layout.putConstraint(SpringLayout.EAST, dateAndTime[i], -10, SpringLayout.EAST, perOrder[i]);
-            layout.putConstraint(SpringLayout.NORTH, dateAndTime[i], 10, SpringLayout.NORTH, perOrder[i]);
+            layout.putConstraint(SpringLayout.WEST, dateAndTime[i], 10, SpringLayout.EAST, customerType[i]);
+            layout.putConstraint(SpringLayout.NORTH, dateAndTime[i], 0, SpringLayout.NORTH, customerType[i]);
 
-            // 2. Second Row
             layout.putConstraint(SpringLayout.WEST, orderID[i], 10, SpringLayout.WEST, perOrder[i]);
-            layout.putConstraint(SpringLayout.NORTH, orderID[i], 2, SpringLayout.SOUTH, productName[i]);
+            layout.putConstraint(SpringLayout.NORTH, orderID[i], 5, SpringLayout.SOUTH, customerType[i]);
 
-            layout.putConstraint(SpringLayout.EAST, customerType[i], -10, SpringLayout.EAST, perOrder[i]);
-            layout.putConstraint(SpringLayout.NORTH, customerType[i], 10, SpringLayout.SOUTH, dateAndTime[i]);
-
-            // 3. Third Row (Details)
-            layout.putConstraint(SpringLayout.WEST, productQuantity[i], 10, SpringLayout.WEST, perOrder[i]);
-            layout.putConstraint(SpringLayout.NORTH, productQuantity[i], 10, SpringLayout.SOUTH, orderID[i]);
-
-            layout.putConstraint(SpringLayout.WEST, productPrice[i], 50, SpringLayout.EAST, productQuantity[i]);
-            layout.putConstraint(SpringLayout.NORTH, productPrice[i], 0, SpringLayout.NORTH, productQuantity[i]);
-
-            layout.putConstraint(SpringLayout.WEST, purchaseSubtotal[i], 50, SpringLayout.EAST, productPrice[i]);
-            layout.putConstraint(SpringLayout.NORTH, purchaseSubtotal[i], 0, SpringLayout.NORTH, productPrice[i]);
-
-            layout.putConstraint(SpringLayout.WEST, purchaseGrandTotal[i], 50, SpringLayout.EAST, purchaseSubtotal[i]);
-            layout.putConstraint(SpringLayout.NORTH, purchaseGrandTotal[i], 0, SpringLayout.NORTH, purchaseSubtotal[i]);
-
-            // 4. Bottom Row
-            layout.putConstraint(SpringLayout.WEST, purchaseChange[i], 10, SpringLayout.WEST, perOrder[i]);
-            layout.putConstraint(SpringLayout.NORTH, purchaseChange[i], 10, SpringLayout.SOUTH, productQuantity[i]);
-
-            perOrder[i].setPreferredSize(new Dimension(555, orderHeight));
+            layout.putConstraint(SpringLayout.EAST, purchaseGrandTotal[i], -10, SpringLayout.EAST, perOrder[i]);
+            layout.putConstraint(SpringLayout.VERTICAL_CENTER, purchaseGrandTotal[i], 0, SpringLayout.VERTICAL_CENTER, perOrder[i]);
         }
 
-        //---------------------------------------------------------
-
-//        int rowSize = transactionHistory2D.length;
-
-        //---------------------------------------------------------
-
         customScrollBarUI scrollBarUI2 = new customScrollBarUI();
+        scrollBarUI2.setCustomUI(color.getHeader(), Color.GREEN, color.getCenterPane());
+
         JScrollPane scrollPane = new JScrollPane(mainPanelOnCenters);
 
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -183,6 +137,8 @@ public class adminSideButtonFunctions extends adminDefinitions {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         mainPanelOnCenter.add(scrollPane);
+
+        perOrderButtons[0].doClick();
 
         adminOperations.panelFinisher(centerContainerPanelUp);
     }
