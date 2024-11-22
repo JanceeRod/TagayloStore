@@ -214,14 +214,14 @@ public class adminInterface extends adminDefinitions {
 
         orderPaneLabel = customSwingCreate.createCustomLabel("QUICK ACTIONS", Color.BLACK, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
 
-        orderPaneCen = customSwingCreate.createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
+        orderPaneCen = customSwingCreate.createCustomPanel(8, 0, Color.RED, new BorderLayout());
 
         orderPaneBot = customSwingCreate.createCustomPanel(340, 150, color.getChoice(), null);
         orderPaneBot.setLayout(null);
 
         centerPaneOnRightPanel = new JPanel();
         centerPaneOnRightPanel.setBorder(new EmptyBorder(0, 10, 0, 0));
-        centerPaneOnRightPanel.setBackground(rightRibbonPanel.getBackground());
+        centerPaneOnRightPanel.setBackground(Color.GREEN);
         centerPaneOnRightPanel.setLayout(new GridLayout(0, 1));
 
         scrollBarForCart = new customScrollBarUI();
@@ -244,8 +244,8 @@ public class adminInterface extends adminDefinitions {
         centerContainerPanelDown = customSwingCreate.createCustomPanel(600, 35, centerContainerPanelUp, new BorderLayout());
         centerContainerPanelDown.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 
-        mainPanelOnCenter = customSwingCreate.createCustomPanel(0, 0, Color.RED, new BorderLayout());
-        mainPanelOnCenter.setBorder(BorderFactory.createEmptyBorder(15, 5, 0, 0));
+        mainPanelOnCenter = customSwingCreate.createCustomPanel(0, 0, centerContainerPanelUp, new BorderLayout());
+        mainPanelOnCenter.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 
         centerPanelMainLayer = new customRoundedPanel(15);
         centerPanelMainLayer.setBackground(color.getChoice());

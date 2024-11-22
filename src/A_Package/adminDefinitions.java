@@ -120,8 +120,9 @@ public class adminDefinitions {
     //CENTER PANEL
     //Panel
     static JPanel centerContainerPanelUp;
-    JPanel centerContainerPanelDown;
+    static JPanel centerContainerPanelDown;
     static JPanel mainPanelOnCenter;
+    static JPanel mainPanelOnCenters;
 
     //Rounded Panel
     static customRoundedPanel centerPanelMainLayer;
@@ -130,6 +131,7 @@ public class adminDefinitions {
     JLabel orderPaneLabel;
 
     //Button
+
 
     //Extras
 

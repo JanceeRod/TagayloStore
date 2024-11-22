@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static javax.swing.SwingConstants.CENTER;
-import static jdk.internal.org.jline.utils.InfoCmp.Capability.buttons;
 
 public class adminSideButtonFunctions extends adminDefinitions {
 
@@ -34,37 +33,42 @@ public class adminSideButtonFunctions extends adminDefinitions {
 //        centerPanelMainLayer.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
 
         JLabel title = Operations.createCustomLabel("TRANSACTION HISTORY", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
-
         centerPanelMainLayer.add(title);
 
-        SpringLayout SL = new SpringLayout();
-        JPanel mainPanelOnCenters = new JPanel();
-//            mainPanelOnCenters.setBackground(mainPanelOnCenter.getBackground());
-        mainPanelOnCenters.setBackground(Color.BLUE);
-        mainPanelOnCenters.setLayout(SL);
-
-
         int size = transactionHistory2D.length;
+        int orderWidth = centerPanelMainLayer.getWidth();
+        int orderHeight = 160;
         JButton[] perOrderButtons = new JButton[size];
         customRoundedPanel[] perOrder = new customRoundedPanel[size];
 
-        System.out.println(size);
+        JLabel[] orderID = new JLabel[size];
+        JLabel[] dateAndTime = new JLabel[size];
+        JLabel[] productName = new JLabel[size];
+        JLabel[] productPrice = new JLabel[size];
+        JLabel[] productQuantity = new JLabel[size];
+        JLabel[] purchaseSubtotal = new JLabel[size];
+        JLabel[] purchaseGrandTotal = new JLabel[size];
+        JLabel[] purchaseChange = new JLabel[size];
+        JLabel[] customerType = new JLabel[size];
 
-        int orderWidth = centerPanelMainLayer.getWidth();
-
-        mainPanelOnCenters.setPreferredSize(new Dimension(orderWidth, size * 75));
+        SpringLayout SL = new SpringLayout();
+        mainPanelOnCenters = new JPanel();
+        mainPanelOnCenters.setBackground(Color.BLUE);
+        mainPanelOnCenters.setLayout(SL);
+        mainPanelOnCenters.setPreferredSize(new Dimension(orderWidth, size * (orderHeight + 10)));
 
         for (int i = 0; i < size; i++) {
-            perOrderButtons[i] = new JButton("Button " + i);
-            perOrderButtons[i].setBackground(Color.GREEN);
-            perOrderButtons[i].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            perOrderButtons[i] = new JButton();
+            perOrderButtons[i].setForeground(Color.RED);
+            perOrderButtons[i].setBackground(mainPanelOnCenters.getBackground());
+            perOrderButtons[i].setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
             perOrderButtons[i].setEnabled(T);
             perOrderButtons[i].setFocusPainted(F);
             perOrderButtons[i].setLayout(new BorderLayout(1,1));
-            perOrderButtons[i].setPreferredSize(new Dimension(555, 65));
+            perOrderButtons[i].setPreferredSize(new Dimension(555, 150));
 
             perOrder[i] = new customRoundedPanel(25);
-            perOrder[i].setBackground(Color.BLUE);
+            perOrder[i].setBackground(Color.WHITE);
             perOrder[i].setLayout(null);
 
             perOrderButtons[i].add(perOrder[i]);
@@ -82,7 +86,93 @@ public class adminSideButtonFunctions extends adminDefinitions {
                 SL.putConstraint(SpringLayout.WEST, perOrderButtons[i], 10, SpringLayout.WEST, mainPanelOnCenters);
                 SL.putConstraint(SpringLayout.EAST, perOrderButtons[i], -10, SpringLayout.EAST, mainPanelOnCenters);
             }
+
+            for (int j = 0; j < 9; j++) {
+//                System.out.println(transactionHistory2D[i][j]);
+            }
         }
+
+        for (int i = 0; i < size; i++) {
+            orderID[i] = new JLabel("Transaction ID: " + transactionHistory2D[i][0]);
+            orderID[i].setFont(font.getProductNameREGULAR());
+
+            dateAndTime[i] = new JLabel(transactionHistory2D[i][1]);
+            dateAndTime[i].setFont(font.getProductNameBOLD());
+
+            productName[i] = new JLabel(transactionHistory2D[i][2]);
+            productName[i].setFont(font.getTitleFont());
+
+            productPrice[i] = new JLabel("PHP " + transactionHistory2D[i][3]);
+            productPrice[i].setFont(font.getProductPriceBOLD());
+
+            productQuantity[i] = new JLabel(transactionHistory2D[i][4] + "x");
+            productQuantity[i].setFont(font.getProductPriceBOLD());
+
+            purchaseSubtotal[i] = new JLabel("PHP " + transactionHistory2D[i][5]);
+            purchaseSubtotal[i].setFont(font.getProductPriceBOLD());
+
+            purchaseGrandTotal[i] = new JLabel("PHP " + transactionHistory2D[i][6]);
+            purchaseGrandTotal[i].setFont(font.getProductPriceBOLD());
+
+            purchaseChange[i] = new JLabel("Change: PHP " + transactionHistory2D[i][7]);
+            purchaseChange[i].setFont(font.getProductNameREGULAR());
+
+            customerType[i] = new JLabel(transactionHistory2D[i][8]);
+            customerType[i].setFont(font.getProductNameREGULAR());
+
+            SpringLayout layout = new SpringLayout();
+            perOrder[i].setLayout(layout);
+
+            perOrder[i].add(orderID[i]);
+            perOrder[i].add(dateAndTime[i]);
+            perOrder[i].add(productName[i]);
+            perOrder[i].add(productPrice[i]);
+            perOrder[i].add(productQuantity[i]);
+            perOrder[i].add(purchaseSubtotal[i]);
+            perOrder[i].add(purchaseGrandTotal[i]);
+            perOrder[i].add(purchaseChange[i]);
+            perOrder[i].add(customerType[i]);
+
+            // Constraints
+            // 1. Top Row
+            layout.putConstraint(SpringLayout.WEST, productName[i], 10, SpringLayout.WEST, perOrder[i]);
+            layout.putConstraint(SpringLayout.NORTH, productName[i], 10, SpringLayout.NORTH, perOrder[i]);
+
+            layout.putConstraint(SpringLayout.EAST, dateAndTime[i], -10, SpringLayout.EAST, perOrder[i]);
+            layout.putConstraint(SpringLayout.NORTH, dateAndTime[i], 10, SpringLayout.NORTH, perOrder[i]);
+
+            // 2. Second Row
+            layout.putConstraint(SpringLayout.WEST, orderID[i], 10, SpringLayout.WEST, perOrder[i]);
+            layout.putConstraint(SpringLayout.NORTH, orderID[i], 2, SpringLayout.SOUTH, productName[i]);
+
+            layout.putConstraint(SpringLayout.EAST, customerType[i], -10, SpringLayout.EAST, perOrder[i]);
+            layout.putConstraint(SpringLayout.NORTH, customerType[i], 10, SpringLayout.SOUTH, dateAndTime[i]);
+
+            // 3. Third Row (Details)
+            layout.putConstraint(SpringLayout.WEST, productQuantity[i], 10, SpringLayout.WEST, perOrder[i]);
+            layout.putConstraint(SpringLayout.NORTH, productQuantity[i], 10, SpringLayout.SOUTH, orderID[i]);
+
+            layout.putConstraint(SpringLayout.WEST, productPrice[i], 50, SpringLayout.EAST, productQuantity[i]);
+            layout.putConstraint(SpringLayout.NORTH, productPrice[i], 0, SpringLayout.NORTH, productQuantity[i]);
+
+            layout.putConstraint(SpringLayout.WEST, purchaseSubtotal[i], 50, SpringLayout.EAST, productPrice[i]);
+            layout.putConstraint(SpringLayout.NORTH, purchaseSubtotal[i], 0, SpringLayout.NORTH, productPrice[i]);
+
+            layout.putConstraint(SpringLayout.WEST, purchaseGrandTotal[i], 50, SpringLayout.EAST, purchaseSubtotal[i]);
+            layout.putConstraint(SpringLayout.NORTH, purchaseGrandTotal[i], 0, SpringLayout.NORTH, purchaseSubtotal[i]);
+
+            // 4. Bottom Row
+            layout.putConstraint(SpringLayout.WEST, purchaseChange[i], 10, SpringLayout.WEST, perOrder[i]);
+            layout.putConstraint(SpringLayout.NORTH, purchaseChange[i], 10, SpringLayout.SOUTH, productQuantity[i]);
+
+            perOrder[i].setPreferredSize(new Dimension(555, orderHeight));
+        }
+
+        //---------------------------------------------------------
+
+//        int rowSize = transactionHistory2D.length;
+
+        //---------------------------------------------------------
 
         customScrollBarUI scrollBarUI2 = new customScrollBarUI();
         JScrollPane scrollPane = new JScrollPane(mainPanelOnCenters);

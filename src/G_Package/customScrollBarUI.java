@@ -15,9 +15,9 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 public class customScrollBarUI extends BasicScrollBarUI {
 	customColorPallete color = new customColorPallete();
 	
-	private Color trackColor = Color.DARK_GRAY;
-	private Color thumbColor = Color.GRAY;
-	private Color backgroundColor;
+	private Color trackColor = Color.GREEN;
+	private Color thumbColor = Color.RED;
+	private Color backgroundColor = Color.WHITE;
 	
 	public void CustomScrollBarUI(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
