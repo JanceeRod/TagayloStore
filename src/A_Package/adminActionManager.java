@@ -147,7 +147,6 @@ public class adminActionManager extends adminDefinitions {
             orderPaneCen.add(priceLabel);
             orderPaneCen.add(grandTotalLabel);
             orderPaneCen.add(grandTotalTextLabel);
-//            orderPaneCen.add(separatorLine);
             orderPaneCen.add(amountInCashLabel);
             orderPaneCen.add(amountInCashTextLabel);
             orderPaneCen.add(changeLabel);
@@ -207,6 +206,13 @@ public class adminActionManager extends adminDefinitions {
 
             orderPaneCen.revalidate();
             orderPaneCen.repaint();
+        }
+    }
+
+    public static class viewSales implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
         }
     }
 

@@ -2,22 +2,22 @@ package A_Package;
 
 import G_Package.customRoundedPanel;
 import G_Package.customScrollBarUI;
-import G_Package.customSwingCreate;
 import M_Package.Operations;
-import M_Package.mouseListen;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
-import java.util.Set;
 
 import static javax.swing.SwingConstants.CENTER;
+
+import S_Package.salesBarChart;
+import S_Package.salesPieChart;
 
 public class adminSideButtonFunctions extends adminDefinitions {
 
     public static void homeButtonToggle() {
         centerPanelMainLayer.removeAll();
         mainPanelOnCenter.removeAll();
+        orderPaneCen.removeAll();
 
         adminOperations.updateIndicator("Oten");
 
@@ -28,11 +28,12 @@ public class adminSideButtonFunctions extends adminDefinitions {
     public static void transactionHistoryButtonToggle() {
         centerPanelMainLayer.removeAll();
         mainPanelOnCenter.removeAll();
+        orderPaneCen.removeAll();
 
         orderPaneLabel.setText("VIEW TRANSACTION");
 
         centerPanelMainLayer.setBackground(color.getCenterPiece());
-//        centerPanelMainLayer.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
+        mainPanelOnCenter.setBackground(color.getCenterPane());
 
         JLabel title = Operations.createCustomLabel("TRANSACTION HISTORY", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
         centerPanelMainLayer.add(title);
@@ -84,10 +85,6 @@ public class adminSideButtonFunctions extends adminDefinitions {
                 SL.putConstraint(SpringLayout.NORTH, perOrderButtons[i], 10, SpringLayout.SOUTH, perOrderButtons[i - 1]);
                 SL.putConstraint(SpringLayout.WEST, perOrderButtons[i], 10, SpringLayout.WEST, mainPanelOnCenters);
                 SL.putConstraint(SpringLayout.EAST, perOrderButtons[i], -10, SpringLayout.EAST, mainPanelOnCenters);
-            }
-
-            for (int j = 0; j < 9; j++) {
-//                System.out.println(transactionHistory2D[i][j]);
             }
         }
 
@@ -147,64 +144,85 @@ public class adminSideButtonFunctions extends adminDefinitions {
     public static void salesButtonToggle() {
         centerPanelMainLayer.removeAll();
         mainPanelOnCenter.removeAll();
+        orderPaneCen.removeAll();
 
-        adminOperations.updateIndicator("miss ko na sya");
+        orderPaneLabel.setText("QUICK ACTIONS");
 
-        centerPanelMainLayer.setBackground(Color.MAGENTA);
+        JLabel title = Operations.createCustomLabel("SALES", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
+        centerPanelMainLayer.add(title);
+
+        centerPanelMainLayer.setBackground(color.getCenterPiece());
+        mainPanelOnCenter.setBackground(Color.RED);
+
+        int size = transactionHistory2D.length;
+        int orderWidth = centerPanelMainLayer.getWidth();
+        int orderHeight = 58;
+
+        SpringLayout SL = new SpringLayout();
+        mainPanelOnCenters = new JPanel();
+        mainPanelOnCenters.setBackground(mainPanelOnCenter.getBackground());
+        mainPanelOnCenters.setLayout(SL);
+        mainPanelOnCenters.setPreferredSize(new Dimension(orderWidth, size * (orderHeight + 10)));
+
+        System.out.println("This is sales?????");
+
+        customRoundedPanel[] salesChartPanels = new customRoundedPanel[4];
+
+        for (int i = 0; i < 4; i++) {
+            salesChartPanels[i] = new customRoundedPanel(25);
+            salesChartPanels[i].setBackground(Color.BLUE);
+            salesChartPanels[i].setBorder(BorderFactory.createEmptyBorder());
+
+            salesChartPanels[i].setPreferredSize(new Dimension(mainPanelOnCenter.getWidth() - 50, 150));
+
+            mainPanelOnCenters.add(salesChartPanels[i]);
+
+            if (i == 0) {
+                // Attach the first panel to the top of the container
+                SL.putConstraint(SpringLayout.NORTH, salesChartPanels[i], 10, SpringLayout.NORTH, mainPanelOnCenter);
+            } else {
+                // Attach subsequent panels below the previous one
+                SL.putConstraint(SpringLayout.NORTH, salesChartPanels[i], 10, SpringLayout.SOUTH, salesChartPanels[i - 1]);
+            }
+
+            // Center the panels horizontally
+            SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, salesChartPanels[i], 0, SpringLayout.HORIZONTAL_CENTER, mainPanelOnCenter);
+        }
+
+        customScrollBarUI scrollBarUI2 = new customScrollBarUI();
+        scrollBarUI2.setCustomUI(color.getHeader(), Color.GREEN, color.getCenterPane());
+
+        JScrollPane scrollPane = new JScrollPane(mainPanelOnCenters);
+
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUI(scrollBarUI2);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        mainPanelOnCenter.add(scrollPane);
+
+//        new salesBarChart(mainPanelOnCenter);
+//        salesBarChart.displaySalesChart();
+
+        adminOperations.panelFinisher(orderPaneCen);
         adminOperations.panelFinisher(centerContainerPanelUp);
     }
 
     public static void inventoryButtonToggle() {
         centerPanelMainLayer.removeAll();
         mainPanelOnCenter.removeAll();
+        orderPaneCen.removeAll();
 
-        centerPanelMainLayer.setBackground(color.getLeftSide());
-        centerPanelMainLayer.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        centerPanelMainLayer.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 0));
+        orderPaneLabel.setText("QUICK ACTIONS");
 
-        int[] arrayLengths = new int[categoryDataMap.size()];
-        int i = 0;
-        for (Map.Entry<String, String[][]> entry : categoryDataMap.entrySet()) {
-            String[][] array2D = entry.getValue();
+        centerPanelMainLayer.setBackground(color.getCenterPiece());
 
-            int length = array2D.length;
-            arrayLengths[i] = length;
-            i++;
-        }
+        JLabel title = Operations.createCustomLabel("INVENTORY MANAGER", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
+        centerPanelMainLayer.add(title);
 
-        int size = categoryDataMap.size();
-        button2_ = new JButton[size];
-        pillShape = new customRoundedPanel[size];
-        pSLabel = new JLabel[size];
-        for (int j = 0; j < button2_.length; j++) {
-            button2_[j] = new JButton();
-            button2_[j].setBackground(centerPanelMainLayer.getBackground());
-            button2_[j].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            button2_[j].setEnabled(T);
-            button2_[j].setFocusPainted(F);
-            button2_[j].setPreferredSize(new Dimension(105, 34));
-            button2_[j].addActionListener(new adminActionManager.menuTable(j, arrayLengths[j]));
+        System.out.println("This is inventory?????");
 
-            pillShape[j] = new customRoundedPanel(25);
-            pillShape[j].setLayout(new GridLayout(1,1));
-            button2_[j].add(pillShape[j]);
-
-            button2_[j].addMouseListener(new mouseListen(pillShape[j], button2_[j], color.getChoice(), Color.RED));
-
-            pSLabel[j] = new JLabel();
-            Set<String> arrayNames = categoryDataMap.keySet();
-            if (j < arrayNames.size()) {
-                String arrayName = (String) arrayNames.toArray()[j];
-                pSLabel[j].setText(arrayName);
-            }
-            pSLabel[j].setHorizontalAlignment(CENTER);
-            pSLabel[j].setFont(font.getProductNameREGULAR());
-            pSLabel[j].setForeground(Color.GRAY);
-
-            pillShape[j].add(pSLabel[j]);
-
-            centerPanelMainLayer.add(button2_[j]);
-        }
+        adminOperations.panelFinisher(orderPaneCen);
         adminOperations.panelFinisher(centerContainerPanelUp);
     }
 
