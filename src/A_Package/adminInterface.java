@@ -5,15 +5,9 @@ import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import G_Package.customRoundedPanel;
 import G_Package.customPopupMenu;
@@ -21,8 +15,6 @@ import G_Package.customScrollBarUI;
 import G_Package.customSwingCreate;
 
 import M_Package.Operations;
-import M_Package.mouseListen;
-import M_Package.userInterface;
 
 import static javax.swing.SwingConstants.CENTER;
 
