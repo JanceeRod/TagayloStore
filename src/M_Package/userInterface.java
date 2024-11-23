@@ -270,7 +270,8 @@ public class userInterface extends Definitions {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (orderRecord != null) {
-					new paymentWindow(orderRecord, calculations);
+					paymentWindow payment = new paymentWindow(orderRecord, calculations);
+					payment.setVisible(T);
 				}
 			}
 		});

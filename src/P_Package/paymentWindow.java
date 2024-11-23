@@ -55,6 +55,7 @@ public class paymentWindow extends JFrame {
 		setSize(720, 490);
 		setLocationRelativeTo(null);
 		setResizable(T);
+		setAlwaysOnTop(T);
 		
 		JPanel panel1 = new JPanel(); // Panel on the top
     	panel1.setPreferredSize(new Dimension(1080, 50));
