@@ -15,15 +15,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import G_Package.customRoundedPanel;
-import G_Package.customPopupMenu;
-import G_Package.customScrollBarUI;
-import G_Package.customColorPallete;
+import G_Package.*;
 
 import P_Package.paymentWindow;
 
 public class userInterface extends Definitions {
-
 	public userInterface() {
 
 		mainFrame = new JFrame();
@@ -40,13 +36,11 @@ public class userInterface extends Definitions {
 		centerPanel();
 
 		sideRibbonButtons[0].doClick();
-
 		mainFrame.getContentPane().setLayout(new BorderLayout());
 		mainFrame.add(topRibbonPanel, BorderLayout.NORTH);
 		mainFrame.add(rightRibbonPanel, BorderLayout.EAST);
 		mainFrame.add(leftRibbonPanel, BorderLayout.WEST);
 		mainFrame.add(centerContainerPanelUp, BorderLayout.CENTER);
-		mainFrame.setVisible(T);
 		mainFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.out.println("Program is closing. Do cleanup or save data if needed.");
@@ -57,7 +51,7 @@ public class userInterface extends Definitions {
 		gd.setFullScreenWindow(mainFrame);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		systemTimeAndDate();
-
+		mainFrame.setVisible(T);
 	}
 
 	public void topRibbon() {
@@ -95,11 +89,14 @@ public class userInterface extends Definitions {
 		profileButtonPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
 
 		profileButton = new JButton();
-		profileButton.setBackground(Color.BLUE);
+		profileButton.setBackground(color.getHeader());
 		profileButton.setBorder(BorderFactory.createEmptyBorder());
 		profileButton.setLayout(new GridLayout(1,1));
+		profileButton.setFocusPainted(F);
 		profileButton.setEnabled(T);
-//		profileButton.addActionListener(new menuButtons(-1, null, null));
+
+		customRoundedPanel profileButtonRoundedPanel = customSwingCreate.createCustomRoundedPanel(15, 0, 0, 0, 0, color.getChoice(), null);
+		profileButton.add(profileButtonRoundedPanel);
 
 		profileButtonPop = new customPopupMenu();
 		profileButtonPop.addMenuItem("Settings", e -> JOptionPane.showMessageDialog(mainFrame, "This is Settings"));
@@ -135,7 +132,8 @@ public class userInterface extends Definitions {
 		topRibbonPanel.add(javaJivePanel, BorderLayout.WEST);
 		topRibbonPanel.add(timePanel, BorderLayout.EAST);
 		topRibbonPanel.add(profileButtonPanel, BorderLayout.EAST);
-
+		topRibbonPanel.setVisible(T);
+		System.out.println("Top Ribbon is set.");
 	}
 
 	public void leftPanel() {
@@ -180,7 +178,8 @@ public class userInterface extends Definitions {
 
 			sideRibbonButtons[i].addActionListener(new sideButtons(i, sideRibbonLabels[i]));
 		}
-
+		leftRibbonPanel.setVisible(T);
+		System.out.println("Left Ribbon is set.");
 	}
 
 	public void rightPanel() {
@@ -305,7 +304,8 @@ public class userInterface extends Definitions {
 		rightRibbonPanel.add(orderPaneTop, BorderLayout.NORTH);
 		rightRibbonPanel.add(orderPaneBot, BorderLayout.SOUTH);
 		rightRibbonPanel.add(orderPaneCen, BorderLayout.CENTER);
-
+		rightRibbonPanel.setVisible(T);
+		System.out.println("Right Ribbon is set.");
 	}
 
 	public void centerPanel() {
@@ -326,7 +326,8 @@ public class userInterface extends Definitions {
 
 		centerContainerPanelUp.add(mainPanelOnCenter, BorderLayout.CENTER);
 		centerContainerPanelUp.add(centerContainerPanelDown, BorderLayout.NORTH);
-
+		centerContainerPanelUp.setVisible(T);
+		System.out.println("Center Panel is set.");
 	}
 
 	public void instantiate() {
@@ -803,28 +804,35 @@ public class userInterface extends Definitions {
 
 
 	public void systemTimeAndDate() {
-		while (T) {
-			CT = LocalTime.now();
-			CTF = DateTimeFormatter.ofPattern("hh:mm a");
-			CTF2 = DateTimeFormatter.ofPattern("hh:mm:ss a");
+		// Swing Timer for updating the UI every second
+		Timer timer = new Timer(1000, e -> {
+			LocalTime currentTime = LocalTime.now();
+			LocalDate currentDate = LocalDate.now();
 
-			CD = LocalDate.now();
-			CDF = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+			// Format time and date
+			DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+			DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 
-			TM = CT.format(CTF);
-			TM2 = CT.format(CTF2);
-			DM = CD.format(CDF);
+			// Update labels in the UI
+			TimeLabel.setText(currentTime.format(timeFormatter));
+			DateLabel.setText(currentDate.format(dateFormatter));
+		});
+		timer.start(); // Start the timer for UI updates
 
-			DateLabel.setText(DM);
-
-			try {
-				System.out.println("TimeLabel: " + TM2 + "\nDate: " + DM + "\n");
-				TimeLabel.setText(TM);
-				Thread.sleep(60000);
-			} catch(InterruptedException e) {
-				e.printStackTrace();
+		// Background Thread for printing time to the console every minute
+		new Thread(() -> {
+			while (true) {
+				try {
+					LocalTime currentTime = LocalTime.now();
+					DateTimeFormatter consoleTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+					System.out.println("TimeLabel: " + currentTime.format(consoleTimeFormatter));
+					Thread.sleep(60000); // Sleep for 1 minute
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+					break; // Exit the loop if the thread is interrupted
+				}
 			}
-		}
+		}).start();
 	}
 
 	public void whenSearched() {

@@ -8,33 +8,34 @@ import java.util.*;
 import java.util.List;
 
 import A_Package.adminInterface;
+import M_Package.Main;
 import M_Package.userInterface;
 
 public class logMain extends logDefinitions {
-//    public static void main(String[] args) {
-//        try {
-//            List<Map<String, String>> users = new ArrayList<>();
-//            Map<String, String> admin = new HashMap<>();
-//            admin.put("username", "admin");
-//            admin.put("password", logDefinitions.hashPassword("admin123", "random_salt"));
-//            admin.put("role", "Admin");
-//            users.add(admin);
-//
-//            Map<String, String> cashier = new HashMap<>();
-//            cashier.put("username", "cashier1");
-//            cashier.put("password", logDefinitions.hashPassword("cashier123", "random_salt"));
-//            cashier.put("role", "Cashier");
-//            users.add(cashier);
-//
-//            logDefinitions.writeCredentials("credentials.txt", users);
-//
-//            createLoginGUI();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public logMain() {
+        try {
+            List<Map<String, String>> users = new ArrayList<>();
+            Map<String, String> admin = new HashMap<>();
+            admin.put("username", "admin");
+            admin.put("password", logDefinitions.hashPassword("admin123", "random_salt"));
+            admin.put("role", "Admin");
+            users.add(admin);
 
-    private static void createLoginGUI() {
+            Map<String, String> cashier = new HashMap<>();
+            cashier.put("username", "cashier1");
+            cashier.put("password", logDefinitions.hashPassword("cashier123", "random_salt"));
+            cashier.put("role", "Cashier");
+            users.add(cashier);
+
+            logDefinitions.writeCredentials("credentials.txt", users);
+
+            createLoginGUI();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void createLoginGUI() {
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(720, 490);
@@ -94,14 +95,18 @@ public class logMain extends logDefinitions {
                     if (user.get("username").equals(username)) {
                         isValid = logDefinitions.validatePassword(password, user.get("password"), salt);
                         if (isValid) {
+                            frame.setVisible(false);
+                            frame.dispose();
                             String role = user.get("role");
                             if ("Admin".equalsIgnoreCase(role)) {
-                                lblMessage.setText("Login successful as Admin.");
-                                frame.dispose();
+//                                lblMessage.setText("Login successful as Admin.");
+
+                                System.out.println("Admin");
                                 new adminInterface();
                             } else if ("Cashier".equalsIgnoreCase(role)) {
-                                lblMessage.setText("Login successful as Cashier.");
-                                frame.dispose();
+//                                lblMessage.setText("Login successful as Cashier.");
+
+                                System.out.println("Cashier");
                                 new userInterface();
                             }
                             return;

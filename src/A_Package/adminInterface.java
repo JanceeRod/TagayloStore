@@ -27,11 +27,6 @@ import M_Package.userInterface;
 import static javax.swing.SwingConstants.CENTER;
 
 public class adminInterface extends adminDefinitions {
-
-    public static void main(String[] args) {
-        new adminInterface();
-    }
-
     public adminInterface() {
 
         mainFrame = new JFrame();
@@ -65,7 +60,6 @@ public class adminInterface extends adminDefinitions {
 //		gd.setFullScreenWindow(mainFrame);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         systemTimeAndDate();
-
     }
 
     public void instantiate() {
@@ -138,7 +132,13 @@ public class adminInterface extends adminDefinitions {
         profileButtonPop = new customPopupMenu();
 //        profileButtonPop.addMenuItem("Settings", e -> JOptionPane.showMessageDialog(mainFrame, "This is Settings"));
 //        profileButtonPop.addMenuItem("About Us?", e -> JOptionPane.showMessageDialog(mainFrame, "This is about us!"));
-        profileButtonPop.addMenuItem("Log Out", e -> JOptionPane.showMessageDialog(mainFrame, "Logged out"));
+        profileButtonPop.addMenuItem("Log Out",
+                e -> {
+                    System.out.println("Program is closing. Do cleanup or save data if needed.");
+                    JOptionPane.showMessageDialog(mainFrame, "Logged out");
+                    mainFrame.dispose();
+                    System.exit(0);
+                });
 //        profileButtonPop.addMenuItem("Help", e -> JOptionPane.showMessageDialog(mainFrame, "Help"));
 
         profileButton.addActionListener(e -> {
@@ -265,27 +265,34 @@ public class adminInterface extends adminDefinitions {
     }
 
     public void systemTimeAndDate() {
-        while (T) {
-            CT = LocalTime.now();
-            CTF = DateTimeFormatter.ofPattern("hh:mm a");
-            CTF2 = DateTimeFormatter.ofPattern("hh:mm:ss a");
+        // Swing Timer for updating the UI every second
+        Timer timer = new Timer(1000, e -> {
+            LocalTime currentTime = LocalTime.now();
+            LocalDate currentDate = LocalDate.now();
 
-            CD = LocalDate.now();
-            CDF = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+            // Format time and date
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 
-            TM = CT.format(CTF);
-            TM2 = CT.format(CTF2);
-            DM = CD.format(CDF);
+            // Update labels in the UI
+            TimeLabel.setText(currentTime.format(timeFormatter));
+            DateLabel.setText(currentDate.format(dateFormatter));
+        });
+        timer.start(); // Start the timer for UI updates
 
-            DateLabel.setText(DM);
-
-            try {
-                System.out.println("TimeLabel: " + TM2 + "\nDate: " + DM + "\n");
-                TimeLabel.setText(TM);
-                Thread.sleep(60000);
-            } catch(InterruptedException e) {
-                e.printStackTrace();
+        // Background Thread for printing time to the console every minute
+        new Thread(() -> {
+            while (true) {
+                try {
+                    LocalTime currentTime = LocalTime.now();
+                    DateTimeFormatter consoleTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
+                    System.out.println("TimeLabel: " + currentTime.format(consoleTimeFormatter));
+                    Thread.sleep(60000); // Sleep for 1 minute
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                    break; // Exit the loop if the thread is interrupted
+                }
             }
-        }
+        }).start();
     }
 }
