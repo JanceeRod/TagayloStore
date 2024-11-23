@@ -16,16 +16,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import G_Package.customRoundedPanel;
@@ -49,6 +40,8 @@ public class paymentWindow extends JFrame {
 	String[] paymentMethods = {"Payment Method", "Cash", "Credit Card", "Debit Card", "GCash"};
 	
 	JPanel afterOptions;
+
+	double total = 0;
 	
 	public paymentWindow(HashMap<String, Integer> hashMap, String[] calculations) {
 		setTitle("Java Jive Cafe - Payment Window");
@@ -56,6 +49,8 @@ public class paymentWindow extends JFrame {
 		setLocationRelativeTo(null);
 		setResizable(T);
 		setAlwaysOnTop(T);
+
+		total = Double.parseDouble(calculations[2]);
 		
 		JPanel panel1 = new JPanel(); // Panel on the top
     	panel1.setPreferredSize(new Dimension(1080, 50));
@@ -357,7 +352,42 @@ public class paymentWindow extends JFrame {
 	}
 	
 	private void cashMethod() {
-		afterOptions.setBackground(Color.GREEN);
+//		afterOptions.setBackground(Color.GREEN);
+		afterOptions.removeAll();
+		afterOptions.setLayout(new GridLayout(3, 2, 10, 10));
+
+		JLabel totalCostLabel = new JLabel("Total Cost:");
+		JTextField totalCostField = new JTextField();
+		totalCostField.setEditable(false);
+		totalCostField.setText("₱" + total);
+
+		JLabel amountGivenLabel = new JLabel("Amount Given:");
+		JTextField amountGivenField = new JTextField();
+
+		JLabel changeLabel = new JLabel("Change:");
+		JTextField changeField = new JTextField();
+		changeField.setEditable(false);
+
+		amountGivenField.addActionListener(e -> {
+			try {
+				double totalCost = total;
+				double amountGiven = Double.parseDouble(amountGivenField.getText());
+				double change = amountGiven - totalCost;
+				changeField.setText("₱" + formatThousands(String.valueOf(change)));
+			} catch (NumberFormatException ex) {
+				changeField.setText("Invalid input");
+			}
+		});
+
+		afterOptions.add(totalCostLabel);
+		afterOptions.add(totalCostField);
+		afterOptions.add(amountGivenLabel);
+		afterOptions.add(amountGivenField);
+		afterOptions.add(changeLabel);
+		afterOptions.add(changeField);
+
+		afterOptions.revalidate();
+		afterOptions.repaint();
 	}
 	
 	private void creditCardMethod() {
