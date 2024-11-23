@@ -270,7 +270,8 @@ public class userInterface extends Definitions {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (orderRecord != null) {
-					new paymentWindow(orderRecord, calculations);
+					paymentWindow payment = new paymentWindow(orderRecord, calculations);
+					payment.setVisible(T);
 				}
 			}
 		});
@@ -421,7 +422,7 @@ public class userInterface extends Definitions {
 			button2_[j].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			button2_[j].setEnabled(T);
 			button2_[j].setFocusPainted(F);
-			button2_[j].setPreferredSize(new Dimension(95, 34));
+			button2_[j].setPreferredSize(new Dimension(105, 34));
 			button2_[j].addActionListener(new userInterface.menuTable(j, arrayLengths[j]));
 
 			pillShape[j] = new customRoundedPanel(25);
@@ -470,12 +471,12 @@ public class userInterface extends Definitions {
 					if (i == buttonIndex) {
 						pillShape[i].setBackground(color.getChoice());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
-						pSLabel[i].setFont(font.getFG4());
+						pSLabel[i].setFont(font.getProductNameBOLD());
 						pSLabel[i].setForeground(Color.white);
 					} else {
 						pillShape[i].setBackground(centerPanelMainLayer.getBackground());
 						pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
-						pSLabel[i].setFont(font.getFG4());
+						pSLabel[i].setFont(font.getProductNameREGULAR());
 						pSLabel[i].setForeground(customColorPallete.medyo_black);
 					}
 				}
@@ -553,10 +554,11 @@ public class userInterface extends Definitions {
 				forPanel5_[i].addMouseListener(new mouseListen(panel5_[i], forPanel5_[i]));
 				panel5_[i].setBackground(Color.WHITE);
 
-				ImageIcon imageIcon = new ImageIcon("images/groceries/canton.png");
+				ImageIcon imageIcon = new ImageIcon("images/products/" + menuArray[i][3]);
 				JLabel imageLabel = new JLabel(imageIcon);
 				panel5_[i].add(imageLabel, BorderLayout.CENTER);
 
+//				System.out.println(menuArray[i][3]);
 				productName[i].setText(menuArray[i][1]);
 				productPrice[i].setText("PHP " + menuArray[i][2] + ".00");
 			}
