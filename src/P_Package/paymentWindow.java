@@ -1,12 +1,6 @@
 package P_Package;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -37,7 +31,7 @@ public class paymentWindow extends JFrame {
 	JLabel[] quantityPrice6s;
 	JPanel[] basePanel;
 	
-	String[] paymentMethods = {"Payment Method", "Cash", "Credit Card", "Debit Card", "GCash"};
+	String[] paymentMethods = {"Payment Method", "Cash"};
 	
 	JPanel afterOptions;
 
@@ -350,11 +344,10 @@ public class paymentWindow extends JFrame {
 			}
 		}
 	}
-	
+
 	private void cashMethod() {
-//		afterOptions.setBackground(Color.GREEN);
 		afterOptions.removeAll();
-		afterOptions.setLayout(new GridLayout(3, 2, 10, 10));
+		afterOptions.setLayout(new GridLayout(4, 2, 10, 10));
 
 		JLabel totalCostLabel = new JLabel("Total Cost:");
 		JTextField totalCostField = new JTextField();
@@ -367,6 +360,14 @@ public class paymentWindow extends JFrame {
 		JLabel changeLabel = new JLabel("Change:");
 		JTextField changeField = new JTextField();
 		changeField.setEditable(false);
+
+		JButton proceedButton = new JButton("Proceed to Payment");
+		proceedButton.addActionListener(e -> {
+			JOptionPane.showMessageDialog(this, "Proceeding to payment...", "Payment", JOptionPane.INFORMATION_MESSAGE);
+		});
+
+		JPanel buttonPanel = new JPanel(new BorderLayout());
+		buttonPanel.add(proceedButton, BorderLayout.CENTER);
 
 		amountGivenField.addActionListener(e -> {
 			try {
@@ -385,11 +386,15 @@ public class paymentWindow extends JFrame {
 		afterOptions.add(amountGivenField);
 		afterOptions.add(changeLabel);
 		afterOptions.add(changeField);
+		afterOptions.add(buttonPanel); // Add the panel with the button
+		afterOptions.add(new JLabel()); // Empty space to keep the grid balance
 
 		afterOptions.revalidate();
 		afterOptions.repaint();
 	}
-	
+
+
+
 	private void creditCardMethod() {
 		afterOptions.setBackground(Color.RED);
 	}
