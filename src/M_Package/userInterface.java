@@ -270,7 +270,8 @@ public class userInterface extends Definitions {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (orderRecord != null) {
-					new paymentWindow(orderRecord, calculations);
+					paymentWindow payment = new paymentWindow(orderRecord, calculations);
+					payment.setVisible(T);
 				}
 			}
 		});
@@ -553,10 +554,11 @@ public class userInterface extends Definitions {
 				forPanel5_[i].addMouseListener(new mouseListen(panel5_[i], forPanel5_[i], Color.WHITE, Color.WHITE));
 				panel5_[i].setBackground(Color.WHITE);
 
-				ImageIcon imageIcon = new ImageIcon("images/g.png");
+				ImageIcon imageIcon = new ImageIcon("images/products/" + menuArray[i][3]);
 				JLabel imageLabel = new JLabel(imageIcon);
 				panel5_[i].add(imageLabel, BorderLayout.CENTER);
 
+//				System.out.println(menuArray[i][3]);
 				productName[i].setText(menuArray[i][1]);
 				productPrice[i].setText("PHP " + menuArray[i][2] + ".00");
 			}

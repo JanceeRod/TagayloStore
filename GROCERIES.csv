@@ -1,10 +1,10 @@
-G1,Mega Sardines Red,28
-G2,Mega Sardines Green,27
-G3,Argentina Corned Beef,33
-G4,Argentina Beefloaf,25
-G5,Fresca Tuna Mechado,27
-G6,Fresca Tuna Hot&Spicy,27
-G7,Lucky Me Noodles Beef,11
-G8,Lucky Me Noodles Labuyo,11
-G9,Lucky Me Pancit Canton Kasalo Pack,23
-G10,Lucky Me Pancit Canton Regular,14
+G1,Mega Sardines Red,28,mega-red.png
+G2,Mega Sardines Green,27,mega-green.png
+G3,Argentina Corned Beef,33,argentina-cornedbeef.png
+G4,Argentina Beefloaf,25,argentina-beefloaf.png
+G5,Fresca Tuna Mechado,27,fresca-mechado.png
+G6,Fresca Tuna Hot&Spicy,27,fresca-hotnspicy.png
+G7,Lucky Me Noodles Beef,11,luckyme-noodles.png
+G8,Lucky Me Noodles Labuyo,11,luckyme-noodles.png
+G9,Lucky Me Pancit Canton Kasalo Pack,23,luckyme-canton-kasalo.png
+G10,Lucky Me Pancit Canton Regular,14,luckyme-canton-regular.png

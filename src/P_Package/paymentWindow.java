@@ -1,12 +1,6 @@
 package P_Package;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -16,16 +10,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import G_Package.customRoundedPanel;
@@ -46,15 +31,20 @@ public class paymentWindow extends JFrame {
 	JLabel[] quantityPrice6s;
 	JPanel[] basePanel;
 	
-	String[] paymentMethods = {"Payment Method", "Cash", "Credit Card", "Debit Card", "GCash"};
+	String[] paymentMethods = {"Payment Method", "Cash"};
 	
 	JPanel afterOptions;
+
+	double total = 0;
 	
 	public paymentWindow(HashMap<String, Integer> hashMap, String[] calculations) {
 		setTitle("Tagaylo Store POS - Payment Window");
 		setSize(720, 490);
 		setLocationRelativeTo(null);
 		setResizable(T);
+		setAlwaysOnTop(T);
+
+		total = Double.parseDouble(calculations[2]);
 		
 		JPanel panel1 = new JPanel(); // Panel on the top
     	panel1.setPreferredSize(new Dimension(1080, 50));
@@ -354,11 +344,57 @@ public class paymentWindow extends JFrame {
 			}
 		}
 	}
-	
+
 	private void cashMethod() {
-		afterOptions.setBackground(Color.GREEN);
+		afterOptions.removeAll();
+		afterOptions.setLayout(new GridLayout(4, 2, 10, 10));
+
+		JLabel totalCostLabel = new JLabel("Total Cost:");
+		JTextField totalCostField = new JTextField();
+		totalCostField.setEditable(false);
+		totalCostField.setText("₱" + total);
+
+		JLabel amountGivenLabel = new JLabel("Amount Given:");
+		JTextField amountGivenField = new JTextField();
+
+		JLabel changeLabel = new JLabel("Change:");
+		JTextField changeField = new JTextField();
+		changeField.setEditable(false);
+
+		JButton proceedButton = new JButton("Proceed to Payment");
+		proceedButton.addActionListener(e -> {
+			JOptionPane.showMessageDialog(this, "Proceeding to payment...", "Payment", JOptionPane.INFORMATION_MESSAGE);
+		});
+
+		JPanel buttonPanel = new JPanel(new BorderLayout());
+		buttonPanel.add(proceedButton, BorderLayout.CENTER);
+
+		amountGivenField.addActionListener(e -> {
+			try {
+				double totalCost = total;
+				double amountGiven = Double.parseDouble(amountGivenField.getText());
+				double change = amountGiven - totalCost;
+				changeField.setText("₱" + formatThousands(String.valueOf(change)));
+			} catch (NumberFormatException ex) {
+				changeField.setText("Invalid input");
+			}
+		});
+
+		afterOptions.add(totalCostLabel);
+		afterOptions.add(totalCostField);
+		afterOptions.add(amountGivenLabel);
+		afterOptions.add(amountGivenField);
+		afterOptions.add(changeLabel);
+		afterOptions.add(changeField);
+		afterOptions.add(buttonPanel); // Add the panel with the button
+		afterOptions.add(new JLabel()); // Empty space to keep the grid balance
+
+		afterOptions.revalidate();
+		afterOptions.repaint();
 	}
-	
+
+
+
 	private void creditCardMethod() {
 		afterOptions.setBackground(Color.RED);
 	}
