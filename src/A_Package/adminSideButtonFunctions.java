@@ -104,6 +104,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
 
             purchaseGrandTotal[i] = new JLabel("PHP " + transactionHistory2D[i][5]);
             purchaseGrandTotal[i].setFont(font.getProductPriceBOLD());
+            purchaseGrandTotal[i].setForeground(color.getHeader());
 
             SpringLayout layout = new SpringLayout();
             perOrder[i].setLayout(layout);

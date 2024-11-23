@@ -37,7 +37,6 @@ public class adminActionManager extends adminDefinitions {
             SpringLayout layout = new SpringLayout();
             orderPaneCen.setLayout(layout);
 
-            // Locate the transaction index using transactionID
             int transactionIndex = -1;
             for (int i = 0; i < transactionHistory2D.length; i++) {
                 if (transactionHistory2D[i][0].equals(transactionID)) {
@@ -46,12 +45,19 @@ public class adminActionManager extends adminDefinitions {
                 }
             }
 
-            for (int i = 0; i < transactionHistory2D.length; i++) {
-                perOrder[transactionIndex].setBackground(color.getRightSide());
-                perOrder[i].setBackground(Color.WHITE);
+            if (transactionIndex != -1) {
+                for (int i = 0; i < transactionHistory2D.length; i++) {
+                    if (i == transactionIndex) {
+                        perOrder[i].setBackground(color.getRightSide());
+                    } else {
+                        perOrder[i].setBackground(Color.WHITE);
+                    }
+                }
+            } else {
+                System.out.println("Transaction ID not found!");
             }
 
-            // If transaction ID is not found, show an error and return
+
             if (transactionIndex == -1) {
                 JLabel errorLabel = new JLabel("Transaction not found.");
                 orderPaneCen.add(errorLabel);
@@ -60,7 +66,6 @@ public class adminActionManager extends adminDefinitions {
                 return;
             }
 
-            // Retrieve transaction details
             String customerType = transactionHistory2D[transactionIndex][8];
             String purchaseDate = transactionHistory2D[transactionIndex][2]; // Assuming index 9 for purchase date
             String dateAndTime = transactionHistory2D[transactionIndex][1];
