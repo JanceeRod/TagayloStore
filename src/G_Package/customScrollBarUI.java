@@ -15,8 +15,8 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 public class customScrollBarUI extends BasicScrollBarUI {
 	customColorPallete color = new customColorPallete();
 	
-	private Color trackColor = Color.DARK_GRAY;
-	private Color thumbColor = Color.GRAY;
+	private Color trackColor;
+	private Color thumbColor;
 	private Color backgroundColor;
 	
 	public void CustomScrollBarUI(Color backgroundColor) {
@@ -126,5 +126,12 @@ public class customScrollBarUI extends BasicScrollBarUI {
 		} else {
 			g.fillRect(trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height);
 		}
+	}
+
+	@Override
+	protected void configureScrollBarColors() {
+		super.configureScrollBarColors();
+		scrollbar.setUnitIncrement(20);
+		scrollbar.setBlockIncrement(100);
 	}
 }

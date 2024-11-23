@@ -113,7 +113,7 @@ public class Transaction {
 	}
 	
 	public String toCsvString() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd    HH:mm:ss a");
 		return transactionId + "," +
         dateTime.format(formatter) + "," +
         productPurchased + "," +

@@ -13,10 +13,21 @@ public class mouseListen extends MouseAdapter {
     private JButton button;
     customColorPallete color = new customColorPallete();
 
-    public mouseListen(customRoundedPanel panel, JButton button) {
+    public mouseListen(customRoundedPanel panel, JButton button, Color entered,  Color exited) {
         this.setPanel(panel);
         this.setButton(button);
+        this.setEnteredColor(entered);
+        this.setExitedColor(exited);
     }
+
+    private void setEnteredColor (Color color) {
+        panel.setBackground(color);
+    }
+
+    private void setExitedColor (Color color) {
+        panel.setBackground(color);
+    }
+
     private void setButton(JButton button) {
         this.button = button;
     }

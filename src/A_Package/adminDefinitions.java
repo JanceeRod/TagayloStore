@@ -26,25 +26,24 @@ public class adminDefinitions {
 
     Operations Operate = new Operations();
 
-    GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    static Double defaultNo = 0.00;
+    static Double salesTax = 5.25;
+    static String formattedDefaultNo  = String.format("%.2f", defaultNo);
 
-    Double defaultNo = 0.00;
-    Double salesTax = 5.25;
-    String formattedDefaultNo  = String.format("%.2f", defaultNo);
+    public static customRoundedPanel[] mainPanelOnCenter_;
+    public static customRoundedPanel[] pillShape;
 
-    public customRoundedPanel[] panel5_;
-    public customRoundedPanel[] mainPanelOnCenter_;
-    public customRoundedPanel[] pillShape;
-    public JButton[] forPanel5_;
-
-    public JButton[] button2_;
+    public static JButton[] button2_;
     public JLabel[] productName;
     public JLabel[] productPrice;
-    public JLabel[] quantityLabel6s;
-    public JLabel[] productName6s;
-    public JLabel[] productPrice6s;
-    public JLabel[] pSLabel;
+    public static JLabel[] quantityLabel6s;
+    public static JLabel[] productName6s;
+    public static JLabel[] productPrice6s;
+    public static JLabel[] pSLabel;
 
+    //Search
+    static JLabel searchResult;
+    static JButton closeSearch;
 
 
     //TOP RIBBON
@@ -64,7 +63,7 @@ public class adminDefinitions {
     JLabel DateLabel;
 
     //Text field
-    JTextField searchBox;
+    static JTextField searchBox;
 
     //Button
     JButton profileButton;
@@ -79,13 +78,13 @@ public class adminDefinitions {
     JPanel leftRibbonPanel;
 
     //Rounded Panel
-    customRoundedPanel[] sideRibbonRoundedPanels;
+    static customRoundedPanel[] sideRibbonRoundedPanels;
 
     //Label
     JLabel[] label2_;
 
     //Button
-    JButton[] sideRibbonButtons;
+    static JButton[] sideRibbonButtons;
 
     //Extras
     String[] sideRibbonLabels;
@@ -95,66 +94,64 @@ public class adminDefinitions {
     //RIGHT PANEL
     //Panel
     JPanel rightRibbonPanel;
-    JPanel orderPaneCen;
+    static JPanel orderPaneCen;
     JPanel orderPaneTop;
     JPanel orderPaneBot;
-    JPanel centerPaneOnRightPanel;
+    static JPanel centerPaneOnRightPanel;
 
     //Rounded Panel
     customRoundedPanel orderPaneTitleTab;
-    customRoundedPanel roundedPanelForCancelButton;
-    customRoundedPanel roundedPanelForProceedButton;
+    static customRoundedPanel roundedPanelForCancelButton;
+    static customRoundedPanel roundedPanelForProceedButton;
 
     //Label
-    JLabel cancelLabel;
-    JLabel proceedLabel;
-
-    JLabel[] cartLabelsText;
-    JLabel[] cartLabelsNumbers;
+    static JLabel[] cartLabelsNumbers;
 
     //Button
-    JButton cancelButton;
-    JButton proceedButton;
+    static JButton cancelButton;
+    static JButton proceedButton;
 
     //Extras
-    String[] cartLabels;
     int[] labelText1_;
 
     customScrollBarUI scrollBarForCart;
-    JScrollPane scrollPane;
 
 
     //CENTER PANEL
     //Panel
-    JPanel centerContainerPanelUp;
-    JPanel centerContainerPanelDown;
-    JPanel mainPanelOnCenter;
+    static JPanel centerContainerPanelUp;
+    static JPanel centerContainerPanelDown;
+    static JPanel mainPanelOnCenter;
+    static JPanel mainPanelOnCenters;
 
     //Rounded Panel
-    customRoundedPanel centerPanelMainLayer;
+    static customRoundedPanel centerPanelMainLayer;
+    static customRoundedPanel[] perOrder;
 
     //Label
-    JLabel orderPaneLabel;
+    static JLabel orderPaneLabel;
 
     //Button
+    static JButton[] perOrderButtons;
 
     //Extras
 
 
 
     //BOOLEAN
-    boolean T = true, F = false;
+    static boolean T = true;
+    static boolean F = false;
 
 
     //graphics
-    customColorPallete color = new customColorPallete();
-    customFontGallery font = new customFontGallery();
+    static customColorPallete color = new customColorPallete();
+    static customFontGallery font = new customFontGallery();
 
 
     //data structures
     public static LinkedHashMap<String, Integer> cafeInventory = new LinkedHashMap<>();
     public LinkedHashMap<String, String[][]> arrayOf2DArrays = new LinkedHashMap<>();
-    public LinkedHashMap<String, Integer> orderRecord = new LinkedHashMap<>();
+    public static LinkedHashMap<String, Integer> orderRecord = new LinkedHashMap<>();
     public static List<Transaction> transactionHistory = new ArrayList<>();
     public static List<String[]> searchResults = new ArrayList<>();
 
@@ -164,7 +161,8 @@ public class adminDefinitions {
     static String transactions = "transactionHistory.csv";
     static String masterfile = "inventoryMasterfile.csv";
     static String[][] inventoryMasterfile;
-    String[] calculations;
+    static String[][] transactionHistory2D;
+    static String[] calculations;
 
 
     //new files
