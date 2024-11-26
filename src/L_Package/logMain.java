@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.List;
 
 import A_Package.adminInterface;
+import G_Package.customColorPallete;
 import M_Package.Main;
 import M_Package.userInterface;
 
@@ -38,48 +39,76 @@ public class logMain extends logDefinitions {
     public static void createLoginGUI() {
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(720, 490);
-        frame.setLayout(null);
+        frame.setSize(600, 400);
+        frame.setLayout(new GridBagLayout());
+        frame.setLocationRelativeTo(null); // Center the frame on the screen
+        frame.getContentPane().setBackground(color.getRightSide());
+
+        // Create GridBagConstraints for layout
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10); // Add padding
 
         // Title Label
-        JLabel lblTitle = new JLabel("POS System Login");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 24)); // Replace with your custom font if needed
-        lblTitle.setBounds(550, 50, 300, 50);
-        frame.add(lblTitle);
+        JLabel lblTitle = new JLabel("Tagaylo Store POS System Login", SwingConstants.CENTER);
+        lblTitle.setFont(font.getTitleFont());
+        lblTitle.setForeground(color.getHeader());
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        frame.add(lblTitle, gbc);
 
         // Username Label
         JLabel lblUsername = new JLabel("Username:");
-        lblUsername.setFont(new Font("Arial", Font.PLAIN, 16)); // Replace with your custom font
-        lblUsername.setBounds(500, 200, 100, 30);
-        frame.add(lblUsername);
+        lblUsername.setFont(font.getProductPriceREGULAR());
+        lblUsername.setForeground(customColorPallete.medyo_black);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        frame.add(lblUsername, gbc);
 
         // Username TextField
         JTextField txtUsername = new JTextField();
-        txtUsername.setBounds(600, 200, 200, 30);
-        frame.add(txtUsername);
+        txtUsername.setForeground(Color.GRAY);
+        txtUsername.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtUsername.setPreferredSize(new Dimension(200, 30));
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        frame.add(txtUsername, gbc);
 
         // Password Label
         JLabel lblPassword = new JLabel("Password:");
-        lblPassword.setFont(new Font("Arial", Font.PLAIN, 16)); // Replace with your custom font
-        lblPassword.setBounds(500, 250, 100, 30);
-        frame.add(lblPassword);
+        lblPassword.setFont(font.getProductPriceREGULAR());
+        lblPassword.setForeground(customColorPallete.medyo_black);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        frame.add(lblPassword, gbc);
 
         // Password Field
         JPasswordField txtPassword = new JPasswordField();
-        txtPassword.setBounds(600, 250, 200, 30);
-        frame.add(txtPassword);
+        txtPassword.setForeground(Color.GRAY);
+        txtPassword.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtPassword.setPreferredSize(new Dimension(200, 30));
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        frame.add(txtPassword, gbc);
 
         // Login Button
         JButton btnLogin = new JButton("Login");
-        btnLogin.setBounds(600, 300, 100, 30);
-        frame.add(btnLogin);
+        btnLogin.setBackground(color.getHeader());
+        btnLogin.setForeground(Color.WHITE);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        frame.add(btnLogin, gbc);
 
         // Message Label
-        JLabel lblMessage = new JLabel("");
-        lblMessage.setFont(new Font("Arial", Font.PLAIN, 14)); // Replace with your custom font
-        lblMessage.setBounds(600, 350, 300, 30);
+        JLabel lblMessage = new JLabel("", SwingConstants.CENTER);
+        lblMessage.setFont(new Font("Arial", Font.PLAIN, 14));
         lblMessage.setForeground(Color.RED);
-        frame.add(lblMessage);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        frame.add(lblMessage, gbc);
 
         // Login Button Action
         btnLogin.addActionListener((ActionEvent e) -> {
@@ -99,14 +128,8 @@ public class logMain extends logDefinitions {
                             frame.dispose();
                             String role = user.get("role");
                             if ("Admin".equalsIgnoreCase(role)) {
-//                                lblMessage.setText("Login successful as Admin.");
-
-                                System.out.println("Admin");
                                 new adminInterface();
                             } else if ("Cashier".equalsIgnoreCase(role)) {
-//                                lblMessage.setText("Login successful as Cashier.");
-
-                                System.out.println("Cashier");
                                 new userInterface();
                             }
                             return;

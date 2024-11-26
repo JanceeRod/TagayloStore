@@ -9,6 +9,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+import G_Package.customColorPallete;
 import G_Package.customFontGallery;
 
 public class logDefinitions {
@@ -17,7 +18,8 @@ public class logDefinitions {
 
     boolean T = true, F = false;
 
-    customFontGallery font = new customFontGallery();
+    static customFontGallery font = new customFontGallery();
+    static customColorPallete color = new customColorPallete();
 
     public static void writeCredentials(String filePath, List<Map<String, String>> users) throws IOException {
         StringBuilder content = new StringBuilder("[\n");
