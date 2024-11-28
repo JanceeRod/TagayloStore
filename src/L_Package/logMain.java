@@ -8,26 +8,26 @@ import java.util.*;
 import java.util.List;
 
 import A_Package.adminInterface;
-import M_Package.Main;
-import M_Package.userInterface;
+import B_Package.userInterface;
 
 public class logMain extends logDefinitions {
+
     public logMain() {
         try {
             List<Map<String, String>> users = new ArrayList<>();
             Map<String, String> admin = new HashMap<>();
             admin.put("username", "admin");
-            admin.put("password", logDefinitions.hashPassword("admin123", "random_salt"));
+            admin.put("password", logOperations.hashPassword("admin123", "random_salt"));
             admin.put("role", "Admin");
             users.add(admin);
 
             Map<String, String> cashier = new HashMap<>();
             cashier.put("username", "cashier1");
-            cashier.put("password", logDefinitions.hashPassword("cashier123", "random_salt"));
+            cashier.put("password", logOperations.hashPassword("cashier123", "random_salt"));
             cashier.put("role", "Cashier");
             users.add(cashier);
 
-            logDefinitions.writeCredentials("credentials.txt", users);
+            logOperations.writeCredentials("credentials.txt", users);
 
             createLoginGUI();
         } catch (Exception e) {
@@ -36,50 +36,55 @@ public class logMain extends logDefinitions {
     }
 
     public static void createLoginGUI() {
-        JFrame frame = new JFrame("Login");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(720, 490);
-        frame.setLayout(null);
+        loginFrame = new JFrame("Tagaylo Store Point-of-Sales | Login");
+        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrame.setSize(720, 490);
+        loginFrame.setLayout(new BorderLayout());
+        loginFrame.setVisible(true);
+
+        loginElements();
+    }
+
+    public static void loginElements() {
+        JPanel mainContainer = new JPanel();
+        mainContainer.setBackground(color.getHeader());
+        mainContainer.setLayout(new BorderLayout());
+        loginFrame.add(mainContainer, BorderLayout.CENTER);
 
         // Title Label
-        JLabel lblTitle = new JLabel("POS System Login");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 24)); // Replace with your custom font if needed
-        lblTitle.setBounds(550, 50, 300, 50);
-        frame.add(lblTitle);
+        JLabel lblTitle = new JLabel("Tagaylo Store Login");
+        lblTitle.setFont(font.getTitleFont());
+        loginFrame.add(lblTitle);
 
         // Username Label
         JLabel lblUsername = new JLabel("Username:");
-        lblUsername.setFont(new Font("Arial", Font.PLAIN, 16)); // Replace with your custom font
-        lblUsername.setBounds(500, 200, 100, 30);
-        frame.add(lblUsername);
+        lblUsername.setFont(new Font("Arial", Font.PLAIN, 16));
+        loginFrame.add(lblUsername);
 
         // Username TextField
         JTextField txtUsername = new JTextField();
-        txtUsername.setBounds(600, 200, 200, 30);
-        frame.add(txtUsername);
+        txtUsername.setPreferredSize(new Dimension(200, 30));
+        loginFrame.add(txtUsername);
 
         // Password Label
         JLabel lblPassword = new JLabel("Password:");
-        lblPassword.setFont(new Font("Arial", Font.PLAIN, 16)); // Replace with your custom font
-        lblPassword.setBounds(500, 250, 100, 30);
-        frame.add(lblPassword);
+        lblPassword.setFont(new Font("Arial", Font.PLAIN, 16));
+        loginFrame.add(lblPassword);
 
         // Password Field
         JPasswordField txtPassword = new JPasswordField();
-        txtPassword.setBounds(600, 250, 200, 30);
-        frame.add(txtPassword);
+        txtPassword.setPreferredSize(new Dimension(200, 30));
+        loginFrame.add(txtPassword);
 
         // Login Button
         JButton btnLogin = new JButton("Login");
-        btnLogin.setBounds(600, 300, 100, 30);
-        frame.add(btnLogin);
+        loginFrame.add(btnLogin);
 
         // Message Label
         JLabel lblMessage = new JLabel("");
-        lblMessage.setFont(new Font("Arial", Font.PLAIN, 14)); // Replace with your custom font
-        lblMessage.setBounds(600, 350, 300, 30);
+        lblMessage.setFont(new Font("Arial", Font.PLAIN, 14));
         lblMessage.setForeground(Color.RED);
-        frame.add(lblMessage);
+        loginFrame.add(lblMessage);
 
         // Login Button Action
         btnLogin.addActionListener((ActionEvent e) -> {
@@ -88,15 +93,15 @@ public class logMain extends logDefinitions {
             String salt = "random_salt"; // Use the same salt for hashing
 
             try {
-                List<Map<String, String>> users = readCredentials("credentials.txt");
+                List<Map<String, String>> users = logOperations.readCredentials("credentials.txt");
                 boolean isValid = false;
 
                 for (Map<String, String> user : users) {
                     if (user.get("username").equals(username)) {
-                        isValid = logDefinitions.validatePassword(password, user.get("password"), salt);
+                        isValid = logOperations.validatePassword(password, user.get("password"), salt);
                         if (isValid) {
-                            frame.setVisible(false);
-                            frame.dispose();
+                            loginFrame.setVisible(false);
+                            loginFrame.dispose();
                             String role = user.get("role");
                             if ("Admin".equalsIgnoreCase(role)) {
 //                                lblMessage.setText("Login successful as Admin.");
@@ -123,36 +128,30 @@ public class logMain extends logDefinitions {
             }
         });
 
-        frame.setVisible(true);
+        // Constraints for components
+        // Title
+        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, lblTitle, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
+        SL.putConstraint(SpringLayout.NORTH, lblTitle, 30, SpringLayout.NORTH, loginFrame.getContentPane());
+
+        // Username Label
+        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, lblUsername, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
+        SL.putConstraint(SpringLayout.NORTH, lblUsername, 30, SpringLayout.SOUTH, lblTitle);
+
+        // Username TextField
+        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, txtUsername, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
+        SL.putConstraint(SpringLayout.NORTH, txtUsername, 10, SpringLayout.SOUTH, lblUsername);
+
+        // Password Label
+        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, lblPassword, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
+        SL.putConstraint(SpringLayout.NORTH, lblPassword, 20, SpringLayout.SOUTH, txtUsername);
+
+        // Password TextField
+        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, txtPassword, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
+        SL.putConstraint(SpringLayout.NORTH, txtPassword, 10, SpringLayout.SOUTH, lblPassword);
+
+        // Login Button
+        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnLogin, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
+        SL.putConstraint(SpringLayout.NORTH, btnLogin, 20, SpringLayout.SOUTH, txtPassword);
     }
 
-    public static List<Map<String, String>> readCredentials(String filePath) throws IOException {
-        StringBuilder json = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                json.append(line.trim());
-            }
-        }
-        return parseCredentials(json.toString());
-    }
-
-    private static List<Map<String, String>> parseCredentials(String json) {
-        List<Map<String, String>> users = new ArrayList<>();
-        json = json.substring(1, json.length() - 1).trim(); // Remove outer brackets
-        String[] userEntries = json.split("},\\s*\\{");
-        for (String entry : userEntries) {
-            entry = entry.replace("{", "").replace("}", "").trim();
-            String[] fields = entry.split(",");
-            Map<String, String> user = new HashMap<>();
-            for (String field : fields) {
-                String[] keyValue = field.split(":");
-                String key = keyValue[0].replace("\"", "").trim();
-                String value = keyValue[1].replace("\"", "").trim();
-                user.put(key, value);
-            }
-            users.add(user);
-        }
-        return users;
-    }
 }

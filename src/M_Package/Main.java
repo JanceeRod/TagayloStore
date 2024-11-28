@@ -5,7 +5,7 @@ import L_Package.logMain;
 
 public class Main {
 	public static void main(String[] args) {
-		new logMain();
+//		new logMain();
 //		new adminInterface();
 //		new userInterface();
 	}

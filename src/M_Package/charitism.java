@@ -1,5 +1,7 @@
 package M_Package;
 
+import B_Package.userDefinitions;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.util.Map;
 //import mainPackage.colorPallete;
 //import mainPackage.fontGallery;
 
-public class charitism extends Definitions {
+public class charitism extends userDefinitions {
 
 	charitism() {
 

@@ -14,11 +14,16 @@ import G_Package.customPopupMenu;
 import G_Package.customScrollBarUI;
 import G_Package.customSwingCreate;
 
-import M_Package.Operations;
+import B_Package.userOperations;
 
 import static javax.swing.SwingConstants.CENTER;
 
 public class adminInterface extends adminDefinitions {
+
+    public static void main(String[] args) {
+        new adminInterface();
+    }
+
     public adminInterface() {
 
         mainFrame = new JFrame();
@@ -45,7 +50,7 @@ public class adminInterface extends adminDefinitions {
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 System.out.println("Program is closing. Do cleanup or save data if needed.");
-                Operations.clearCSVFile(masterfile);
+                userOperations.clearCSVFile(masterfile);
             }
         });
 
@@ -55,15 +60,15 @@ public class adminInterface extends adminDefinitions {
     }
 
     public void instantiate() {
-        Operations.clearCSVFile(inventory);
+        userOperations.clearCSVFile(inventory);
 
-        categoryDataMap = Operations.convertCategoriesToArrays(categories);
+        categoryDataMap = userOperations.convertCategoriesToArrays(categories);
 
-        Operations.writeAllArraysToMasterFile(categoryDataMap, masterfile);
-        globalInventory = Operations.saveToDataArray(masterfile);
+        userOperations.writeAllArraysToMasterFile(categoryDataMap, masterfile);
+        globalInventory = userOperations.saveToDataArray(masterfile);
 
         //convertCSVtoArray
-        transactionHistory2D = Operations.saveToDataArray(transactions);
+        transactionHistory2D = userOperations.saveToDataArray(transactions);
 
         //reverse the array
         for (int i = 0; i < transactionHistory2D.length / 2; i++) {
@@ -73,7 +78,7 @@ public class adminInterface extends adminDefinitions {
         }
 
 //		Operations.menuPrint(globalInventory);
-        Operations.processArrayToHashMap(globalInventory, cafeInventory);
+        userOperations.processArrayToHashMap(globalInventory, cafeInventory);
     }
 
     public void topRibbon() {

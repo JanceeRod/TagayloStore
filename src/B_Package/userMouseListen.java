@@ -1,4 +1,4 @@
-package M_Package;
+package B_Package;
 
 import G_Package.customRoundedPanel;
 import G_Package.customColorPallete;
@@ -8,12 +8,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class mouseListen extends MouseAdapter {
+public class userMouseListen extends MouseAdapter {
     private customRoundedPanel panel;
     private JButton button;
     customColorPallete color = new customColorPallete();
 
-    public mouseListen(customRoundedPanel panel, JButton button, Color entered,  Color exited) {
+    public userMouseListen(customRoundedPanel panel, JButton button, Color entered, Color exited) {
         this.setPanel(panel);
         this.setButton(button);
         this.setEnteredColor(entered);

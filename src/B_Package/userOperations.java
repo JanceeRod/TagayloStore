@@ -1,4 +1,4 @@
-package M_Package;
+package B_Package;
 
 import E_Package.Category;
 import G_Package.customRoundedPanel;
@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Operations extends Definitions {
+public class userOperations extends userDefinitions {
 
     public static JPanel createCustomPanel(int width, int height, Object backgroundSource, LayoutManager layout) {
         JPanel customPanel = new JPanel();
@@ -47,6 +47,30 @@ public class Operations extends Definitions {
         }
         customPanel.setLayout(layout);
         return customPanel;
+    }
+
+    public static void updateIndicator() {
+        mainPanelOnCenter.setLayout(new BorderLayout());
+
+        JLabel notice = new JLabel();
+        notice.setText("We're still working on this page :(");
+        notice.setFont(font.getProductPriceBOLD());
+        notice.setForeground(Color.LIGHT_GRAY);
+        notice.setHorizontalAlignment(SwingConstants.CENTER);
+
+        mainPanelOnCenter.add(notice, BorderLayout.CENTER);
+    }
+
+    public static void panelFinisher(JPanel panel) {
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    public static void buttonColorReset(JPanel[] panel, int buttonIndex, Color a, Color b) {
+        for (JPanel jPanel : panel) {
+            jPanel.setBackground(a);
+        }
+        panel[buttonIndex].setBackground(b);
     }
 
     //utility method

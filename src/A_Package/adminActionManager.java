@@ -2,7 +2,7 @@ package A_Package;
 
 import G_Package.customRoundedPanel;
 import G_Package.customScrollBarUI;
-import M_Package.Operations;
+import B_Package.userOperations;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -239,12 +239,12 @@ public class adminActionManager extends adminDefinitions {
                 for (int i = 0; i < categoryKeys.size(); i++) {
                     if (i == buttonIndex) {
                         pillShape[i].setBackground(color.getChoice());
-                        pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
+                        pSLabel[i].setText(userOperations.toTitleCase(categoryKeys.get(i)));
                         pSLabel[i].setFont(font.getProductNameBOLD());
                         pSLabel[i].setForeground(Color.DARK_GRAY);
                     } else {
                         pillShape[i].setBackground(centerPanelMainLayer.getBackground());
-                        pSLabel[i].setText(Operations.toTitleCase(categoryKeys.get(i)));
+                        pSLabel[i].setText(userOperations.toTitleCase(categoryKeys.get(i)));
                         pSLabel[i].setFont(font.getProductNameREGULAR());
                         pSLabel[i].setForeground(Color.GRAY);
                     }
@@ -402,7 +402,7 @@ public class adminActionManager extends adminDefinitions {
                     productPrice6s[i].setPreferredSize(new Dimension(60, 15));
                 }
 
-                String[] productPrice = Operations.getPricesArray(keysArray);
+                String[] productPrice = userOperations.getPricesArray(keysArray);
                 for (int i = 0; i < orderRecord.size(); i++) {
 
                     intArray[i] = valuesArray[i];
@@ -412,7 +412,7 @@ public class adminActionManager extends adminDefinitions {
 
                     mainPanelOnCenter_[i].add(productPrice6s[i]);
                     quantityLabel6s[i].setText(String.valueOf(intArray[i]));
-                    productName6s[i].setText(Operations.getProductName(keysArray[i]));
+                    productName6s[i].setText(userOperations.getProductName(keysArray[i]));
                     productPrice6s[i].setText("₱" + productPrice[i] + ".00");
                 }
 
@@ -438,7 +438,7 @@ public class adminActionManager extends adminDefinitions {
             for (String productCode : orderRecord.keySet()) {
                 int quantity = orderRecord.get(productCode);
                 try {
-                    double price = Double.parseDouble(Operations.getProductPrice(productCode));
+                    double price = Double.parseDouble(userOperations.getProductPrice(productCode));
 
                     double productTax = (salesTax / 100) * price;
                     subtotal = price * quantity;
@@ -582,19 +582,19 @@ public class adminActionManager extends adminDefinitions {
         @Override
         public void insertUpdate(DocumentEvent e) {
             adminSearchAlgo.whenSearched();
-            Operations.searchProducts(searchBox.getText());
+            userOperations.searchProducts(searchBox.getText());
         }
 
         @Override
         public void removeUpdate(DocumentEvent e) {
             adminSearchAlgo.whenSearched();
-            Operations.searchProducts(searchBox.getText());
+            userOperations.searchProducts(searchBox.getText());
         }
 
         @Override
         public void changedUpdate(DocumentEvent e) {
             adminSearchAlgo.whenSearched();
-            Operations.searchProducts(searchBox.getText());
+            userOperations.searchProducts(searchBox.getText());
         }
     }
 

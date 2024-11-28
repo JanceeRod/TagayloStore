@@ -2,15 +2,12 @@ package A_Package;
 
 import G_Package.customRoundedPanel;
 import G_Package.customScrollBarUI;
-import M_Package.Operations;
+import B_Package.userOperations;
 
 import javax.swing.*;
 import java.awt.*;
 
 import static javax.swing.SwingConstants.CENTER;
-
-import S_Package.salesBarChart;
-import S_Package.salesPieChart;
 
 public class adminSideButtonFunctions extends adminDefinitions {
 
@@ -35,7 +32,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
         centerPanelMainLayer.setBackground(color.getCenterPiece());
         mainPanelOnCenter.setBackground(color.getCenterPane());
 
-        JLabel title = Operations.createCustomLabel("TRANSACTION HISTORY", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
+        JLabel title = userOperations.createCustomLabel("TRANSACTION HISTORY", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
         centerPanelMainLayer.add(title);
 
         int size = transactionHistory2D.length;
@@ -148,7 +145,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
 
         orderPaneLabel.setText("QUICK ACTIONS");
 
-        JLabel title = Operations.createCustomLabel("SALES", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
+        JLabel title = userOperations.createCustomLabel("SALES", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
         centerPanelMainLayer.add(title);
 
         centerPanelMainLayer.setBackground(color.getCenterPiece());
@@ -217,7 +214,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
 
         centerPanelMainLayer.setBackground(color.getCenterPiece());
 
-        JLabel title = Operations.createCustomLabel("INVENTORY MANAGER", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
+        JLabel title = userOperations.createCustomLabel("INVENTORY MANAGER", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
         centerPanelMainLayer.add(title);
 
         System.out.println("This is inventory?????");

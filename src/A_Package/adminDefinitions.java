@@ -8,10 +8,9 @@ import G_Package.customColorPallete;
 import G_Package.customScrollBarUI;
 import G_Package.customFontGallery;
 import G_Package.customPopupMenu;
-import M_Package.Operations;
+import B_Package.userOperations;
 
 import javax.swing.*;
-import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +23,7 @@ public class adminDefinitions {
 
     JFrame mainFrame;
 
-    Operations Operate = new Operations();
+    userOperations Operate = new userOperations();
 
     static Double defaultNo = 0.00;
     static Double salesTax = 5.25;
@@ -97,7 +96,7 @@ public class adminDefinitions {
     static JPanel orderPaneCen;
     JPanel orderPaneTop;
     JPanel orderPaneBot;
-    static JPanel centerPaneOnRightPanel;
+    public static JPanel centerPaneOnRightPanel;
 
     //Rounded Panel
     customRoundedPanel orderPaneTitleTab;

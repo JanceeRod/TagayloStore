@@ -1,168 +1,156 @@
 package E_Package;
 
+import B_Package.userOperations;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
-//import mainPackage.Transaction.ProductInfo;
+import java.util.*;
 
 public class Transaction {
 	private String transactionId;
 	private LocalDateTime dateTime;
-	private String productPurchased;
-	private double price;
-	private int quantity;
-	private double subtotal;
+	private List<String[]> productsPurchased;
 	private double totalAmount;
 	private double cashAmount;
 	private double change;
 	private String customer;
-	
+
 	public Transaction() {
-		this.transactionId = getTransactionId();
-		this.dateTime = getDateTime();
-		this.productPurchased = getProductPurchased();
-		this.price = getPrice();
-		this.quantity = getQuantity();
-		this.subtotal = getSubtotal();
-		this.totalAmount = getTotalAmount();
-		this.cashAmount = getCashAmount();
-		this.change = getChange();
-		this.customer = getCustomer();
+		this.transactionId = generateTransactionId();
+		this.dateTime = LocalDateTime.now();
+		this.productsPurchased = new ArrayList<>();
+		this.totalAmount = 0;
+		this.cashAmount = 0;
+		this.change = 0;
+		this.customer = "";
 	}
-	
+
+	// Getters
 	public String getTransactionId() {
 		return transactionId;
 	}
-	
+
 	public LocalDateTime getDateTime() {
 		return dateTime;
 	}
-	
-	public String getProductPurchased() {
-		return productPurchased;
+
+	public List<String[]> getProductsPurchased() {
+		return productsPurchased;
 	}
-	
-	public double getPrice() {
-		return price;
-	}
-	
-	public int getQuantity() {
-		return quantity;
-	}
-	
-	public double getSubtotal() {
-		return subtotal;
-	}
-	
+
 	public double getTotalAmount() {
 		return totalAmount;
 	}
-	
+
 	public double getCashAmount() {
 		return cashAmount;
 	}
-	
+
 	public double getChange() {
 		return change;
 	}
-	
-	public String getCustomer() {
-		return customer;
-	}
-	
+
+	// Setters
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
 	}
-	
+
 	public void setDateTime(LocalDateTime dateTime) {
 		this.dateTime = dateTime;
 	}
-	
-	public void setProductPurchased(String productPurchased) {
-		this.productPurchased = productPurchased;
-	}
-	
-	public void setPrice(double price) {
-		this.price = price;
-	}
-	
-	public void setSubTotal(double subtotal) {
-		this.subtotal = subtotal;
-	}
-	
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-	
+
 	public void setTotalAmount(double totalAmount) {
 		this.totalAmount = totalAmount;
+		calculateChange();
 	}
-	
+
 	public void setCashAmount(double cashAmount) {
 		this.cashAmount = cashAmount;
+		calculateChange();
 	}
-	
-	public void setChange(double change) {
-		this.change = change;
-	}
-	
+
 	public void setCustomer(String customer) {
-		this.customer = customer;
+		this.customer = customer.isEmpty() ? "Walk-in Customer" : customer;
 	}
-	
-	public String toCsvString() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd    HH:mm:ss a");
+
+	// Methods
+	public void addCustomerOrders(HashMap<String, Integer> customerOrders) {
+		for (Map.Entry<String, Integer> entry : customerOrders.entrySet()) {
+			String productCode = entry.getKey();
+			int quantity = entry.getValue();
+			double price = Double.parseDouble(userOperations.getProductPrice(productCode));
+
+			addProduct(productCode, quantity, price);
+		}
+	}
+
+	public void clearCustomerOrders(HashMap<String, Integer> customerOrders) {
+		customerOrders.clear();
+		productsPurchased.clear();
+		recalculateTotalAmount();
+	}
+
+	public void addProduct(String productCode, int quantity, double price) {
+		// Add productCode and quantity to the list
+		productsPurchased.add(new String[]{productCode, String.valueOf(quantity)});
+
+		// Update totalAmount
+		double productTotal = price * quantity;
+		totalAmount += productTotal;
+		calculateChange(); // Recalculate change after adding a product
+	}
+
+	public void removeProduct(String productCode) {
+		productsPurchased.removeIf(product -> product[0].equals(productCode));
+		recalculateTotalAmount();
+	}
+
+	private void recalculateTotalAmount() {
+		totalAmount = 0;
+		for (String[] product : productsPurchased) {
+			int quantity = Integer.parseInt(product[1]);
+			double price = Double.parseDouble(userOperations.getProductPrice(product[0]));
+			totalAmount += price * quantity;
+		}
+		calculateChange(); // Recalculate change after adjusting totalAmount
+	}
+
+	private void calculateChange() {
+		change = cashAmount - totalAmount;
+		System.out.println("Change calculated: " + change);
+	}
+
+	private String generateTransactionId() {
+		return "TXN-" + System.currentTimeMillis();
+	}
+
+	public String toCSVString() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		return transactionId + "," +
-        dateTime.format(formatter) + "," +
-        productPurchased + "," +
-        price + "," +
-        quantity + "," +
-        totalAmount + "," +
-        cashAmount + "," +
-        change + "," +
-        customer;
+				dateTime.format(formatter) + "," +
+				Arrays.deepToString(productsPurchased.toArray()) + "," +
+				totalAmount + "," +
+				cashAmount + "," +
+				change + "," +
+				customer;
 	}
-	
-	private List<ProductInfo> productInfoList = new ArrayList<>();
-	
-	public void addProductInfo(String productName, double price, int quantity, double totalAmount) {
-		ProductInfo productInfo = new ProductInfo(productName, price, quantity, totalAmount);
-		productInfoList.add(productInfo);
-	}
-	
-	public List<ProductInfo> getProductInfoList() {
-		return productInfoList;
-	}
-	
-	public static class ProductInfo {
-		private String productName;
-		private double price;
-		private int quantity;
-		private double totalAmount;
-		
-		public ProductInfo(String productName, double price, int quantity, double totalAmount) {
-			this.productName = productName;
-			this.price = price;
-			this.quantity = quantity;
-			this.totalAmount = totalAmount;
-		}
-		
-		public String getProductName() {
-			return productName;
-		}
-		
-		public double getPrice() {
-			return price;
-		}
-		
-		public int getQuantity() {
-			return quantity;
-		}
-		
-		public double getTotalAmount() {
-			return totalAmount;
+
+	public void saveToCSV(String filePath) {
+		boolean fileExists = new java.io.File(filePath).exists();
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+			if (!fileExists) {
+				writer.write("TransactionId,DateTime,ProductsPurchased,TotalAmount,CashAmount,Change,Customer");
+				writer.newLine();
+			}
+
+			writer.write(toCSVString());
+			writer.newLine();
+		} catch (IOException e) {
+			System.err.println("Error writing to CSV file: " + e.getMessage());
 		}
 	}
 }
