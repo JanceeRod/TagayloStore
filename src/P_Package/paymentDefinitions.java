@@ -6,7 +6,10 @@ import G_Package.customFontGallery;
 import G_Package.customRoundedPanel;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class paymentDefinitions {
 
@@ -72,4 +75,8 @@ public class paymentDefinitions {
 
     //path
     static String transactionPath = "transactionHistory.csv";
+
+    //dataStructure
+    List<Map<String, Object>> transactionHistory = new ArrayList<>();
+
 }

@@ -1,5 +1,6 @@
 package A_Package;
 
+import C_Package.manageTransactions;
 import G_Package.customRoundedPanel;
 import G_Package.customScrollBarUI;
 import B_Package.userOperations;
@@ -12,6 +13,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class adminActionManager extends adminDefinitions {
 
@@ -30,24 +32,16 @@ public class adminActionManager extends adminDefinitions {
         public void actionPerformed(ActionEvent e) {
             System.out.println("This is purchase no: " + transactionID);
 
-            // Clear existing content in the side panel
+            Map<String, Object> transaction = manageTransactions.getTransactionById(transactions, transactionID);
+
             orderPaneCen.removeAll();
 
-            // Set up SpringLayout
             SpringLayout layout = new SpringLayout();
             orderPaneCen.setLayout(layout);
 
-            int transactionIndex = -1;
-            for (int i = 0; i < transactionHistory2D.length; i++) {
-                if (transactionHistory2D[i][0].equals(transactionID)) {
-                    transactionIndex = i;
-                    break;
-                }
-            }
-
-            if (transactionIndex != -1) {
+            if (transaction != null) {
                 for (int i = 0; i < transactionHistory2D.length; i++) {
-                    if (i == transactionIndex) {
+                    if (transactionHistory2D[i][0].equals(transactionID)) {
                         perOrder[i].setBackground(color.getRightSide());
                     } else {
                         perOrder[i].setBackground(Color.WHITE);
@@ -55,10 +49,6 @@ public class adminActionManager extends adminDefinitions {
                 }
             } else {
                 System.out.println("Transaction ID not found!");
-            }
-
-
-            if (transactionIndex == -1) {
                 JLabel errorLabel = new JLabel("Transaction not found.");
                 orderPaneCen.add(errorLabel);
                 orderPaneCen.revalidate();
@@ -66,147 +56,82 @@ public class adminActionManager extends adminDefinitions {
                 return;
             }
 
-            String customerType = transactionHistory2D[transactionIndex][8];
-            String purchaseDate = transactionHistory2D[transactionIndex][2]; // Assuming index 9 for purchase date
-            String dateAndTime = transactionHistory2D[transactionIndex][1];
-            String quantity = transactionHistory2D[transactionIndex][4];
-            String orderPurchased = transactionHistory2D[transactionIndex][2];
-            String price = "PHP " + transactionHistory2D[transactionIndex][3];
-            String grandTotal = "PHP " + transactionHistory2D[transactionIndex][5];
-            String amountInCash = "PHP " + transactionHistory2D[transactionIndex][6];
-            String change = "PHP " + transactionHistory2D[transactionIndex][7]; // Assuming correct column here
+            String customerType = (String) transaction.get("customer");
+            String dateAndTime = (String) transaction.get("dateTime");
+            List<Map<String, Object>> productsPurchased = (List<Map<String, Object>>) transaction.get("productsPurchased");
+            double totalAmount = (double) transaction.get("totalAmount");
+            double cashAmount = (double) transaction.get("cashAmount");
+            double change = (double) transaction.get("change");
 
-            // Create labels for each piece of data
-            JLabel transactionIDTextLabel = new JLabel("Transaction ID: ");
-            transactionIDTextLabel.setFont(font.getProductNameREGULAR());
-
-            JLabel transactionIDLabel = new JLabel(transactionID);
+            JLabel transactionIDLabel = new JLabel("Transaction ID: " + transactionID);
             transactionIDLabel.setFont(font.getProductNameBOLD());
 
-            JLabel customerLabel = new JLabel("Customer:");
-            customerLabel.setFont(font.getProductNameREGULAR());
+            JLabel customerLabel = new JLabel("Customer: " + customerType);
+            customerLabel.setFont(font.getProductNameBOLD());
 
-            JLabel customerTypeLabel = new JLabel(customerType);
-            customerTypeLabel.setFont(font.getProductNameBOLD());
+            JLabel dateAndTimeLabel = new JLabel("Date & Time: " + dateAndTime);
+            dateAndTimeLabel.setFont(font.getProductNameBOLD());
 
-            JLabel purchaseDateValueLabel = new JLabel(purchaseDate);
-            purchaseDateValueLabel.setFont(font.getProductNameBOLD());
+            JLabel totalAmountLabel = new JLabel("Grand Total: PHP " + totalAmount);
+            totalAmountLabel.setFont(font.getProductNameBOLD());
 
-            JLabel dateAndTimeLabel = new JLabel("Date & Time:");
-            dateAndTimeLabel.setFont(font.getProductNameREGULAR());
+            JLabel cashAmountLabel = new JLabel("Amount in Cash: PHP " + cashAmount);
+            cashAmountLabel.setFont(font.getProductNameBOLD());
 
-            JLabel dateAndTimeValueLabel = new JLabel(dateAndTime);
-            dateAndTimeValueLabel.setFont(font.getProductNameBOLD());
+            JLabel changeLabel = new JLabel("Change: PHP " + change);
+            changeLabel.setFont(font.getProductNameBOLD());
 
             JLabel purchasesLabel = new JLabel("Purchases:");
             purchasesLabel.setFont(font.getProductNameREGULAR());
 
-            JLabel quantityLabel = new JLabel(quantity + "x");
-            quantityLabel.setFont(font.getProductNameBOLD());
-
-            JLabel orderPurchasedLabel = new JLabel(orderPurchased);
-            orderPurchasedLabel.setFont(font.getProductNameBOLD());
-            orderPurchasedLabel.setForeground(color.getHeader());
-
-            JLabel priceLabel = new JLabel(price);
-            priceLabel.setFont(font.getProductNameBOLD());
-
-            JLabel grandTotalTextLabel = new JLabel("Grandtotal: ");
-            grandTotalTextLabel.setFont(font.getProductNameREGULAR());
-
-            JLabel grandTotalLabel = new JLabel(grandTotal);
-            grandTotalLabel.setFont(font.getProductNameBOLD());
-
-            JLabel separatorLine = new JLabel("______________________________________________");
-            separatorLine.setFont(font.getProductNameREGULAR());
-
-            JLabel amountInCashLabel = new JLabel(amountInCash);
-            amountInCashLabel.setFont(font.getProductNameBOLD());
-
-            JLabel amountInCashTextLabel = new JLabel("Amount in Cash: ");
-            amountInCashTextLabel.setFont(font.getProductNameREGULAR());
-
-            JLabel changeLabel = new JLabel(change);
-            changeLabel.setFont(font.getProductNameBOLD());
-
-            JLabel changeTextLabel = new JLabel("Change: ");
-            changeTextLabel.setFont(font.getProductNameREGULAR());
-
-            JLabel purchaseCompleteLabel = new JLabel("--- End of Purchase ---", JLabel.CENTER);
-            purchaseCompleteLabel.setFont(font.getProductNameREGULAR());
-
-            orderPaneCen.add(customerLabel);
-            orderPaneCen.add(customerTypeLabel);
-            orderPaneCen.add(dateAndTimeLabel);
-            orderPaneCen.add(dateAndTimeValueLabel);
-            orderPaneCen.add(transactionIDTextLabel);
             orderPaneCen.add(transactionIDLabel);
-            orderPaneCen.add(purchasesLabel);
-            orderPaneCen.add(quantityLabel);
-            orderPaneCen.add(orderPurchasedLabel);
-            orderPaneCen.add(priceLabel);
-            orderPaneCen.add(grandTotalLabel);
-            orderPaneCen.add(grandTotalTextLabel);
-            orderPaneCen.add(amountInCashLabel);
-            orderPaneCen.add(amountInCashTextLabel);
+            orderPaneCen.add(customerLabel);
+            orderPaneCen.add(dateAndTimeLabel);
+            orderPaneCen.add(totalAmountLabel);
+            orderPaneCen.add(cashAmountLabel);
             orderPaneCen.add(changeLabel);
-            orderPaneCen.add(changeTextLabel);
-            orderPaneCen.add(purchaseCompleteLabel);
+            orderPaneCen.add(purchasesLabel);
 
-            layout.putConstraint(SpringLayout.NORTH, transactionIDTextLabel, 30, SpringLayout.NORTH, orderPaneCen);
-            layout.putConstraint(SpringLayout.WEST, transactionIDTextLabel, 20, SpringLayout.WEST, orderPaneCen);
+            int yOffset = 20;
+            for (Map<String, Object> product : productsPurchased) {
+                String productCode = (String) product.get("productCode");
+                int quantity = (int) product.get("quantity");
 
-            layout.putConstraint(SpringLayout.NORTH, transactionIDLabel, 0, SpringLayout.NORTH, transactionIDTextLabel);
-            layout.putConstraint(SpringLayout.EAST, transactionIDLabel, -20, SpringLayout.EAST, orderPaneCen);
+                JLabel productLabel = new JLabel(quantity + "x " + productCode);
+                productLabel.setFont(font.getProductNameREGULAR());
+                productLabel.setForeground(color.getHeader());
 
-            layout.putConstraint(SpringLayout.NORTH, customerLabel, 5, SpringLayout.SOUTH, transactionIDTextLabel);
+                orderPaneCen.add(productLabel);
+                layout.putConstraint(SpringLayout.NORTH, productLabel, yOffset, SpringLayout.SOUTH, purchasesLabel);
+                layout.putConstraint(SpringLayout.WEST, productLabel, 20, SpringLayout.WEST, orderPaneCen);
+                yOffset += 20;
+            }
+
+            layout.putConstraint(SpringLayout.NORTH, transactionIDLabel, 20, SpringLayout.NORTH, orderPaneCen);
+            layout.putConstraint(SpringLayout.WEST, transactionIDLabel, 20, SpringLayout.WEST, orderPaneCen);
+
+            layout.putConstraint(SpringLayout.NORTH, customerLabel, 10, SpringLayout.SOUTH, transactionIDLabel);
             layout.putConstraint(SpringLayout.WEST, customerLabel, 20, SpringLayout.WEST, orderPaneCen);
 
-            layout.putConstraint(SpringLayout.NORTH, customerTypeLabel, 0, SpringLayout.NORTH, customerLabel);
-            layout.putConstraint(SpringLayout.EAST, customerTypeLabel, -20, SpringLayout.EAST, orderPaneCen);
-
-            layout.putConstraint(SpringLayout.NORTH, dateAndTimeLabel, 5, SpringLayout.SOUTH, customerTypeLabel);
+            layout.putConstraint(SpringLayout.NORTH, dateAndTimeLabel, 10, SpringLayout.SOUTH, customerLabel);
             layout.putConstraint(SpringLayout.WEST, dateAndTimeLabel, 20, SpringLayout.WEST, orderPaneCen);
 
-            layout.putConstraint(SpringLayout.NORTH, dateAndTimeValueLabel, 0, SpringLayout.NORTH, dateAndTimeLabel);
-            layout.putConstraint(SpringLayout.EAST, dateAndTimeValueLabel, -20, SpringLayout.EAST, orderPaneCen);
+            layout.putConstraint(SpringLayout.NORTH, totalAmountLabel, 10, SpringLayout.SOUTH, dateAndTimeLabel);
+            layout.putConstraint(SpringLayout.WEST, totalAmountLabel, 20, SpringLayout.WEST, orderPaneCen);
 
-            layout.putConstraint(SpringLayout.NORTH, purchasesLabel, 40, SpringLayout.SOUTH, dateAndTimeLabel);
+            layout.putConstraint(SpringLayout.NORTH, cashAmountLabel, 10, SpringLayout.SOUTH, totalAmountLabel);
+            layout.putConstraint(SpringLayout.WEST, cashAmountLabel, 20, SpringLayout.WEST, orderPaneCen);
+
+            layout.putConstraint(SpringLayout.NORTH, changeLabel, 10, SpringLayout.SOUTH, cashAmountLabel);
+            layout.putConstraint(SpringLayout.WEST, changeLabel, 20, SpringLayout.WEST, orderPaneCen);
+
+            layout.putConstraint(SpringLayout.NORTH, purchasesLabel, 20, SpringLayout.SOUTH, changeLabel);
             layout.putConstraint(SpringLayout.WEST, purchasesLabel, 20, SpringLayout.WEST, orderPaneCen);
-
-            layout.putConstraint(SpringLayout.NORTH, quantityLabel, 10, SpringLayout.SOUTH, purchasesLabel);
-            layout.putConstraint(SpringLayout.WEST, quantityLabel, 20, SpringLayout.WEST, orderPaneCen);
-
-            layout.putConstraint(SpringLayout.NORTH, orderPurchasedLabel, 0, SpringLayout.NORTH, quantityLabel);
-            layout.putConstraint(SpringLayout.WEST, orderPurchasedLabel, 10, SpringLayout.EAST, quantityLabel);
-
-            layout.putConstraint(SpringLayout.NORTH, priceLabel, 0, SpringLayout.NORTH, quantityLabel);
-            layout.putConstraint(SpringLayout.EAST, priceLabel, -20, SpringLayout.EAST, orderPaneCen);
-
-            layout.putConstraint(SpringLayout.NORTH, grandTotalLabel, 30, SpringLayout.SOUTH, priceLabel);
-            layout.putConstraint(SpringLayout.EAST, grandTotalLabel, -20, SpringLayout.EAST, orderPaneCen);
-
-            layout.putConstraint(SpringLayout.NORTH, grandTotalTextLabel, 30, SpringLayout.SOUTH, priceLabel);
-            layout.putConstraint(SpringLayout.EAST, grandTotalTextLabel, -20, SpringLayout.WEST, grandTotalLabel);
-
-            layout.putConstraint(SpringLayout.NORTH, amountInCashLabel, 5, SpringLayout.SOUTH, grandTotalLabel);
-            layout.putConstraint(SpringLayout.EAST, amountInCashLabel, -20, SpringLayout.EAST, orderPaneCen);
-
-            layout.putConstraint(SpringLayout.NORTH, amountInCashTextLabel, 5, SpringLayout.SOUTH, grandTotalTextLabel);
-            layout.putConstraint(SpringLayout.EAST, amountInCashTextLabel, -20, SpringLayout.WEST, amountInCashLabel);
-
-            layout.putConstraint(SpringLayout.NORTH, changeLabel, 5, SpringLayout.SOUTH, amountInCashLabel);
-            layout.putConstraint(SpringLayout.EAST, changeLabel, -20, SpringLayout.EAST, orderPaneCen);
-
-            layout.putConstraint(SpringLayout.NORTH, changeTextLabel, 5, SpringLayout.SOUTH, amountInCashTextLabel);
-            layout.putConstraint(SpringLayout.EAST, changeTextLabel, -20, SpringLayout.WEST, changeLabel);
-
-            layout.putConstraint(SpringLayout.NORTH, purchaseCompleteLabel, 20, SpringLayout.SOUTH, changeLabel);
-            layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, purchaseCompleteLabel, 0, SpringLayout.HORIZONTAL_CENTER, orderPaneCen);
 
             orderPaneCen.revalidate();
             orderPaneCen.repaint();
         }
+
     }
 
     public static class viewSales implements ActionListener {

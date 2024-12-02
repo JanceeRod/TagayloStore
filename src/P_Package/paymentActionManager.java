@@ -19,6 +19,8 @@ import static P_Package.paymentFunctions.cashMethod;
 
 public class paymentActionManager extends paymentDefinitions {
 
+    Map<String, Object> transactionMap = new HashMap<>();
+
     public static class confirmPayment implements ActionListener {
 
         @Override

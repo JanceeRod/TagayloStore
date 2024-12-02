@@ -86,7 +86,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
         }
 
         for (int i = 0; i < size; i++) {
-            customerType[i] = new JLabel(transactionHistory2D[i][8]);
+            customerType[i] = new JLabel(transactionHistory2D[i][7]);
             customerType[i].setFont(font.getProductNameBOLD());
             customerType[i].setForeground(color.getHeader());
 

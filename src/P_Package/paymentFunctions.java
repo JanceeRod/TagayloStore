@@ -2,11 +2,9 @@ package P_Package;
 
 import B_Package.userActionManager;
 import B_Package.userOperations;
-import E_Package.Transaction;
 import G_Package.customRoundedPanel;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;

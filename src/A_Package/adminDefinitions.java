@@ -160,7 +160,7 @@ public class adminDefinitions {
     static String transactions = "transactionHistory.csv";
     static String masterfile = "inventoryMasterfile.csv";
     static String[][] inventoryMasterfile;
-    static String[][] transactionHistory2D;
+    public static String[][] transactionHistory2D;
     static String[] calculations;
 
 
