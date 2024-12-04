@@ -69,6 +69,7 @@ public class paymentFunctions extends paymentDefinitions {
         JLabel changeTextLabel = new JLabel();
         changeTextLabel.setText("PHP 0.00");
         changeTextLabel.setFont(font.getProductPriceBOLD());
+        changeTextLabel.setForeground(Color.white);
 
         customRoundedPanel change = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getHeader(), new BorderLayout());
 
@@ -88,6 +89,7 @@ public class paymentFunctions extends paymentDefinitions {
         JLabel confirmPaymentLabel = new JLabel();
         confirmPaymentLabel.setText("Confirm Payment");
         confirmPaymentLabel.setFont(font.getProductPriceBOLD());
+        confirmPaymentLabel.setForeground(Color.white);
 
         confirmPayment.add(confirmPaymentLabel, BorderLayout.CENTER);
         confirmPaymentButton.add(confirmPayment, BorderLayout.CENTER);

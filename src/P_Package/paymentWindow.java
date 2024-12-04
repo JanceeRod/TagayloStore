@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import G_Package.customColorPallete;
 import G_Package.customRoundedPanel;
 import G_Package.customScrollBarUI;
 import B_Package.userOperations;
@@ -63,7 +64,7 @@ public class paymentWindow extends paymentDefinitions {
 		summaryLabel.setText("ORDER SUMMARY");
 		summaryLabel.setFont(font.getProductPriceBOLD());
 		summaryLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		summaryLabel.setForeground(Color.BLACK);
+		summaryLabel.setForeground(Color.white);
 
 		summaryPanel2v.add(summaryLabel);
 		summaryPanel2s.add(summaryPanel2v);
@@ -211,11 +212,11 @@ public class paymentWindow extends paymentDefinitions {
 	private void centerPanel() {
 
 		panel3 = new JPanel(); // Panel on the center
-		panel3.setBackground(Color.GREEN);
+		panel3.setBackground(color.getRightSide());
 		panel3.setLayout(new BorderLayout());
 
 		panelForPurchaseTotal = new JPanel();
-		panelForPurchaseTotal.setBackground(Color.RED);
+		panelForPurchaseTotal.setBackground(color.getCenterPiece());
 		panelForPurchaseTotal.setLayout(new BorderLayout());
 
 		totalPriceLabel = new JLabel();
@@ -233,13 +234,13 @@ public class paymentWindow extends paymentDefinitions {
 		amountDueLabel.setForeground(Color.DARK_GRAY);
 
 		amountDueAndTotalPrice = new JPanel();
-		amountDueAndTotalPrice.setBackground(Color.GREEN);
+		amountDueAndTotalPrice.setBackground(color.getRightSide());
 		amountDueAndTotalPrice.setLayout(new BorderLayout());
 		amountDueAndTotalPrice.add(totalPriceLabel, BorderLayout.EAST);
 		amountDueAndTotalPrice.add(amountDueLabel, BorderLayout.CENTER);
 
 		optionsPanel = new JPanel();
-		optionsPanel.setBackground(Color.CYAN);
+		optionsPanel.setBackground(color.getRightSide());
 		optionsPanel.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
 		optionsPanel.setPreferredSize(new Dimension(panelForPurchaseTotal.getWidth(), 50));
 		optionsPanel.setLayout(new BorderLayout());
@@ -250,7 +251,7 @@ public class paymentWindow extends paymentDefinitions {
 		forOptions.addActionListener(new paymentActionManager.paymentListener(0));
 
 		options = new customRoundedPanel(20);
-		options.setBackground(Color.GREEN);
+		options.setBackground(color.getCenterPiece());
 		options.setLayout(new BorderLayout());
 
 		confirmOrderLabel = new JLabel();
@@ -258,13 +259,14 @@ public class paymentWindow extends paymentDefinitions {
 		confirmOrderLabel.setFont(font.getProductPriceBOLD());
 		confirmOrderLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		confirmOrderLabel.setVerticalAlignment(SwingConstants.CENTER);
+		confirmOrderLabel.setForeground(Color.WHITE);
 
 		options.add(confirmOrderLabel, BorderLayout.CENTER);
 		forOptions.add(options);
 		optionsPanel.add(forOptions);
 
 		afterOptions = new JPanel();
-		afterOptions.setBackground(Color.ORANGE);
+		afterOptions.setBackground(color.getCenterPane());
 		afterOptions.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 		afterOptions.setPreferredSize(new Dimension(panelForPurchaseTotal.getWidth(), 270));
 
