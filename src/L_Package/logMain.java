@@ -8,26 +8,26 @@ import java.util.*;
 import java.util.List;
 
 import A_Package.adminInterface;
+import G_Package.customColorPallete;
 import B_Package.userInterface;
 
 public class logMain extends logDefinitions {
-
     public logMain() {
         try {
             List<Map<String, String>> users = new ArrayList<>();
             Map<String, String> admin = new HashMap<>();
             admin.put("username", "admin");
-            admin.put("password", logOperations.hashPassword("admin123", "random_salt"));
+            admin.put("password", logDefinitions.hashPassword("admin123", "random_salt"));
             admin.put("role", "Admin");
             users.add(admin);
 
             Map<String, String> cashier = new HashMap<>();
             cashier.put("username", "cashier1");
-            cashier.put("password", logOperations.hashPassword("cashier123", "random_salt"));
+            cashier.put("password", logDefinitions.hashPassword("cashier123", "random_salt"));
             cashier.put("role", "Cashier");
             users.add(cashier);
 
-            logOperations.writeCredentials("credentials.txt", users);
+            logDefinitions.writeCredentials("credentials.txt", users);
 
             createLoginGUI();
         } catch (Exception e) {
@@ -36,55 +36,80 @@ public class logMain extends logDefinitions {
     }
 
     public static void createLoginGUI() {
-        loginFrame = new JFrame("Tagaylo Store Point-of-Sales | Login");
-        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginFrame.setSize(720, 490);
-        loginFrame.setLayout(new BorderLayout());
-        loginFrame.setVisible(true);
+        JFrame frame = new JFrame("Login");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setLayout(new GridBagLayout());
+        frame.setLocationRelativeTo(null); // Center the frame on the screen
+        frame.getContentPane().setBackground(color.getRightSide());
 
-        loginElements();
-    }
+        // Create GridBagConstraints for layout
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10); // Add padding
 
-    public static void loginElements() {
-        JPanel mainContainer = new JPanel();
-        mainContainer.setBackground(color.getHeader());
-        mainContainer.setLayout(new BorderLayout());
-        loginFrame.add(mainContainer, BorderLayout.CENTER);
-
-        // Title Label
-        JLabel lblTitle = new JLabel("Tagaylo Store Login");
-        lblTitle.setFont(font.getTitleFont());
-        loginFrame.add(lblTitle);
+        // Title Image
+        ImageIcon originalIcon = new ImageIcon("images/ui/logo.png");
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(245, 100, Image.SCALE_SMOOTH); // Set desired width and height
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        JLabel lblTitle = new JLabel(resizedIcon, SwingConstants.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        frame.add(lblTitle, gbc);
 
         // Username Label
         JLabel lblUsername = new JLabel("Username:");
-        lblUsername.setFont(new Font("Arial", Font.PLAIN, 16));
-        loginFrame.add(lblUsername);
+        lblUsername.setFont(font.getProductPriceREGULAR());
+        lblUsername.setForeground(customColorPallete.medyo_black);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        frame.add(lblUsername, gbc);
 
         // Username TextField
         JTextField txtUsername = new JTextField();
+        txtUsername.setForeground(Color.GRAY);
+        txtUsername.setFont(new Font("Arial", Font.PLAIN, 14));
         txtUsername.setPreferredSize(new Dimension(200, 30));
-        loginFrame.add(txtUsername);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        frame.add(txtUsername, gbc);
 
         // Password Label
         JLabel lblPassword = new JLabel("Password:");
-        lblPassword.setFont(new Font("Arial", Font.PLAIN, 16));
-        loginFrame.add(lblPassword);
+        lblPassword.setFont(font.getProductPriceREGULAR());
+        lblPassword.setForeground(customColorPallete.medyo_black);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        frame.add(lblPassword, gbc);
 
         // Password Field
         JPasswordField txtPassword = new JPasswordField();
+        txtPassword.setForeground(Color.GRAY);
+        txtPassword.setFont(new Font("Arial", Font.PLAIN, 14));
         txtPassword.setPreferredSize(new Dimension(200, 30));
-        loginFrame.add(txtPassword);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        frame.add(txtPassword, gbc);
 
         // Login Button
         JButton btnLogin = new JButton("Login");
-        loginFrame.add(btnLogin);
+        btnLogin.setBackground(color.getHeader());
+        btnLogin.setForeground(Color.WHITE);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        frame.add(btnLogin, gbc);
 
         // Message Label
-        JLabel lblMessage = new JLabel("");
+        JLabel lblMessage = new JLabel("", SwingConstants.CENTER);
         lblMessage.setFont(new Font("Arial", Font.PLAIN, 14));
         lblMessage.setForeground(Color.RED);
-        loginFrame.add(lblMessage);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        frame.add(lblMessage, gbc);
 
         // Login Button Action
         btnLogin.addActionListener((ActionEvent e) -> {
@@ -93,25 +118,19 @@ public class logMain extends logDefinitions {
             String salt = "random_salt"; // Use the same salt for hashing
 
             try {
-                List<Map<String, String>> users = logOperations.readCredentials("credentials.txt");
+                List<Map<String, String>> users = readCredentials("credentials.txt");
                 boolean isValid = false;
 
                 for (Map<String, String> user : users) {
                     if (user.get("username").equals(username)) {
-                        isValid = logOperations.validatePassword(password, user.get("password"), salt);
+                        isValid = logDefinitions.validatePassword(password, user.get("password"), salt);
                         if (isValid) {
-                            loginFrame.setVisible(false);
-                            loginFrame.dispose();
+                            frame.setVisible(false);
+                            frame.dispose();
                             String role = user.get("role");
                             if ("Admin".equalsIgnoreCase(role)) {
-//                                lblMessage.setText("Login successful as Admin.");
-
-                                System.out.println("Admin");
                                 new adminInterface();
                             } else if ("Cashier".equalsIgnoreCase(role)) {
-//                                lblMessage.setText("Login successful as Cashier.");
-
-                                System.out.println("Cashier");
                                 new userInterface();
                             }
                             return;
@@ -128,30 +147,36 @@ public class logMain extends logDefinitions {
             }
         });
 
-        // Constraints for components
-        // Title
-        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, lblTitle, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
-        SL.putConstraint(SpringLayout.NORTH, lblTitle, 30, SpringLayout.NORTH, loginFrame.getContentPane());
-
-        // Username Label
-        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, lblUsername, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
-        SL.putConstraint(SpringLayout.NORTH, lblUsername, 30, SpringLayout.SOUTH, lblTitle);
-
-        // Username TextField
-        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, txtUsername, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
-        SL.putConstraint(SpringLayout.NORTH, txtUsername, 10, SpringLayout.SOUTH, lblUsername);
-
-        // Password Label
-        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, lblPassword, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
-        SL.putConstraint(SpringLayout.NORTH, lblPassword, 20, SpringLayout.SOUTH, txtUsername);
-
-        // Password TextField
-        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, txtPassword, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
-        SL.putConstraint(SpringLayout.NORTH, txtPassword, 10, SpringLayout.SOUTH, lblPassword);
-
-        // Login Button
-        SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnLogin, 0, SpringLayout.HORIZONTAL_CENTER, loginFrame.getContentPane());
-        SL.putConstraint(SpringLayout.NORTH, btnLogin, 20, SpringLayout.SOUTH, txtPassword);
+        frame.setVisible(true);
     }
 
+    public static List<Map<String, String>> readCredentials(String filePath) throws IOException {
+        StringBuilder json = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                json.append(line.trim());
+            }
+        }
+        return parseCredentials(json.toString());
+    }
+
+    private static List<Map<String, String>> parseCredentials(String json) {
+        List<Map<String, String>> users = new ArrayList<>();
+        json = json.substring(1, json.length() - 1).trim(); // Remove outer brackets
+        String[] userEntries = json.split("},\\s*\\{");
+        for (String entry : userEntries) {
+            entry = entry.replace("{", "").replace("}", "").trim();
+            String[] fields = entry.split(",");
+            Map<String, String> user = new HashMap<>();
+            for (String field : fields) {
+                String[] keyValue = field.split(":");
+                String key = keyValue[0].replace("\"", "").trim();
+                String value = keyValue[1].replace("\"", "").trim();
+                user.put(key, value);
+            }
+            users.add(user);
+        }
+        return users;
+    }
 }

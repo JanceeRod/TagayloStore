@@ -2,6 +2,7 @@ package L_Package;
 
 import javax.swing.*;
 
+import G_Package.customColorPallete;
 import G_Package.customFontGallery;
 import G_Package.customColorPallete;
 
