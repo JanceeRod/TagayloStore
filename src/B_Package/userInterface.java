@@ -145,19 +145,27 @@ public class userInterface extends userDefinitions {
 
 		profileButtonPanel.add(profileButton, BorderLayout.CENTER);
 
-		TimeLabel = customSwingCreate.createCustomLabel(null, Color.GRAY, font.gettCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
-		DateLabel = customSwingCreate.createCustomLabel(null, Color.GRAY, font.getdCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
+		TimeLabel = customSwingCreate.createCustomLabel(null, Color.WHITE, font.gettCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
+		DateLabel = customSwingCreate.createCustomLabel(null, Color.WHITE, font.getdCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
+
+		JPanel timeProfilePanel = new JPanel();
+		timeProfilePanel.setBackground(color.getHeader());
+		timeProfilePanel.setLayout(new BorderLayout());
+
 
 		searchPanel.add(tfPanel);
 		timePanel.add(TimeLabel, BorderLayout.EAST);
-		//timePanel.add(DateLabel, BorderLayout.CENTER);
+//		timePanel.add(DateLabel, BorderLayout.CENTER);
+		timePanel.setVisible(T);
 
 		javaJivePanel.add(titlePOS, BorderLayout.WEST);
 		javaJivePanel.add(searchPanel, BorderLayout.CENTER);
 
+		timeProfilePanel.add(timePanel, BorderLayout.WEST);
+		timeProfilePanel.add(profileButtonPanel, BorderLayout.EAST);
+
 		topRibbonPanel.add(javaJivePanel, BorderLayout.WEST);
-		topRibbonPanel.add(timePanel, BorderLayout.EAST);
-		topRibbonPanel.add(profileButtonPanel, BorderLayout.EAST);
+		topRibbonPanel.add(timeProfilePanel, BorderLayout.EAST);
 		topRibbonPanel.setVisible(T);
 	}
 
