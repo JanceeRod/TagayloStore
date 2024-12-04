@@ -2,6 +2,7 @@ package A_Package;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -14,12 +15,17 @@ import G_Package.customPopupMenu;
 import G_Package.customScrollBarUI;
 import G_Package.customSwingCreate;
 
-import L_Package.logMain;
-import M_Package.Operations;
+import T_Package.TransactionManager;
 
+import static B_Package.userOperations.*;
 import static javax.swing.SwingConstants.CENTER;
 
 public class adminInterface extends adminDefinitions {
+
+    public static void main(String[] args) {
+        new adminInterface();
+    }
+
     public adminInterface() {
 
         mainFrame = new JFrame();
@@ -46,7 +52,7 @@ public class adminInterface extends adminDefinitions {
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 System.out.println("Program is closing. Do cleanup or save data if needed.");
-                Operations.clearCSVFile(masterfile);
+                clearCSVFile(masterfile);
             }
         });
 
@@ -56,25 +62,19 @@ public class adminInterface extends adminDefinitions {
     }
 
     public void instantiate() {
-        Operations.clearCSVFile(inventory);
+        clearCSVFile(inventory);
 
-        categoryDataMap = Operations.convertCategoriesToArrays(categories);
+        categoryDataMap = convertCategoriesToArrays(categories);
 
-        Operations.writeAllArraysToMasterFile(categoryDataMap, masterfile);
-        globalInventory = Operations.saveToDataArray(masterfile);
+        writeAllArraysToMasterFile(categoryDataMap, masterfile);
+        globalInventory = saveToDataArray(masterfile);
 
-        //convertCSVtoArray
-        transactionHistory2D = Operations.saveToDataArray(transactions);
+        processArrayToHashMap(globalInventory, cafeInventory);
 
-        //reverse the array
-        for (int i = 0; i < transactionHistory2D.length / 2; i++) {
-            String[] temp = transactionHistory2D[i];
-            transactionHistory2D[i] = transactionHistory2D[transactionHistory2D.length - 1 - i];
-            transactionHistory2D[transactionHistory2D.length - 1 - i] = temp;
-        }
+        extractProductPrices(globalInventory, productPrices);
+        extractProductNames(globalInventory, productNames);
 
-//		Operations.menuPrint(globalInventory);
-        Operations.processArrayToHashMap(globalInventory, cafeInventory);
+        manager = new TransactionManager("transactionHistory.csv");
     }
 
     public void topRibbon() {
@@ -228,13 +228,20 @@ public class adminInterface extends adminDefinitions {
         scrollBarForCart = new customScrollBarUI();
         scrollBarForCart.setCustomUI(color.getLeftSide(), Color.LIGHT_GRAY, centerPaneOnRightPanel.getBackground());
 
+        scrollPane = new JScrollPane(centerPaneOnRightPanel);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUI(scrollBarForCart);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
         orderPaneTitleTab.add(orderPaneLabel);
         orderPaneTop.add(orderPaneTitleTab);
 
-        rightRibbonPanel.add(orderPaneTop, BorderLayout.NORTH);
-//        rightRibbonPanel.add(orderPaneBot, BorderLayout.SOUTH);
-        rightRibbonPanel.add(orderPaneCen, BorderLayout.CENTER);
+        orderPaneCen.add(scrollPane);
 
+        rightRibbonPanel.add(orderPaneTop, BorderLayout.NORTH);
+        rightRibbonPanel.add(orderPaneCen, BorderLayout.CENTER);
+        rightRibbonPanel.setVisible(T);
     }
 
     public void centerPanel() {
