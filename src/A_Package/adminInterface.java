@@ -112,14 +112,17 @@ public class adminInterface extends adminDefinitions {
         profileButtonPanel = customSwingCreate.createCustomPanel(50, 50, Color.RED, new BorderLayout());
         profileButtonPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
 
+        ImageIcon originalIcon = new ImageIcon("images/ui/profile.png");
+        JLabel imageLabel = new JLabel(originalIcon);
+        customRoundedPanel profileButtonRoundedPanel = customSwingCreate.createCustomRoundedPanel(15, 0, 0, 0, 0, color.getChoice(), new BorderLayout());
+        profileButtonRoundedPanel.add(imageLabel, BorderLayout.CENTER);
+
         profileButton = new JButton();
         profileButton.setBackground(color.getHeader());
         profileButton.setBorder(BorderFactory.createEmptyBorder());
         profileButton.setLayout(new GridLayout(1,1));
         profileButton.setFocusPainted(F);
         profileButton.setEnabled(T);
-
-        customRoundedPanel profileButtonRoundedPanel = customSwingCreate.createCustomRoundedPanel(15, 0, 0, 0, 0, color.getChoice(), null);
         profileButton.add(profileButtonRoundedPanel);
 
         profileButtonPop = new customPopupMenu();
