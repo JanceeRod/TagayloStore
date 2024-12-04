@@ -1,6 +1,7 @@
 package P_Package;
 
 import G_Package.customRoundedPanel;
+import T_Package.Transaction;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,12 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static B_Package.userDefinitions.centerPaneOnRightPanel;
+import static B_Package.userDefinitions.orderRecord;
+import static B_Package.userOperations.numbersReset;
 import static B_Package.userOperations.panelFinisher;
+
 import static P_Package.paymentFunctions.cashMethod;
 
 public class paymentActionManager extends paymentDefinitions {
-
-    Map<String, Object> transactionMap = new HashMap<>();
 
     public static class confirmPayment implements ActionListener {
 
@@ -36,23 +38,29 @@ public class paymentActionManager extends paymentDefinitions {
 
             System.out.println(transaction.toCSVString());
 
-            transaction.clearCustomerOrders(customerOrders);
+            orderRecord.clear();
 
             centerPaneOnRightPanel.removeAll();
+
             panelFinisher(centerPaneOnRightPanel);
+
+            centerPaneOnRightPanel.setPreferredSize(new Dimension(0, 0));
+
+            numbersReset();
+            transaction = new Transaction();
 
             frame.dispose();
         }
     }
 
+
+
     public static void printCustomerOrders(HashMap<String, Integer> customerOrders) {
-        // Check if the map is empty
         if (customerOrders.isEmpty()) {
             System.out.println("No customer orders available.");
             return;
         }
 
-        // Iterate over the map and print each entry
         System.out.println("Customer Orders:");
         for (Map.Entry<String, Integer> entry : customerOrders.entrySet()) {
             System.out.println("Product Code: " + entry.getKey() + ", Quantity: " + entry.getValue());

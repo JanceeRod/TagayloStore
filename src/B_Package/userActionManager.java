@@ -1,7 +1,6 @@
 package B_Package;
 
 import G_Package.customRoundedPanel;
-import G_Package.customScrollBarUI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,9 +9,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 
-import static B_Package.userOperations.panelFinisher;
+import static B_Package.userOperations.*;
 import static B_Package.userSideButtonFunctions.homeButtonToggle;
-import static B_Package.userOperations.buttonColorReset;
 
 public class userActionManager extends userDefinitions {
 
@@ -50,6 +48,7 @@ public class userActionManager extends userDefinitions {
         private String[][] menuArray;
 
         public menuButtons(int buttonIndex, String[][] menuArray, String altProductCode) {
+
             this.setButtonIndex(buttonIndex);
             if (menuArray == null && altProductCode == null) {
                 this.setMenuArray(null);
@@ -86,19 +85,27 @@ public class userActionManager extends userDefinitions {
                 } else {
                     System.err.println("Invalid button index for array access.");
                 }
-            } else if (buttonIndex == -1){
-                for (int i = 0; i < cartLabelsNumbers.length; i++) {
-                    cartLabelsNumbers[i].setText(formattedDefaultNo);
-                }
+            } else if (buttonIndex == -1) {
+                functions();
+
                 centerPaneOnRightPanel.removeAll();
-                centerPaneOnRightPanel.repaint();
-                centerPaneOnRightPanel.revalidate();
+
+                numbersReset();
+
+                panelFinisher(centerPaneOnRightPanel);
+                centerPaneOnRightPanel.setPreferredSize(new Dimension(0, 0));
+
+                scrollPane.revalidate();
+                scrollPane.repaint();
 
                 roundedPanelForCancelButton.setBackground(color.getRightSide());
                 roundedPanelForProceedButton.setBackground(color.getRightSide());
+
                 cancelButton.setEnabled(F);
                 proceedButton.setEnabled(F);
+
                 orderRecord.clear();
+
                 System.out.println("Order is CANCELLED");
             }
         }
@@ -114,10 +121,12 @@ public class userActionManager extends userDefinitions {
 
                 centerPaneOnRightPanel.removeAll();
 
-                mainPanelOnCenter_ = new customRoundedPanel[number];
+                productsOnCartPanel = new customRoundedPanel[number];
                 quantityLabel6s = new JLabel[number];
                 productName6s = new JLabel[number];
                 productPrice6s = new JLabel[number];
+
+                cancelProductPurchase = new JButton[number];
 
                 int topMargin = 10;
                 int verticalSpacing = 0;
@@ -129,11 +138,11 @@ public class userActionManager extends userDefinitions {
                     Color panelColor = (i % 2 == 0) ? Color.WHITE : color.getRightSide();
                     intArray[i] = valuesArray[i];
 
-                    mainPanelOnCenter_[i] = new customRoundedPanel(25);
-                    mainPanelOnCenter_[i].setBorder(new EmptyBorder(8, 10, 0, 10));
-                    mainPanelOnCenter_[i].setBackground(panelColor);
-                    mainPanelOnCenter_[i].setLayout(new FlowLayout(FlowLayout.LEFT, 12, 11));
-                    mainPanelOnCenter_[i].setPreferredSize(new Dimension(320, 55));
+                    productsOnCartPanel[i] = new customRoundedPanel(25);
+                    productsOnCartPanel[i].setBorder(new EmptyBorder(8, 10, 0, 10));
+                    productsOnCartPanel[i].setBackground(panelColor);
+                    productsOnCartPanel[i].setLayout(new FlowLayout(FlowLayout.LEFT, 12, 11));
+                    productsOnCartPanel[i].setPreferredSize(new Dimension(320, 55));
 
                     quantityLabel6s[i] = new JLabel();
                     quantityLabel6s[i].setText(String.valueOf(intArray[i]));
@@ -145,29 +154,53 @@ public class userActionManager extends userDefinitions {
                     productName6s[i].setText(userOperations.getProductName(keysArray[i]));
                     productName6s[i].setForeground(Color.DARK_GRAY);
                     productName6s[i].setFont(font.getProductNameREGULAR());
-                    productName6s[i].setPreferredSize(new Dimension(170, 15));
+                    productName6s[i].setPreferredSize(new Dimension(150, 15));
 
                     productPrice6s[i] = new JLabel();
                     productPrice6s[i].setText("₱" + productPrice[i] + ".00");
                     productPrice6s[i].setForeground(color.getHeader());
                     productPrice6s[i].setFont(font.getProductNameBOLD());
                     productPrice6s[i].setHorizontalAlignment(SwingConstants.RIGHT);
-                    productPrice6s[i].setPreferredSize(new Dimension(60, 15));
+                    productPrice6s[i].setPreferredSize(new Dimension(50, 15));
 
-                    centerPaneOnRightPanel.add(mainPanelOnCenter_[i]);
+                    int currentIndex = i;
 
-                    mainPanelOnCenter_[i].add(quantityLabel6s[i]);
-                    mainPanelOnCenter_[i].add(productName6s[i]);
-                    mainPanelOnCenter_[i].add(productPrice6s[i]);
+                    cancelProductPurchase[i] = new JButton();
+                    cancelProductPurchase[i].setPreferredSize(new Dimension(20,20));
+                    cancelProductPurchase[i].setBorder(BorderFactory.createEmptyBorder());
+                    cancelProductPurchase[i].setLayout(new BorderLayout());
+                    cancelProductPurchase[i].setBackground(Color.GREEN);
+                    cancelProductPurchase[i].setFocusPainted(F);
+                    cancelProductPurchase[i].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            String productCode = keysArray[currentIndex];
+                            orderRecord.remove(productCode);
+                            centerPaneOnRightPanel.removeAll();
 
-                    SpringLayout.Constraints constraints = SpringForCart.getConstraints(mainPanelOnCenter_[i]);
+                            panelFinisher(centerPaneOnRightPanel);
+                            scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMinimum());
+
+                            numbersReset();
+                            functions();
+                        }
+                    });
+
+                    centerPaneOnRightPanel.add(productsOnCartPanel[i]);
+
+                    productsOnCartPanel[i].add(quantityLabel6s[i]);
+                    productsOnCartPanel[i].add(productName6s[i]);
+                    productsOnCartPanel[i].add(productPrice6s[i]);
+                    productsOnCartPanel[i].add(cancelProductPurchase[i]);
+
+                    SpringLayout.Constraints constraints = SpringForCart.getConstraints(productsOnCartPanel[i]);
 
                     constraints.setX(Spring.constant(10));
 
                     if (i == 0) {
                         constraints.setY(Spring.constant(topMargin));
                     } else {
-                        SpringLayout.Constraints prevConstraints = SpringForCart.getConstraints(mainPanelOnCenter_[i - 1]);
+                        SpringLayout.Constraints prevConstraints = SpringForCart.getConstraints(productsOnCartPanel[i - 1]);
                         constraints.setY(Spring.sum(prevConstraints.getConstraint(SpringLayout.SOUTH), Spring.constant(verticalSpacing)));
                     }
                 }

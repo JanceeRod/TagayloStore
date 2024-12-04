@@ -1,9 +1,9 @@
 package A_Package;
 
-import C_Package.manageTransactions;
 import G_Package.customRoundedPanel;
 import G_Package.customScrollBarUI;
 import B_Package.userOperations;
+import T_Package.TransactionManager;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -32,16 +32,16 @@ public class adminActionManager extends adminDefinitions {
         public void actionPerformed(ActionEvent e) {
             System.out.println("This is purchase no: " + transactionID);
 
-            Map<String, Object> transaction = manageTransactions.getTransactionById(transactions, transactionID);
-
             orderPaneCen.removeAll();
 
             SpringLayout layout = new SpringLayout();
             orderPaneCen.setLayout(layout);
 
-            if (transaction != null) {
-                for (int i = 0; i < transactionHistory2D.length; i++) {
-                    if (transactionHistory2D[i][0].equals(transactionID)) {
+            int count = manager.getTransactionCount();
+
+            if (count != 0) {
+                for (int i = 0; i < count; i++) {
+                    if (manager.getTransactionIDByIndex(i).equals(transactionID)) {
                         perOrder[i].setBackground(color.getRightSide());
                     } else {
                         perOrder[i].setBackground(Color.WHITE);
@@ -56,29 +56,22 @@ public class adminActionManager extends adminDefinitions {
                 return;
             }
 
-            String customerType = (String) transaction.get("customer");
-            String dateAndTime = (String) transaction.get("dateTime");
-            List<Map<String, Object>> productsPurchased = (List<Map<String, Object>>) transaction.get("productsPurchased");
-            double totalAmount = (double) transaction.get("totalAmount");
-            double cashAmount = (double) transaction.get("cashAmount");
-            double change = (double) transaction.get("change");
-
             JLabel transactionIDLabel = new JLabel("Transaction ID: " + transactionID);
             transactionIDLabel.setFont(font.getProductNameBOLD());
 
-            JLabel customerLabel = new JLabel("Customer: " + customerType);
+            JLabel customerLabel = new JLabel("Customer: ");
             customerLabel.setFont(font.getProductNameBOLD());
 
-            JLabel dateAndTimeLabel = new JLabel("Date & Time: " + dateAndTime);
+            JLabel dateAndTimeLabel = new JLabel("Date & Time: ");
             dateAndTimeLabel.setFont(font.getProductNameBOLD());
 
-            JLabel totalAmountLabel = new JLabel("Grand Total: PHP " + totalAmount);
+            JLabel totalAmountLabel = new JLabel("Grand Total: PHP ");
             totalAmountLabel.setFont(font.getProductNameBOLD());
 
-            JLabel cashAmountLabel = new JLabel("Amount in Cash: PHP " + cashAmount);
+            JLabel cashAmountLabel = new JLabel("Amount in Cash: PHP ");
             cashAmountLabel.setFont(font.getProductNameBOLD());
 
-            JLabel changeLabel = new JLabel("Change: PHP " + change);
+            JLabel changeLabel = new JLabel("Change: PHP ");
             changeLabel.setFont(font.getProductNameBOLD());
 
             JLabel purchasesLabel = new JLabel("Purchases:");
@@ -92,20 +85,6 @@ public class adminActionManager extends adminDefinitions {
             orderPaneCen.add(changeLabel);
             orderPaneCen.add(purchasesLabel);
 
-            int yOffset = 20;
-            for (Map<String, Object> product : productsPurchased) {
-                String productCode = (String) product.get("productCode");
-                int quantity = (int) product.get("quantity");
-
-                JLabel productLabel = new JLabel(quantity + "x " + productCode);
-                productLabel.setFont(font.getProductNameREGULAR());
-                productLabel.setForeground(color.getHeader());
-
-                orderPaneCen.add(productLabel);
-                layout.putConstraint(SpringLayout.NORTH, productLabel, yOffset, SpringLayout.SOUTH, purchasesLabel);
-                layout.putConstraint(SpringLayout.WEST, productLabel, 20, SpringLayout.WEST, orderPaneCen);
-                yOffset += 20;
-            }
 
             layout.putConstraint(SpringLayout.NORTH, transactionIDLabel, 20, SpringLayout.NORTH, orderPaneCen);
             layout.putConstraint(SpringLayout.WEST, transactionIDLabel, 20, SpringLayout.WEST, orderPaneCen);

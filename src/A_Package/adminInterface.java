@@ -2,6 +2,7 @@ package A_Package;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -14,8 +15,10 @@ import G_Package.customPopupMenu;
 import G_Package.customScrollBarUI;
 import G_Package.customSwingCreate;
 
-import B_Package.userOperations;
 
+import T_Package.TransactionManager;
+
+import static B_Package.userOperations.*;
 import static javax.swing.SwingConstants.CENTER;
 
 public class adminInterface extends adminDefinitions {
@@ -50,7 +53,7 @@ public class adminInterface extends adminDefinitions {
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 System.out.println("Program is closing. Do cleanup or save data if needed.");
-                userOperations.clearCSVFile(masterfile);
+                clearCSVFile(masterfile);
             }
         });
 
@@ -60,25 +63,17 @@ public class adminInterface extends adminDefinitions {
     }
 
     public void instantiate() {
-        userOperations.clearCSVFile(inventory);
+        clearCSVFile(inventory);
 
-        categoryDataMap = userOperations.convertCategoriesToArrays(categories);
+        categoryDataMap = convertCategoriesToArrays(categories);
 
-        userOperations.writeAllArraysToMasterFile(categoryDataMap, masterfile);
-        globalInventory = userOperations.saveToDataArray(masterfile);
+        writeAllArraysToMasterFile(categoryDataMap, masterfile);
+        globalInventory = saveToDataArray(masterfile);
 
-        //convertCSVtoArray
-        transactionHistory2D = userOperations.saveToDataArray(transactions);
+        processArrayToHashMap(globalInventory, cafeInventory);
+        extractProductPrices(globalInventory, productPrices);
 
-        //reverse the array
-        for (int i = 0; i < transactionHistory2D.length / 2; i++) {
-            String[] temp = transactionHistory2D[i];
-            transactionHistory2D[i] = transactionHistory2D[transactionHistory2D.length - 1 - i];
-            transactionHistory2D[transactionHistory2D.length - 1 - i] = temp;
-        }
-
-//		Operations.menuPrint(globalInventory);
-        userOperations.processArrayToHashMap(globalInventory, cafeInventory);
+        manager = new TransactionManager("transactionHistory.csv");
     }
 
     public void topRibbon() {

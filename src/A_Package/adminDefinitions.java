@@ -1,29 +1,23 @@
 package A_Package;
 
 import C_Package.manageCategories;
+
 import E_Package.Category;
-import E_Package.Transaction;
+
 import G_Package.customRoundedPanel;
 import G_Package.customColorPallete;
 import G_Package.customScrollBarUI;
 import G_Package.customFontGallery;
 import G_Package.customPopupMenu;
-import B_Package.userOperations;
+
+import T_Package.TransactionManager;
 
 import javax.swing.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class adminDefinitions {
 
     JFrame mainFrame;
-
-    userOperations Operate = new userOperations();
 
     static Double defaultNo = 0.00;
     static Double salesTax = 5.25;
@@ -32,9 +26,6 @@ public class adminDefinitions {
     public static customRoundedPanel[] mainPanelOnCenter_;
     public static customRoundedPanel[] pillShape;
 
-    public static JButton[] button2_;
-    public JLabel[] productName;
-    public JLabel[] productPrice;
     public static JLabel[] quantityLabel6s;
     public static JLabel[] productName6s;
     public static JLabel[] productPrice6s;
@@ -111,7 +102,6 @@ public class adminDefinitions {
     static JButton proceedButton;
 
     //Extras
-    int[] labelText1_;
 
     customScrollBarUI scrollBarForCart;
 
@@ -149,30 +139,24 @@ public class adminDefinitions {
 
     //data structures
     public static LinkedHashMap<String, Integer> cafeInventory = new LinkedHashMap<>();
-    public LinkedHashMap<String, String[][]> arrayOf2DArrays = new LinkedHashMap<>();
     public static LinkedHashMap<String, Integer> orderRecord = new LinkedHashMap<>();
-    public static List<Transaction> transactionHistory = new ArrayList<>();
     public static List<String[]> searchResults = new ArrayList<>();
+    public static List<Map<String, Integer>> parsedProducts;
+    public static Map<String, Double> productPrices = new HashMap<>();
 
 
     //files
     static String inventory = "cafeInventory.csv";
     static String transactions = "transactionHistory.csv";
+    static String purchases = "transactionPurchases.csv";
     static String masterfile = "inventoryMasterfile.csv";
-    static String[][] inventoryMasterfile;
-    public static String[][] transactionHistory2D;
     static String[] calculations;
+
+    static TransactionManager manager;
 
 
     //new files
     static Map<String, String[][]> categoryDataMap;
     static List<Category> categories = manageCategories.getCategories();
     static String[][] globalInventory;
-
-
-    //time and date
-    public static LocalTime CT;
-    public static LocalDate CD;
-    public static DateTimeFormatter CTF, CTF2, CDF;
-    public static String TM, TM2, DM;
 }

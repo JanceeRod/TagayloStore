@@ -1,6 +1,6 @@
 package P_Package;
 
-import E_Package.Transaction;
+import T_Package.Transaction;
 import G_Package.customColorPallete;
 import G_Package.customFontGallery;
 import G_Package.customRoundedPanel;
@@ -22,7 +22,7 @@ public class paymentDefinitions {
 
     public static customRoundedPanel[] orders;
 
-    static protected HashMap<String, Integer> customerOrders;
+    public static HashMap<String, Integer> customerOrders;
     protected String[] calculations;
 
     public static JPanel afterOptions;
@@ -72,6 +72,7 @@ public class paymentDefinitions {
     static JLabel confirmOrderLabel;
 
     static JButton forOptions;
+    static JButton confirmPaymentButton;
 
     //path
     static String transactionPath = "transactionHistory.csv";

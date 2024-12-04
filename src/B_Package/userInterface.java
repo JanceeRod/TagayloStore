@@ -9,9 +9,14 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import G_Package.*;
+import G_Package.customPopupMenu;
+import G_Package.customRoundedPanel;
+import G_Package.customSwingCreate;
+import G_Package.customScrollBarUI;
 
 import P_Package.paymentWindow;
+
+import static B_Package.userOperations.*;
 
 public class userInterface extends userDefinitions {
 
@@ -55,30 +60,32 @@ public class userInterface extends userDefinitions {
 
 
 	public void instantiate() {
-		userOperations.clearCSVFile(inventory);
+		clearCSVFile(inventory);
 
 		categoryDataMap = userOperations.convertCategoriesToArrays(categories);
 
 		userOperations.writeAllArraysToMasterFile(categoryDataMap, masterfile);
-		globalInventory = userOperations.saveToDataArray(masterfile);
+		globalInventory = saveToDataArray(masterfile);
 
 //		Operations.menuPrint(globalInventory);
-		userOperations.processArrayToHashMap(globalInventory, cafeInventory);
+
+		processArrayToHashMap(globalInventory, cafeInventory);
+		extractProductPrices(globalInventory, productPrices);
 	}
 
 
 
 	public void topRibbon() {
 
-		topRibbonPanel = userOperations.createCustomPanel(1080, 60, color.getHeader(), null);
+		topRibbonPanel = customSwingCreate.createCustomPanel(1080, 60, color.getHeader(), null);
 		topRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
 
-		javaJivePanel = userOperations.createCustomPanel(650, 50, topRibbonPanel, null);
+		javaJivePanel = customSwingCreate.createCustomPanel(650, 50, topRibbonPanel, null);
 		javaJivePanel.setBorder(BorderFactory.createEmptyBorder(0, 25, 0, 0));
 
-		titlePOS = userOperations.createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getTitleFont(), 0, 0, 0, 0, 0, 0, 0, 20, SwingConstants.LEFT);
+		titlePOS = customSwingCreate.createCustomLabel("Tagaylo Store POS", color.getTitleColor(), font.getTitleFont(), 0, 0, 0, 0, 0, 0, 0, 20, SwingConstants.LEFT);
 
-		tfPanel = userOperations.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
+		tfPanel = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
 
 		searchBox = new JTextField("Search products...");
 		searchBox.setPreferredSize(new Dimension(425, 29));
@@ -93,13 +100,13 @@ public class userInterface extends userDefinitions {
 		searchBox.getDocument().addDocumentListener(new userActionManager.documentListen());
 		tfPanel.add(searchBox);
 
-		searchPanel = userOperations.createCustomPanel(300, 50, topRibbonPanel, new BorderLayout());
+		searchPanel = customSwingCreate.createCustomPanel(300, 50, topRibbonPanel, new BorderLayout());
 		searchPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-		timePanel = userOperations.createCustomPanel(500, 50, topRibbonPanel, new BorderLayout());
+		timePanel = customSwingCreate.createCustomPanel(500, 50, topRibbonPanel, new BorderLayout());
 		timePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 25));
 
-		profileButtonPanel = userOperations.createCustomPanel(50, 50, Color.RED, new BorderLayout());
+		profileButtonPanel = customSwingCreate.createCustomPanel(50, 50, Color.RED, new BorderLayout());
 		profileButtonPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
 
 		profileButton = new JButton();
@@ -134,11 +141,12 @@ public class userInterface extends userDefinitions {
 
 		profileButtonPanel.add(profileButton, BorderLayout.CENTER);
 
-		TimeLabel = userOperations.createCustomLabel(null, Color.GRAY, font.gettCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
-		DateLabel = userOperations.createCustomLabel(null, Color.GRAY, font.getdCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
+		TimeLabel = customSwingCreate.createCustomLabel(null, Color.GRAY, font.gettCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
+		DateLabel = customSwingCreate.createCustomLabel(null, Color.GRAY, font.getdCF(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.LEFT);
 
 		searchPanel.add(tfPanel);
-		timePanel.add(TimeLabel, BorderLayout.EAST); //timePanel.add(DateLabel, BorderLayout.CENTER);
+		timePanel.add(TimeLabel, BorderLayout.EAST);
+		//timePanel.add(DateLabel, BorderLayout.CENTER);
 
 		javaJivePanel.add(titlePOS, BorderLayout.WEST);
 		javaJivePanel.add(searchPanel, BorderLayout.CENTER);
@@ -147,12 +155,11 @@ public class userInterface extends userDefinitions {
 		topRibbonPanel.add(timePanel, BorderLayout.EAST);
 		topRibbonPanel.add(profileButtonPanel, BorderLayout.EAST);
 		topRibbonPanel.setVisible(T);
-		System.out.println("Top Ribbon is set.");
 	}
 
 	public void leftPanel() {
 
-		leftRibbonPanel = userOperations.createCustomPanel(85, 670, color.getLeftSide(), null);
+		leftRibbonPanel = customSwingCreate.createCustomPanel(85, 670, color.getLeftSide(), null);
 		leftRibbonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 8));
 
 		sideRibbonLabels = new String[]{"Home"};
@@ -193,30 +200,29 @@ public class userInterface extends userDefinitions {
 			sideRibbonButtons[i].addActionListener(new userActionManager.sideButtons(i, sideRibbonLabels[i]));
 		}
 		leftRibbonPanel.setVisible(T);
-		System.out.println("Left Ribbon is set.");
 	}
 
 	public void rightPanel() {
 
-		rightRibbonPanel = userOperations.createCustomPanel(360, 370, color.getRightSide(), new BorderLayout());
+		rightRibbonPanel = customSwingCreate.createCustomPanel(360, 370, color.getRightSide(), new BorderLayout());
 		rightRibbonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-		orderPaneTop = userOperations.createCustomPanel(340, 35, rightRibbonPanel, new BorderLayout());
+		orderPaneTop = customSwingCreate.createCustomPanel(340, 35, rightRibbonPanel, new BorderLayout());
 		orderPaneTop.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 15));
 
 		orderPaneTitleTab = new customRoundedPanel(20);
 		orderPaneTitleTab.setBackground(color.getOrderPane());
 		orderPaneTitleTab.setLayout(new BorderLayout());
 
-		orderPaneLabel = userOperations.createCustomLabel("CUSTOMER CART", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
+		orderPaneLabel = customSwingCreate.createCustomLabel("CUSTOMER CART", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, SwingConstants.CENTER);
 
-		orderPaneCen = userOperations.createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
+		orderPaneCen = customSwingCreate.createCustomPanel(8, 0, rightRibbonPanel.getBackground(), new BorderLayout());
 
-		orderPaneBot = userOperations.createCustomPanel(340, 150, color.getOrderPane(), null);
+		orderPaneBot = customSwingCreate.createCustomPanel(340, 150, color.getOrderPane(), new BorderLayout());
 		orderPaneBot.setLayout(null);
 
 		cartLabels = new String[]{"Subtotal", "Tax", "Total:"};
-		labelText1_ = new int[]{18, 41, 69};
+		cartLabel_Ycoord = new int[]{18, 41, 64};
 		cartLabelsText = new JLabel[cartLabels.length];
 		cartLabelsNumbers = new JLabel[cartLabels.length];
 
@@ -226,7 +232,7 @@ public class userInterface extends userDefinitions {
 			cartLabelsText[i].setBorder(new EmptyBorder(0, 0, 15, 0));
 			cartLabelsText[i].setForeground(Color.white);
 			cartLabelsText[i].setFont(font.getProductNameREGULAR());
-			cartLabelsText[i].setBounds(15, labelText1_[i], 120, 30);
+			cartLabelsText[i].setBounds(20, cartLabel_Ycoord[i], 120, 30);
 
 			cartLabelsNumbers[i] = new JLabel();
 			cartLabelsNumbers[i].setText(formattedDefaultNo);
@@ -234,7 +240,7 @@ public class userInterface extends userDefinitions {
 			cartLabelsNumbers[i].setForeground(Color.white);
 			cartLabelsNumbers[i].setFont(font.getProductNameREGULAR());
 			cartLabelsNumbers[i].setHorizontalAlignment(SwingConstants.RIGHT);
-			cartLabelsNumbers[i].setBounds(200, labelText1_[i], 120, 30);
+			cartLabelsNumbers[i].setBounds(215, cartLabel_Ycoord[i], 120, 30);
 
 			orderPaneBot.add(cartLabelsText[i]);
 			orderPaneBot.add(cartLabelsNumbers[i]);
@@ -261,7 +267,7 @@ public class userInterface extends userDefinitions {
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		cancelButton = new JButton();
-		cancelButton.setBounds(10, 98, 155, 40);
+		cancelButton.setBounds(20, 98, 155, 40);
 		cancelButton.setBackground(orderPaneBot.getBackground());
 		cancelButton.setBorder(BorderFactory.createEmptyBorder());
 		cancelButton.setLayout(new GridLayout(1,1));
@@ -271,10 +277,10 @@ public class userInterface extends userDefinitions {
 		cancelLabel = new JLabel();
 		cancelLabel.setText("Cancel Order");
 		cancelLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		cancelLabel.setFont(font.getFG5());
+		cancelLabel.setFont(font.getProductNameBOLD());
 
 		proceedButton = new JButton();
-		proceedButton.setBounds(175, 98, 155, 40);
+		proceedButton.setBounds(185, 98, 155, 40);
 		proceedButton.setBackground(orderPaneBot.getBackground());
 		proceedButton.setBorder(BorderFactory.createEmptyBorder());
 		proceedButton.setLayout(new GridLayout(1,1));
@@ -285,13 +291,15 @@ public class userInterface extends userDefinitions {
 				if (orderRecord != null) {
 					paymentWindow payment = new paymentWindow(orderRecord, calculations);
 				}
+				proceedButton.setEnabled(F);
+				cancelButton.setEnabled(F);
 			}
 		});
 
 		proceedLabel = new JLabel();
 		proceedLabel.setText("Proceed to Payment");
 		proceedLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		proceedLabel.setFont(font.getFG5());
+		proceedLabel.setFont(font.getProductNameBOLD());
 
 		roundedPanelForCancelButton = new customRoundedPanel(20);
 		roundedPanelForCancelButton.setBackground(color.getInactiveButton());
@@ -311,25 +319,24 @@ public class userInterface extends userDefinitions {
 
 		orderPaneCen.add(scrollPane);
 
-		orderPaneBot.add(cancelButton);
-		orderPaneBot.add(proceedButton);
+		orderPaneBot.add(cancelButton, BorderLayout.EAST);
+		orderPaneBot.add(proceedButton, BorderLayout.WEST);
 
 		rightRibbonPanel.add(orderPaneTop, BorderLayout.NORTH);
 		rightRibbonPanel.add(orderPaneBot, BorderLayout.SOUTH);
 		rightRibbonPanel.add(orderPaneCen, BorderLayout.CENTER);
 		rightRibbonPanel.setVisible(T);
-		System.out.println("Right Ribbon is set.");
 	}
 
 	public void centerPanel() {
 
-		centerContainerPanelUp = userOperations.createCustomPanel(0, 0, color.getCenterPane(), new BorderLayout());
+		centerContainerPanelUp = customSwingCreate.createCustomPanel(0, 0, color.getCenterPane(), new BorderLayout());
 		centerContainerPanelUp.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
 
-		centerContainerPanelDown = userOperations.createCustomPanel(600, 35, centerContainerPanelUp, new BorderLayout());
+		centerContainerPanelDown = customSwingCreate.createCustomPanel(600, 35, centerContainerPanelUp, new BorderLayout());
 		centerContainerPanelDown.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 
-		mainPanelOnCenter = userOperations.createCustomPanel(0, 0, color.getCenterPane(), new BorderLayout());
+		mainPanelOnCenter = customSwingCreate.createCustomPanel(0, 0, color.getCenterPane(), new BorderLayout());
 		mainPanelOnCenter.setBorder(BorderFactory.createEmptyBorder(15, 5, 0, 0));
 
 		centerPanelMainLayer = new customRoundedPanel(15);
@@ -340,7 +347,6 @@ public class userInterface extends userDefinitions {
 		centerContainerPanelUp.add(mainPanelOnCenter, BorderLayout.CENTER);
 		centerContainerPanelUp.add(centerContainerPanelDown, BorderLayout.NORTH);
 		centerContainerPanelUp.setVisible(T);
-		System.out.println("Center Panel is set.");
 	}
 
 	public void systemTimeAndDate() {

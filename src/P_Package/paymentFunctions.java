@@ -1,8 +1,9 @@
 package P_Package;
 
 import B_Package.userActionManager;
-import B_Package.userOperations;
+
 import G_Package.customRoundedPanel;
+import G_Package.customSwingCreate;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -40,7 +41,7 @@ public class paymentFunctions extends paymentDefinitions {
         customerName.setText("Customer:");
         customerName.setFont(font.getProductNameREGULAR());
 
-        customRoundedPanel customer = userOperations.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
+        customRoundedPanel customer = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
 
         customerTextBox = getjTextField("", textBoxWidth, customer);
         customerTextBox.addFocusListener(new userActionManager.focusListen());
@@ -52,7 +53,7 @@ public class paymentFunctions extends paymentDefinitions {
         amountInCash.setText("Amount in Cash:");
         amountInCash.setFont(font.getProductNameREGULAR());
 
-        customRoundedPanel amount = userOperations.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
+        customRoundedPanel amount = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
 
         amountTextBox = getjTextField("PHP 0.00", textBoxWidth, amount);
 //        amountTextBox.addKeyListener(new userActionManager.keyListen());
@@ -69,11 +70,11 @@ public class paymentFunctions extends paymentDefinitions {
         changeTextLabel.setText("PHP 0.00");
         changeTextLabel.setFont(font.getProductPriceBOLD());
 
-        customRoundedPanel change = userOperations.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getHeader(), new BorderLayout());
+        customRoundedPanel change = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getHeader(), new BorderLayout());
 
         change.add(changeTextLabel);
 
-        JButton confirmPaymentButton = new JButton();
+        confirmPaymentButton = new JButton();
         confirmPaymentButton.setFont(font.getProductPriceBOLD());
         confirmPaymentButton.setBackground(afterOptions.getBackground());
         confirmPaymentButton.setBorder(new EmptyBorder(0,0,0,0));
@@ -81,7 +82,7 @@ public class paymentFunctions extends paymentDefinitions {
         confirmPaymentButton.setFocusPainted(F);
         confirmPaymentButton.addActionListener(new paymentActionManager.confirmPayment());
 
-        customRoundedPanel confirmPayment = userOperations.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getHeader(), new BorderLayout());
+        customRoundedPanel confirmPayment = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getHeader(), new BorderLayout());
         confirmPayment.setPreferredSize(new Dimension(412, 50));
 
         JLabel confirmPaymentLabel = new JLabel();
@@ -166,18 +167,31 @@ public class paymentFunctions extends paymentDefinitions {
 
             private void updateChangeLabel() {
                 String currentText = textField.getText();
+
                 if (currentText.isEmpty() || !currentText.matches("\\d*\\.?\\d*")) {
                     changeTextLabel.setText("PHP 0.00");
+                    confirmPaymentButton.setEnabled(false); // Disable the button when the input is invalid
                     return;
                 }
+
                 try {
                     double inputAmount = Double.parseDouble(currentText);
                     double changeAmount = inputAmount - totalAmount;
+
                     changeTextLabel.setText(String.format("PHP %.2f", changeAmount));
+
+                    // Disable the button if the change is negative, enable it otherwise
+                    if (changeAmount < 0) {
+                        confirmPaymentButton.setEnabled(false);
+                    } else {
+                        confirmPaymentButton.setEnabled(true);
+                    }
                 } catch (NumberFormatException e) {
                     changeTextLabel.setText("PHP 0.00");
+                    confirmPaymentButton.setEnabled(false); // Disable the button on parsing error
                 }
             }
+
         });
 
         // Clear default text on focus and update change label on focus lost

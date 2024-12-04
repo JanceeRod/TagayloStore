@@ -2,7 +2,7 @@ package B_Package;
 
 import C_Package.manageCategories;
 import E_Package.Category;
-import E_Package.Transaction;
+import T_Package.Transaction;
 import G_Package.customRoundedPanel;
 import G_Package.customColorPallete;
 import G_Package.customScrollBarUI;
@@ -14,10 +14,8 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class userDefinitions {
 
@@ -31,7 +29,7 @@ public class userDefinitions {
     static String formattedDefaultNo  = String.format("%.2f", defaultNo);
 
     public static customRoundedPanel[] panel5_;
-    public static customRoundedPanel[] mainPanelOnCenter_;
+    public static customRoundedPanel[] productsOnCartPanel;
     public static customRoundedPanel[] pillShape;
     public static JButton[] forPanel5_;
 
@@ -111,15 +109,17 @@ public class userDefinitions {
     static JLabel[] cartLabelsNumbers;
 
     //Button
-    static JButton cancelButton;
-    static JButton proceedButton;
+    public static JButton cancelButton;
+    public static JButton proceedButton;
+    static JButton[] cancelProductPurchase;
 
     //Extras
     String[] cartLabels;
-    int[] labelText1_;
+    int[] cartLabel_Ycoord;
 
     customScrollBarUI scrollBarForCart;
-    JScrollPane scrollPane;
+    static JScrollPane scrollPane;
+
 
 
     //CENTER PANEL
@@ -156,6 +156,7 @@ public class userDefinitions {
     public static LinkedHashMap<String, Integer> orderRecord = new LinkedHashMap<>();
     public static List<Transaction> transactionHistory = new ArrayList<>();
     public static List<String[]> searchResults = new ArrayList<>();
+    public static Map<String, Double> productPrices = new HashMap<>();
 
 
     //files

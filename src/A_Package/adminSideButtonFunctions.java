@@ -2,10 +2,11 @@ package A_Package;
 
 import G_Package.customRoundedPanel;
 import G_Package.customScrollBarUI;
-import B_Package.userOperations;
+import G_Package.customSwingCreate;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.DecimalFormat;
 
 import static javax.swing.SwingConstants.CENTER;
 
@@ -32,10 +33,10 @@ public class adminSideButtonFunctions extends adminDefinitions {
         centerPanelMainLayer.setBackground(color.getCenterPiece());
         mainPanelOnCenter.setBackground(color.getCenterPane());
 
-        JLabel title = userOperations.createCustomLabel("TRANSACTION HISTORY", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
+        JLabel title = customSwingCreate.createCustomLabel("TRANSACTION HISTORY", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
         centerPanelMainLayer.add(title);
 
-        int size = transactionHistory2D.length;
+        int size = manager.getTransactionCount();
         int orderWidth = centerPanelMainLayer.getWidth();
         int orderHeight = 58;
         perOrderButtons = new JButton[size];
@@ -62,7 +63,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
             perOrderButtons[i].setFocusPainted(F);
             perOrderButtons[i].setLayout(new BorderLayout(1,1));
             perOrderButtons[i].setPreferredSize(new Dimension(555, orderHeight));
-            perOrderButtons[i].addActionListener(new adminActionManager.viewTransaction(transactionHistory2D[i][0]));
+            perOrderButtons[i].addActionListener(new adminActionManager.viewTransaction(manager.getTransactionIDByIndex(i)));
 
             perOrder[i] = new customRoundedPanel(25);
             perOrder[i].setBackground(Color.WHITE);
@@ -85,18 +86,21 @@ public class adminSideButtonFunctions extends adminDefinitions {
             }
         }
 
+        DecimalFormat formatter = new DecimalFormat("#,###.00");
+
         for (int i = 0; i < size; i++) {
-            customerType[i] = new JLabel(transactionHistory2D[i][7]);
+
+            customerType[i] = new JLabel(manager.getCustomerName(manager.getTransactionIDByIndex(i)));
             customerType[i].setFont(font.getProductNameBOLD());
             customerType[i].setForeground(color.getHeader());
 
-            dateAndTime[i] = new JLabel(transactionHistory2D[i][1]);
+            dateAndTime[i] = new JLabel(manager.getPurchaseDate(manager.getTransactionIDByIndex(i)));
             dateAndTime[i].setFont(font.getProductNameREGULAR());
 
-            orderID[i] = new JLabel("Transaction ID: " + transactionHistory2D[i][0]);
+            orderID[i] = new JLabel("Transaction ID: " + manager.getTransactionIDByIndex(i));
             orderID[i].setFont(font.getProductNameREGULAR());
 
-            purchaseGrandTotal[i] = new JLabel("PHP " + transactionHistory2D[i][5]);
+            purchaseGrandTotal[i] = new JLabel("PHP " + formatter.format(manager.calculateGrandTotal(manager.getTransactionIDByIndex(i), productPrices)));
             purchaseGrandTotal[i].setFont(font.getProductPriceBOLD());
             purchaseGrandTotal[i].setForeground(color.getHeader());
 
@@ -108,13 +112,13 @@ public class adminSideButtonFunctions extends adminDefinitions {
             perOrder[i].add(purchaseGrandTotal[i]);
             perOrder[i].add(customerType[i]);
 
-            layout.putConstraint(SpringLayout.WEST, customerType[i], 10, SpringLayout.WEST, perOrder[i]);
+            layout.putConstraint(SpringLayout.WEST, customerType[i], 15, SpringLayout.WEST, perOrder[i]);
             layout.putConstraint(SpringLayout.NORTH, customerType[i], 10, SpringLayout.NORTH, perOrder[i]);
 
-            layout.putConstraint(SpringLayout.WEST, dateAndTime[i], 10, SpringLayout.EAST, customerType[i]);
+            layout.putConstraint(SpringLayout.WEST, dateAndTime[i], 15, SpringLayout.EAST, customerType[i]);
             layout.putConstraint(SpringLayout.NORTH, dateAndTime[i], 0, SpringLayout.NORTH, customerType[i]);
 
-            layout.putConstraint(SpringLayout.WEST, orderID[i], 10, SpringLayout.WEST, perOrder[i]);
+            layout.putConstraint(SpringLayout.WEST, orderID[i], 15, SpringLayout.WEST, perOrder[i]);
             layout.putConstraint(SpringLayout.NORTH, orderID[i], 5, SpringLayout.SOUTH, customerType[i]);
 
             layout.putConstraint(SpringLayout.EAST, purchaseGrandTotal[i], -10, SpringLayout.EAST, perOrder[i]);
@@ -145,13 +149,13 @@ public class adminSideButtonFunctions extends adminDefinitions {
 
         orderPaneLabel.setText("QUICK ACTIONS");
 
-        JLabel title = userOperations.createCustomLabel("SALES", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
+        JLabel title = customSwingCreate.createCustomLabel("SALES", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
         centerPanelMainLayer.add(title);
 
         centerPanelMainLayer.setBackground(color.getCenterPiece());
         mainPanelOnCenter.setBackground(Color.RED);
 
-        int size = transactionHistory2D.length;
+        int size = manager.getTransactionCount();
         int orderWidth = centerPanelMainLayer.getWidth();
         int orderHeight = 58;
 
@@ -214,7 +218,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
 
         centerPanelMainLayer.setBackground(color.getCenterPiece());
 
-        JLabel title = userOperations.createCustomLabel("INVENTORY MANAGER", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
+        JLabel title = customSwingCreate.createCustomLabel("INVENTORY MANAGER", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
         centerPanelMainLayer.add(title);
 
         System.out.println("This is inventory?????");
