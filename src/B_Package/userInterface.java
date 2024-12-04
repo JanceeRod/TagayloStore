@@ -1,4 +1,4 @@
-package M_Package;
+package B_Package;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -18,6 +18,9 @@ import javax.swing.event.DocumentListener;
 import G_Package.*;
 
 import L_Package.logMain;
+import M_Package.Definitions;
+import M_Package.Operations;
+import M_Package.mouseListen;
 import P_Package.paymentWindow;
 
 public class userInterface extends Definitions {

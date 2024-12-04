@@ -9,8 +9,7 @@ import java.util.List;
 
 import A_Package.adminInterface;
 import G_Package.customColorPallete;
-import M_Package.Main;
-import M_Package.userInterface;
+import B_Package.userInterface;
 
 public class logMain extends logDefinitions {
     public logMain() {
