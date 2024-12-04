@@ -17,17 +17,17 @@ public class logMain extends logDefinitions {
             List<Map<String, String>> users = new ArrayList<>();
             Map<String, String> admin = new HashMap<>();
             admin.put("username", "admin");
-            admin.put("password", logDefinitions.hashPassword("admin123", "random_salt"));
+            admin.put("password", logOperations.hashPassword("admin123", "random_salt"));
             admin.put("role", "Admin");
             users.add(admin);
 
             Map<String, String> cashier = new HashMap<>();
             cashier.put("username", "cashier1");
-            cashier.put("password", logDefinitions.hashPassword("cashier123", "random_salt"));
+            cashier.put("password", logOperations.hashPassword("cashier123", "random_salt"));
             cashier.put("role", "Cashier");
             users.add(cashier);
 
-            logDefinitions.writeCredentials("credentials.txt", users);
+            logOperations.writeCredentials("credentials.txt", users);
 
             createLoginGUI();
         } catch (Exception e) {
@@ -123,7 +123,7 @@ public class logMain extends logDefinitions {
 
                 for (Map<String, String> user : users) {
                     if (user.get("username").equals(username)) {
-                        isValid = logDefinitions.validatePassword(password, user.get("password"), salt);
+                        isValid = logOperations.validatePassword(password, user.get("password"), salt);
                         if (isValid) {
                             frame.setVisible(false);
                             frame.dispose();
