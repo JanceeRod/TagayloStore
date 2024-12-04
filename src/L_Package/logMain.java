@@ -49,10 +49,12 @@ public class logMain extends logDefinitions {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 10, 10, 10); // Add padding
 
-        // Title Label
-        JLabel lblTitle = new JLabel("Tagaylo Store POS System Login", SwingConstants.CENTER);
-        lblTitle.setFont(font.getTitleFont());
-        lblTitle.setForeground(color.getHeader());
+        // Title Image
+        ImageIcon originalIcon = new ImageIcon("images/ui/logo.png");
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(245, 100, Image.SCALE_SMOOTH); // Set desired width and height
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        JLabel lblTitle = new JLabel(resizedIcon, SwingConstants.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
