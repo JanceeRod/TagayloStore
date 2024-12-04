@@ -14,6 +14,7 @@ import G_Package.customRoundedPanel;
 import G_Package.customSwingCreate;
 import G_Package.customScrollBarUI;
 
+import L_Package.logMain;
 import P_Package.paymentWindow;
 
 import static B_Package.userOperations.*;
@@ -120,18 +121,21 @@ public class userInterface extends userDefinitions {
 		profileButton.add(profileButtonRoundedPanel);
 
 		profileButtonPop = new customPopupMenu();
-		profileButtonPop.addMenuItem("Settings", e -> JOptionPane.showMessageDialog(mainFrame, "This is Settings"));
-		profileButtonPop.addMenuItem("About Us?", e -> JOptionPane.showMessageDialog(mainFrame, "This is about us!"));
 		profileButtonPop.addMenuItem("Log Out",
 				e -> {
 					System.out.println("Program is closing. Do cleanup or save data if needed.");
-					userOperations.clearCSVFile(masterfile);
 					JOptionPane.showMessageDialog(mainFrame, "Logged out");
+					mainFrame.dispose();
+					new logMain();
+				});
+		profileButtonPop.addMenuItem("Exit",
+				e -> {
+					System.out.println("Program is closing. Do cleanup or save data if needed.");
+					userOperations.clearCSVFile(masterfile);
+					JOptionPane.showMessageDialog(mainFrame, "System Closing");
 					mainFrame.dispose();
 					System.exit(0);
 				});
-
-		profileButtonPop.addMenuItem("Help", e -> JOptionPane.showMessageDialog(mainFrame, "Help"));
 
 		profileButton.addActionListener(e -> {
 			int x = profileButton.getWidth() - profileButtonPop.getPreferredSize().width;

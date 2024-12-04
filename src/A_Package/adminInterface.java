@@ -121,20 +121,22 @@ public class adminInterface extends adminDefinitions {
 
         customRoundedPanel profileButtonRoundedPanel = customSwingCreate.createCustomRoundedPanel(15, 0, 0, 0, 0, color.getChoice(), null);
         profileButton.add(profileButtonRoundedPanel);
-//		profileButton.addActionListener(new menuButtons(-1, null, null));
 
         profileButtonPop = new customPopupMenu();
-//        profileButtonPop.addMenuItem("Settings", e -> JOptionPane.showMessageDialog(mainFrame, "This is Settings"));
-//        profileButtonPop.addMenuItem("About Us?", e -> JOptionPane.showMessageDialog(mainFrame, "This is about us!"));
         profileButtonPop.addMenuItem("Log Out",
                 e -> {
                     System.out.println("Program is closing. Do cleanup or save data if needed.");
                     JOptionPane.showMessageDialog(mainFrame, "Logged out");
                     mainFrame.dispose();
-//                    System.exit(0);
                     new logMain();
                 });
-//        profileButtonPop.addMenuItem("Help", e -> JOptionPane.showMessageDialog(mainFrame, "Help"));
+        profileButtonPop.addMenuItem("Exit",
+                e -> {
+                    System.out.println("Program is closing. Do cleanup or save data if needed.");
+                    JOptionPane.showMessageDialog(mainFrame, "System Closing");
+                    mainFrame.dispose();
+                    System.exit(0);
+                });
 
         profileButton.addActionListener(e -> {
             int x = profileButton.getWidth() - profileButtonPop.getPreferredSize().width;
