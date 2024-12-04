@@ -30,6 +30,18 @@ public class userOperations extends userDefinitions {
         }
     }
 
+    public static void extractProductNames(String[][] globalInventory, Map<String, String> productNames) {
+        productNames.clear();
+
+        for (String[] row : globalInventory) {
+            if (row.length > 1) {
+                String productCode = row[0];
+                String productName = row[1];
+
+                productNames.put(productCode, productName);
+            }
+        }
+    }
 
     public static void updateIndicator() {
         mainPanelOnCenter.setLayout(new BorderLayout());

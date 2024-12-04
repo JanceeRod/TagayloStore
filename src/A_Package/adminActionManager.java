@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static A_Package.adminOperations.panelFinisher;
+import static T_Package.TransactionManager.getPurchases;
+
 public class adminActionManager extends adminDefinitions {
 
     public static class viewTransaction implements ActionListener {
@@ -33,6 +36,7 @@ public class adminActionManager extends adminDefinitions {
             System.out.println("This is purchase no: " + transactionID);
 
             orderPaneCen.removeAll();
+            orderPaneCen.setBorder(new EmptyBorder(20,0, 20,0));
 
             SpringLayout layout = new SpringLayout();
             orderPaneCen.setLayout(layout);
@@ -56,56 +60,164 @@ public class adminActionManager extends adminDefinitions {
                 return;
             }
 
-            JLabel transactionIDLabel = new JLabel("Transaction ID: " + transactionID);
-            transactionIDLabel.setFont(font.getProductNameBOLD());
+            JLabel transactionIDLabel = new JLabel("Transaction ID:");
+            transactionIDLabel.setFont(font.getProductNameREGULAR());
 
-            JLabel customerLabel = new JLabel("Customer: ");
-            customerLabel.setFont(font.getProductNameBOLD());
+            JLabel transactionIDValue = new JLabel(transactionID);
+            transactionIDValue.setFont(font.getProductNameBOLD());
 
-            JLabel dateAndTimeLabel = new JLabel("Date & Time: ");
-            dateAndTimeLabel.setFont(font.getProductNameBOLD());
+            JLabel customerLabel = new JLabel("Customer:");
+            customerLabel.setFont(font.getProductNameREGULAR());
 
-            JLabel totalAmountLabel = new JLabel("Grand Total: PHP ");
-            totalAmountLabel.setFont(font.getProductNameBOLD());
+            JLabel customerValue = new JLabel(manager.getCustomerName(transactionID));
+            customerValue.setFont(font.getProductNameBOLD());
 
-            JLabel cashAmountLabel = new JLabel("Amount in Cash: PHP ");
-            cashAmountLabel.setFont(font.getProductNameBOLD());
+            JLabel dateTimeLabel = new JLabel("Date & Time:");
+            dateTimeLabel.setFont(font.getProductNameREGULAR());
 
-            JLabel changeLabel = new JLabel("Change: PHP ");
-            changeLabel.setFont(font.getProductNameBOLD());
+            JLabel dateTimeLabelValue = new JLabel(manager.getPurchaseDate(transactionID));
+            dateTimeLabelValue.setFont(font.getProductNameBOLD());
 
             JLabel purchasesLabel = new JLabel("Purchases:");
             purchasesLabel.setFont(font.getProductNameREGULAR());
 
             orderPaneCen.add(transactionIDLabel);
+            orderPaneCen.add(transactionIDValue);
             orderPaneCen.add(customerLabel);
-            orderPaneCen.add(dateAndTimeLabel);
-            orderPaneCen.add(totalAmountLabel);
-            orderPaneCen.add(cashAmountLabel);
-            orderPaneCen.add(changeLabel);
+            orderPaneCen.add(customerValue);
+            orderPaneCen.add(dateTimeLabel);
+            orderPaneCen.add(dateTimeLabelValue);
             orderPaneCen.add(purchasesLabel);
 
 
-            layout.putConstraint(SpringLayout.NORTH, transactionIDLabel, 20, SpringLayout.NORTH, orderPaneCen);
+            // Transaction ID
             layout.putConstraint(SpringLayout.WEST, transactionIDLabel, 20, SpringLayout.WEST, orderPaneCen);
+            layout.putConstraint(SpringLayout.NORTH, transactionIDLabel, 10, SpringLayout.NORTH, orderPaneCen);
+            layout.putConstraint(SpringLayout.EAST, transactionIDValue, -25, SpringLayout.EAST, orderPaneCen); // Right-aligned
+            layout.putConstraint(SpringLayout.NORTH, transactionIDValue, 10, SpringLayout.NORTH, orderPaneCen);
 
-            layout.putConstraint(SpringLayout.NORTH, customerLabel, 10, SpringLayout.SOUTH, transactionIDLabel);
+            // Customer
             layout.putConstraint(SpringLayout.WEST, customerLabel, 20, SpringLayout.WEST, orderPaneCen);
+            layout.putConstraint(SpringLayout.NORTH, customerLabel, 10, SpringLayout.SOUTH, transactionIDLabel);
+            layout.putConstraint(SpringLayout.EAST, customerValue, -25, SpringLayout.EAST, orderPaneCen); // Right-aligned
+            layout.putConstraint(SpringLayout.NORTH, customerValue, 10, SpringLayout.SOUTH, transactionIDValue);
 
-            layout.putConstraint(SpringLayout.NORTH, dateAndTimeLabel, 10, SpringLayout.SOUTH, customerLabel);
-            layout.putConstraint(SpringLayout.WEST, dateAndTimeLabel, 20, SpringLayout.WEST, orderPaneCen);
+            // Date & Time
+            layout.putConstraint(SpringLayout.WEST, dateTimeLabel, 20, SpringLayout.WEST, orderPaneCen);
+            layout.putConstraint(SpringLayout.NORTH, dateTimeLabel, 10, SpringLayout.SOUTH, customerLabel);
+            layout.putConstraint(SpringLayout.EAST, dateTimeLabelValue, -25, SpringLayout.EAST, orderPaneCen); // Right-aligned
+            layout.putConstraint(SpringLayout.NORTH, dateTimeLabelValue, 10, SpringLayout.SOUTH, customerValue);
 
-            layout.putConstraint(SpringLayout.NORTH, totalAmountLabel, 10, SpringLayout.SOUTH, dateAndTimeLabel);
-            layout.putConstraint(SpringLayout.WEST, totalAmountLabel, 20, SpringLayout.WEST, orderPaneCen);
-
-            layout.putConstraint(SpringLayout.NORTH, cashAmountLabel, 10, SpringLayout.SOUTH, totalAmountLabel);
-            layout.putConstraint(SpringLayout.WEST, cashAmountLabel, 20, SpringLayout.WEST, orderPaneCen);
-
-            layout.putConstraint(SpringLayout.NORTH, changeLabel, 10, SpringLayout.SOUTH, cashAmountLabel);
-            layout.putConstraint(SpringLayout.WEST, changeLabel, 20, SpringLayout.WEST, orderPaneCen);
-
-            layout.putConstraint(SpringLayout.NORTH, purchasesLabel, 20, SpringLayout.SOUTH, changeLabel);
+            // Purchases
             layout.putConstraint(SpringLayout.WEST, purchasesLabel, 20, SpringLayout.WEST, orderPaneCen);
+            layout.putConstraint(SpringLayout.NORTH, purchasesLabel, 20, SpringLayout.SOUTH, dateTimeLabel);
+
+
+            Map<String, Integer> purchasesForTransactionPreview = getPurchases(manager.getPurchaseID(transactionID));
+
+            int yOffset = 120;  // Adjust if necessary
+
+            for (Map.Entry<String, Integer> entry : purchasesForTransactionPreview.entrySet()) {
+                String productKey = entry.getKey();
+                Integer quantity = entry.getValue();
+
+                double price = productPrices.getOrDefault(productKey, 0.0);
+                String productName = productNames.getOrDefault(productKey, "Unknown Product");
+
+                double totalPrice = price * quantity;
+
+                JLabel quantityLabel = new JLabel(quantity + "x");
+                quantityLabel.setFont(font.getProductNameBOLD());
+
+                JLabel productNameLabel = new JLabel(productName);
+                productNameLabel.setFont(font.getProductNameBOLD());
+                productNameLabel.setForeground(color.getHeader());
+                productNameLabel.setPreferredSize(new Dimension(180, productNameLabel.getPreferredSize().height));
+                productNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+
+                JLabel priceLabel = new JLabel("PHP " + String.format("%,.2f", totalPrice));
+                priceLabel.setFont(font.getProductNameBOLD());
+
+                orderPaneCen.add(quantityLabel);
+                orderPaneCen.add(productNameLabel);
+                orderPaneCen.add(priceLabel);
+
+                layout.putConstraint(SpringLayout.WEST, quantityLabel, 20, SpringLayout.WEST, orderPaneCen);
+                layout.putConstraint(SpringLayout.NORTH, quantityLabel, yOffset, SpringLayout.NORTH, orderPaneCen);
+
+                layout.putConstraint(SpringLayout.WEST, productNameLabel, 30, SpringLayout.EAST, quantityLabel);
+                layout.putConstraint(SpringLayout.NORTH, productNameLabel, yOffset, SpringLayout.NORTH, orderPaneCen);
+
+                layout.putConstraint(SpringLayout.EAST, priceLabel, -25, SpringLayout.EAST, orderPaneCen);
+                layout.putConstraint(SpringLayout.NORTH, priceLabel, yOffset, SpringLayout.NORTH, orderPaneCen);
+
+                yOffset += 30; // Adjust spacing between rows as needed
+            }
+
+            JLabel grandtotalLabel = new JLabel();
+            grandtotalLabel.setText("Grandtotal:");
+            grandtotalLabel.setFont(font.getProductNameREGULAR());
+
+            JLabel grandtotalValue = new JLabel();
+            grandtotalValue.setText("PHP " + String.format("%,.2f", manager.calculateGrandTotal(transactionID, productPrices))); // Replace `grandTotal` with your actual value
+            grandtotalValue.setFont(font.getProductNameBOLD());
+
+            JLabel amountInCashLabel = new JLabel();
+            amountInCashLabel.setText("Amount in Cash:");
+            amountInCashLabel.setFont(font.getProductNameREGULAR());
+
+            JLabel amountInCashValue = new JLabel();
+            amountInCashValue.setText("PHP " + String.format("%,.2f", manager.getPaidAmount(transactionID))); // Replace `amountInCash` with your actual value
+            amountInCashValue.setFont(font.getProductNameBOLD());
+
+            JLabel changeLabel = new JLabel();
+            changeLabel.setText("Change:");
+            changeLabel.setFont(font.getProductNameREGULAR());
+
+            JLabel changeValue = new JLabel();
+            changeValue.setText("PHP " + String.format("%,.2f", (manager.getPaidAmount(transactionID) - manager.calculateGrandTotal(transactionID, productPrices)))); // Replace `change` with your actual value
+            changeValue.setFont(font.getProductNameBOLD());
+
+            JLabel endOfPurchasesLabel = new JLabel("-- End of Purchase --");
+            endOfPurchasesLabel.setFont(font.getProductNameBOLD());
+            endOfPurchasesLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+            orderPaneCen.add(grandtotalLabel);
+            orderPaneCen.add(grandtotalValue);
+            orderPaneCen.add(amountInCashLabel);
+            orderPaneCen.add(amountInCashValue);
+            orderPaneCen.add(changeLabel);
+            orderPaneCen.add(changeValue);
+            orderPaneCen.add(endOfPurchasesLabel);
+
+            // Layout constraints for summary section
+
+            int verticalSpacing = 20; // Spacing between summary rows
+            int rightMargin = 25;     // Right-side margin for alignment
+
+            // Grandtotal alignment
+            layout.putConstraint(SpringLayout.EAST, grandtotalValue, -rightMargin, SpringLayout.EAST, orderPaneCen);
+            layout.putConstraint(SpringLayout.NORTH, grandtotalValue, yOffset + verticalSpacing, SpringLayout.NORTH, orderPaneCen);
+
+            layout.putConstraint(SpringLayout.EAST, grandtotalLabel, -10, SpringLayout.WEST, grandtotalValue);
+            layout.putConstraint(SpringLayout.NORTH, grandtotalLabel, yOffset + verticalSpacing, SpringLayout.NORTH, orderPaneCen);
+
+            // Amount in Cash alignment
+            layout.putConstraint(SpringLayout.EAST, amountInCashValue, -rightMargin, SpringLayout.EAST, orderPaneCen);
+            layout.putConstraint(SpringLayout.NORTH, amountInCashValue, yOffset + verticalSpacing * 2, SpringLayout.NORTH, orderPaneCen);
+
+            layout.putConstraint(SpringLayout.EAST, amountInCashLabel, -10, SpringLayout.WEST, amountInCashValue);
+            layout.putConstraint(SpringLayout.NORTH, amountInCashLabel, yOffset + verticalSpacing * 2, SpringLayout.NORTH, orderPaneCen);
+
+            // Change alignment
+            layout.putConstraint(SpringLayout.EAST, changeValue, -rightMargin, SpringLayout.EAST, orderPaneCen);
+            layout.putConstraint(SpringLayout.NORTH, changeValue, yOffset + verticalSpacing * 3, SpringLayout.NORTH, orderPaneCen);
+
+            layout.putConstraint(SpringLayout.EAST, changeLabel, -10, SpringLayout.WEST, changeValue);
+            layout.putConstraint(SpringLayout.NORTH, changeLabel, yOffset + verticalSpacing * 3, SpringLayout.NORTH, orderPaneCen);
+
+            layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, endOfPurchasesLabel, 0, SpringLayout.HORIZONTAL_CENTER, orderPaneCen);
+            layout.putConstraint(SpringLayout.NORTH, endOfPurchasesLabel, yOffset + verticalSpacing * 5, SpringLayout.NORTH, orderPaneCen);
 
             orderPaneCen.revalidate();
             orderPaneCen.repaint();

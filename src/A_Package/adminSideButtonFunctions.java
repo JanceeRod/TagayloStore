@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.DecimalFormat;
 
+import static A_Package.adminOperations.panelFinisher;
 import static javax.swing.SwingConstants.CENTER;
 
 public class adminSideButtonFunctions extends adminDefinitions {
@@ -20,7 +21,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
         adminOperations.updateIndicator("Oten");
 
         centerPanelMainLayer.setBackground(Color.BLUE);
-        adminOperations.panelFinisher(centerContainerPanelUp);
+        panelFinisher(centerContainerPanelUp);
     }
 
     public static void transactionHistoryButtonToggle() {
@@ -28,7 +29,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
         mainPanelOnCenter.removeAll();
         orderPaneCen.removeAll();
 
-        orderPaneLabel.setText("VIEW TRANSACTION");
+        orderPaneLabel.setText("TRANSACTION DETAILS");
 
         centerPanelMainLayer.setBackground(color.getCenterPiece());
         mainPanelOnCenter.setBackground(color.getCenterPane());
@@ -139,7 +140,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
 
         perOrderButtons[0].doClick();
 
-        adminOperations.panelFinisher(centerContainerPanelUp);
+        panelFinisher(centerContainerPanelUp);
     }
 
     public static void salesButtonToggle() {
@@ -205,8 +206,8 @@ public class adminSideButtonFunctions extends adminDefinitions {
 //        new salesBarChart(mainPanelOnCenter);
 //        salesBarChart.displaySalesChart();
 
-        adminOperations.panelFinisher(orderPaneCen);
-        adminOperations.panelFinisher(centerContainerPanelUp);
+        panelFinisher(orderPaneCen);
+        panelFinisher(centerContainerPanelUp);
     }
 
     public static void inventoryButtonToggle() {
@@ -223,8 +224,8 @@ public class adminSideButtonFunctions extends adminDefinitions {
 
         System.out.println("This is inventory?????");
 
-        adminOperations.panelFinisher(orderPaneCen);
-        adminOperations.panelFinisher(centerContainerPanelUp);
+        panelFinisher(orderPaneCen);
+        panelFinisher(centerContainerPanelUp);
     }
 
     public static void categoriesButtonToggle() {
@@ -234,6 +235,6 @@ public class adminSideButtonFunctions extends adminDefinitions {
         adminOperations.updateIndicator("hahaha");
 
         centerPanelMainLayer.setBackground(Color.ORANGE);
-        adminOperations.panelFinisher(centerContainerPanelUp);
+        panelFinisher(centerContainerPanelUp);
     }
 }

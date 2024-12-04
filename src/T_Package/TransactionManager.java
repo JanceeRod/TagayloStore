@@ -15,6 +15,8 @@ public class TransactionManager {
     public TransactionManager(String CSVFilePath) {
         transactionMap = new TreeMap<>(Comparator.reverseOrder());
         loadTransactions(CSVFilePath);
+
+//        printTransactionMap();
     }
 
     public void loadTransactions(String transactionHistoryFile) {
@@ -22,11 +24,11 @@ public class TransactionManager {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("TransactionId")) {
-                    continue;  // Skip header line
+                    continue;
                 }
 
                 String[] parts = line.split(",");
-                System.out.println("Processing line: " + line);  // Debugging line
+                System.out.println("Processing line: " + line);
 
                 if (parts.length != 5) {
                     System.out.println("Warning: Malformed line, expected 5 columns, found " + parts.length + " columns: " + line);
@@ -42,20 +44,18 @@ public class TransactionManager {
                     cashAmount = Double.parseDouble(parts[3].trim());
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid cash amount in line: " + line);
-                    continue;  // Skip this line if cash amount is invalid
+                    continue;
                 }
                 String customer = parts[4];
 
-                // Parse LocalDateTime from the dateTime string
                 LocalDateTime localDateTime = null;
                 try {
                     localDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 } catch (Exception e) {
                     System.err.println("Invalid DateTime format in line: " + line);
-                    continue;  // Skip this line if DateTime is invalid
+                    continue;
                 }
 
-                // Create a new transaction
                 Transaction transaction = new Transaction();
                 transaction.setTransactionId(transactionId);
                 transaction.setDateTime(localDateTime);
@@ -63,9 +63,8 @@ public class TransactionManager {
                 transaction.setCustomer(customer);
                 transaction.setPurchaseId(purchaseId);
 
-                // Add the transaction to the TreeMap, using LocalDateTime as the key
-                transactionMap.put(String.valueOf(localDateTime), transaction);
-                System.out.println("Transaction added to map: " + transactionId);  // Debugging line
+                transactionMap.put(transactionId, transaction);
+//                System.out.println("Transaction added to map: " + transactionId);
             }
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
@@ -73,6 +72,20 @@ public class TransactionManager {
         }
     }
 
+    public void printTransactionMap() {
+        TreeMap<String, Transaction> sortedMap = new TreeMap<>((a, b) -> b.compareTo(a));
+        sortedMap.putAll(transactionMap);
+
+        for (Map.Entry<String, Transaction> entry : sortedMap.entrySet()) {
+            Transaction transaction = entry.getValue();
+            System.out.println("Transaction ID: " + entry.getKey());
+            System.out.println("Date & Time: " + transaction.getDateTime());
+            System.out.println("Customer: " + transaction.getCustomer());
+            System.out.println("Purchase ID: " + transaction.getPurchaseId());
+            System.out.println("Amount: " + transaction.getCashAmount());
+            System.out.println("---------------------------------------------------");
+        }
+    }
 
 
     public double calculateGrandTotal(String transactionID, Map<String, Double> productPrices) {
@@ -97,7 +110,7 @@ public class TransactionManager {
     }
 
 
-    public Map<String, Integer> getPurchases(String purchaseId) {
+    public static Map<String, Integer> getPurchases(String purchaseId) {
         Map<String, Integer> purchases = new HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader("transactionPurchases.csv"))) {
@@ -135,11 +148,7 @@ public class TransactionManager {
     }
 
     public int getTransactionCount() {
-        int size = transactionMap.size();
-
-        System.out.println("Transaction Size: " + size);
-
-        return size;
+        return transactionMap.size();
     }
 
     public String getTransactionIDByIndex(int index) {

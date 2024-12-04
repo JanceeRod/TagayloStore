@@ -83,7 +83,7 @@ public class adminDefinitions {
 
     //RIGHT PANEL
     //Panel
-    JPanel rightRibbonPanel;
+    static JPanel rightRibbonPanel;
     static JPanel orderPaneCen;
     JPanel orderPaneTop;
     JPanel orderPaneBot;
@@ -102,7 +102,7 @@ public class adminDefinitions {
     static JButton proceedButton;
 
     //Extras
-
+    static JScrollPane scrollPane;
     customScrollBarUI scrollBarForCart;
 
 
@@ -125,8 +125,6 @@ public class adminDefinitions {
 
     //Extras
 
-
-
     //BOOLEAN
     static boolean T = true;
     static boolean F = false;
@@ -143,6 +141,7 @@ public class adminDefinitions {
     public static List<String[]> searchResults = new ArrayList<>();
     public static List<Map<String, Integer>> parsedProducts;
     public static Map<String, Double> productPrices = new HashMap<>();
+    public static Map<String, String> productNames = new HashMap<>();
 
 
     //files

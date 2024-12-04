@@ -71,7 +71,9 @@ public class adminInterface extends adminDefinitions {
         globalInventory = saveToDataArray(masterfile);
 
         processArrayToHashMap(globalInventory, cafeInventory);
+
         extractProductPrices(globalInventory, productPrices);
+        extractProductNames(globalInventory, productNames);
 
         manager = new TransactionManager("transactionHistory.csv");
     }
@@ -226,13 +228,20 @@ public class adminInterface extends adminDefinitions {
         scrollBarForCart = new customScrollBarUI();
         scrollBarForCart.setCustomUI(color.getLeftSide(), Color.LIGHT_GRAY, centerPaneOnRightPanel.getBackground());
 
+        scrollPane = new JScrollPane(centerPaneOnRightPanel);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUI(scrollBarForCart);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
         orderPaneTitleTab.add(orderPaneLabel);
         orderPaneTop.add(orderPaneTitleTab);
 
-        rightRibbonPanel.add(orderPaneTop, BorderLayout.NORTH);
-//        rightRibbonPanel.add(orderPaneBot, BorderLayout.SOUTH);
-        rightRibbonPanel.add(orderPaneCen, BorderLayout.CENTER);
+        orderPaneCen.add(scrollPane);
 
+        rightRibbonPanel.add(orderPaneTop, BorderLayout.NORTH);
+        rightRibbonPanel.add(orderPaneCen, BorderLayout.CENTER);
+        rightRibbonPanel.setVisible(T);
     }
 
     public void centerPanel() {
