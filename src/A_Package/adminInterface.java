@@ -14,6 +14,7 @@ import G_Package.customPopupMenu;
 import G_Package.customScrollBarUI;
 import G_Package.customSwingCreate;
 
+import L_Package.logMain;
 import M_Package.Operations;
 
 import static javax.swing.SwingConstants.CENTER;
@@ -129,7 +130,8 @@ public class adminInterface extends adminDefinitions {
                     System.out.println("Program is closing. Do cleanup or save data if needed.");
                     JOptionPane.showMessageDialog(mainFrame, "Logged out");
                     mainFrame.dispose();
-                    System.exit(0);
+//                    System.exit(0);
+                    new logMain();
                 });
 //        profileButtonPop.addMenuItem("Help", e -> JOptionPane.showMessageDialog(mainFrame, "Help"));
 

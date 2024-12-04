@@ -17,6 +17,7 @@ import javax.swing.event.DocumentListener;
 
 import G_Package.*;
 
+import L_Package.logMain;
 import P_Package.paymentWindow;
 
 public class userInterface extends Definitions {
@@ -107,7 +108,8 @@ public class userInterface extends Definitions {
 					Operations.clearCSVFile(masterfile);
 					JOptionPane.showMessageDialog(mainFrame, "Logged out");
 					mainFrame.dispose();
-					System.exit(0);
+//					System.exit(0);
+					new logMain();
 				});
 
 		profileButtonPop.addMenuItem("Help", e -> JOptionPane.showMessageDialog(mainFrame, "Help"));
