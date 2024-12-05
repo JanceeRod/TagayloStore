@@ -2,7 +2,6 @@ package A_Package;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -65,12 +64,14 @@ public class adminInterface extends adminDefinitions {
     public void instantiate() {
         clearCSVFile(inventory);
 
-        categoryDataMap = convertCategoriesToArrays(categories);
+        inventoryCategoryDataMap = convertCategoriesToArrays(categories);
 
-        writeAllArraysToMasterFile(categoryDataMap, masterfile);
+        writeAllArraysToMasterFile(inventoryCategoryDataMap, masterfile);
         globalInventory = saveToDataArray(masterfile);
 
         processArrayToHashMap(globalInventory, cafeInventory);
+
+        writeAllArraysToMasterFile(inventoryCategoryDataMap, masterfile);
 
         extractProductPrices(globalInventory, productPrices);
         extractProductNames(globalInventory, productNames);
@@ -166,7 +167,7 @@ public class adminInterface extends adminDefinitions {
         leftRibbonPanel = customSwingCreate.createCustomPanel(85, 670, color.getLeftSide(), null);
         leftRibbonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
 
-        sideRibbonLabels = new String[]{"Home", "Orders", "Sales", "Inventory", "Categories"};
+        sideRibbonLabels = new String[]{"Inventory", "Orders", "Sales"};
         sideRibbonRoundedPanels = new customRoundedPanel[sideRibbonLabels.length];
         sideRibbonButtons = new JButton[sideRibbonLabels.length];
         label2_ = new JLabel[sideRibbonLabels.length];

@@ -5,9 +5,13 @@ import G_Package.customScrollBarUI;
 import G_Package.customSwingCreate;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.Map;
+import java.util.Set;
 
+import static A_Package.adminOperations.getJTextField;
 import static A_Package.adminOperations.panelFinisher;
 import static javax.swing.SwingConstants.CENTER;
 
@@ -16,6 +20,9 @@ public class adminSideButtonFunctions extends adminDefinitions {
     public static void homeButtonToggle() {
         centerPanelMainLayer.removeAll();
         mainPanelOnCenter.removeAll();
+
+        mainPanelOnCenter.setBackground(color.getCenterPane());
+
         orderPaneCen.removeAll();
 
         adminOperations.updateIndicator("Oten");
@@ -32,10 +39,12 @@ public class adminSideButtonFunctions extends adminDefinitions {
         orderPaneLabel.setText("TRANSACTION DETAILS");
 
         centerPanelMainLayer.setBackground(color.getCenterPiece());
+        centerPanelMainLayer.setLayout(new BorderLayout());
+
         mainPanelOnCenter.setBackground(color.getCenterPane());
 
         JLabel title = customSwingCreate.createCustomLabel("TRANSACTION HISTORY", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
-        centerPanelMainLayer.add(title);
+        centerPanelMainLayer.add(title, BorderLayout.CENTER);
 
         int size = manager.getTransactionCount();
         int orderWidth = centerPanelMainLayer.getWidth();
@@ -148,13 +157,14 @@ public class adminSideButtonFunctions extends adminDefinitions {
         mainPanelOnCenter.removeAll();
         orderPaneCen.removeAll();
 
+        mainPanelOnCenter.setBackground(Color.RED);
+
         orderPaneLabel.setText("QUICK ACTIONS");
 
         JLabel title = customSwingCreate.createCustomLabel("SALES", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
         centerPanelMainLayer.add(title);
 
         centerPanelMainLayer.setBackground(color.getCenterPiece());
-        mainPanelOnCenter.setBackground(Color.RED);
 
         int size = manager.getTransactionCount();
         int orderWidth = centerPanelMainLayer.getWidth();
@@ -165,8 +175,6 @@ public class adminSideButtonFunctions extends adminDefinitions {
         mainPanelOnCenters.setBackground(mainPanelOnCenter.getBackground());
         mainPanelOnCenters.setLayout(SL);
         mainPanelOnCenters.setPreferredSize(new Dimension(orderWidth, size * (orderHeight + 10)));
-
-        System.out.println("This is sales?????");
 
         customRoundedPanel[] salesChartPanels = new customRoundedPanel[4];
 
@@ -215,26 +223,54 @@ public class adminSideButtonFunctions extends adminDefinitions {
         mainPanelOnCenter.removeAll();
         orderPaneCen.removeAll();
 
-        orderPaneLabel.setText("QUICK ACTIONS");
+        mainPanelOnCenter.setBackground(color.getCenterPane());
 
-        centerPanelMainLayer.setBackground(color.getCenterPiece());
+        centerPanelMainLayer.setBackground(color.getLeftSide());
+        centerPanelMainLayer.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        centerPanelMainLayer.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 0));
 
-        JLabel title = customSwingCreate.createCustomLabel("INVENTORY MANAGER", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
-        centerPanelMainLayer.add(title);
+        int[] arrayLengths = new int[inventoryCategoryDataMap.size()];
+        int i = 0;
+        for (Map.Entry<String, String[][]> entry : inventoryCategoryDataMap.entrySet()) {
+            String[][] array2D = entry.getValue();
 
-        System.out.println("This is inventory?????");
+            int length = array2D.length;
+            arrayLengths[i] = length;
+            i++;
+        }
 
+        int size = inventoryCategoryDataMap.size();
+        inventoryTabsButtons = new JButton[size];
+        pillShapeButtonTabs = new customRoundedPanel[size];
+        pillShapeButtonTabsLabel = new JLabel[size];
+        for (int j = 0; j < inventoryTabsButtons.length; j++) {
+            inventoryTabsButtons[j] = new JButton();
+            inventoryTabsButtons[j].setBackground(centerPanelMainLayer.getBackground());
+            inventoryTabsButtons[j].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            inventoryTabsButtons[j].setEnabled(T);
+            inventoryTabsButtons[j].setFocusPainted(F);
+            inventoryTabsButtons[j].setPreferredSize(new Dimension(105, 34));
+            inventoryTabsButtons[j].addActionListener(new adminActionManager.inventoryTable(j, arrayLengths[j]));
+
+            pillShapeButtonTabs[j] = new customRoundedPanel(25);
+            pillShapeButtonTabs[j].setLayout(new GridLayout(1,1));
+            inventoryTabsButtons[j].add(pillShapeButtonTabs[j]);
+
+            pillShapeButtonTabsLabel[j] = new JLabel();
+            Set<String> arrayNames = inventoryCategoryDataMap.keySet();
+            if (j < arrayNames.size()) {
+                String arrayName = (String) arrayNames.toArray()[j];
+                pillShapeButtonTabsLabel[j].setText(arrayName);
+            }
+            pillShapeButtonTabsLabel[j].setHorizontalAlignment(CENTER);
+            pillShapeButtonTabsLabel[j].setFont(font.getProductNameREGULAR());
+            pillShapeButtonTabsLabel[j].setForeground(Color.GRAY);
+
+            pillShapeButtonTabs[j].add(pillShapeButtonTabsLabel[j]);
+
+            centerPanelMainLayer.add(inventoryTabsButtons[j]);
+        }
         panelFinisher(orderPaneCen);
-        panelFinisher(centerContainerPanelUp);
-    }
-
-    public static void categoriesButtonToggle() {
-        centerPanelMainLayer.removeAll();
-        mainPanelOnCenter.removeAll();
-
-        adminOperations.updateIndicator("hahaha");
-
-        centerPanelMainLayer.setBackground(Color.ORANGE);
         panelFinisher(centerContainerPanelUp);
     }
 }
