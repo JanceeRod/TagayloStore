@@ -10,8 +10,14 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +25,6 @@ import java.util.Map;
 import static A_Package.adminOperations.getJTextField;
 import static A_Package.adminOperations.panelFinisher;
 import static C_Package.manageCategories.addProductToCategory;
-import static C_Package.manageCategories.removeProductFromCategory;
 import static T_Package.TransactionManager.getPurchases;
 import static javax.swing.SwingConstants.CENTER;
 
@@ -40,26 +45,21 @@ public class adminActionManager extends adminDefinitions {
         public void actionPerformed(ActionEvent e) {
             System.out.println("Remove Product button clicked.");
 
-            // Retrieve the product code from the text field
             String productCode = forProductCodeTextBox.getText().trim();
 
-            // Check if the product code is empty
             if (productCode.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Product code cannot be empty!", "Input Error", JOptionPane.ERROR_MESSAGE);
-                return; // Exit if no product code is entered
+                return;
             }
 
-            // Remove the product from the category using the removeProductFromCategory method
             boolean isRemoved = removeProductFromCategory(inventoryCategoryDataMap, category, productCode);
 
-            // Check if the product was successfully removed and show a corresponding message
             if (isRemoved) {
                 JOptionPane.showMessageDialog(null, "Product has been removed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Product with the specified code does not exist!", "Removal Error", JOptionPane.ERROR_MESSAGE);
             }
 
-            // Refresh the inventory table or data display
             String[][] categoryData = inventoryCategoryDataMap.get(category);
             if (categoryData != null) {
                 inventoryTable.tableModifier(category, categoryData);
@@ -68,39 +68,35 @@ public class adminActionManager extends adminDefinitions {
                 System.out.println("No data found for category: " + category);
             }
 
-            // Optionally, clear the text field after removal
             forProductCodeTextBox.setText("");
         }
 
         public static boolean removeProductFromCategory(Map<String, String[][]> inventoryCategoryDataMap, String category, String productCode) {
             if (!inventoryCategoryDataMap.containsKey(category)) {
                 System.out.println("Category " + category + " does not exist.");
-                return false; // Category doesn't exist
+                return false;
             }
 
             String[][] currentData = inventoryCategoryDataMap.get(category);
             for (int i = 0; i < currentData.length; i++) {
-                if (currentData[i][0].equals(productCode)) { // Assuming product code is in the first index
-                    // Create a new array excluding the product to be removed
+                if (currentData[i][0].equals(productCode)) {
                     String[][] updatedData = new String[currentData.length - 1][];
                     for (int j = 0, k = 0; j < currentData.length; j++) {
                         if (j != i) {
                             updatedData[k++] = currentData[j];
                         }
                     }
-                    inventoryCategoryDataMap.put(category, updatedData); // Update the map
+                    inventoryCategoryDataMap.put(category, updatedData);
                     System.out.println("Product removed from category \"" + category + "\": Code: " + productCode);
-                    return true; // Product was successfully removed
+                    return true;
                 }
             }
 
             System.out.println("Product with code " + productCode + " does not exist in category " + category);
-            return false; // Product was not found
+            return false;
         }
 
     }
-
-
 
     public static class forAddProductButton implements ActionListener {
         private String category;
@@ -122,7 +118,9 @@ public class adminActionManager extends adminDefinitions {
             String productCode = forProductCodeTextBox.getText().trim();
             String productName = forProductNameTextBox.getText().trim();
             String productPrice = forProductPriceTextBox.getText().trim();
-            String productImage = "default.png";
+            if (productImage == null || productImage.isEmpty()) {
+                productImage = "default.png";  // Use default if no image was selected
+            }
 
             if (productCode.isEmpty() || productName.isEmpty() || productPrice.isEmpty()) {
                 JOptionPane.showMessageDialog(
@@ -157,7 +155,7 @@ public class adminActionManager extends adminDefinitions {
             );
 
             System.out.println("Updated inventory:");
-            inventoryTable.printInventoryCategoryDataMap(inventoryCategoryDataMap);
+//            inventoryTable.printInventoryCategoryDataMap(inventoryCategoryDataMap);
 
             forProductCodeTextBox.setText("");
             forProductNameTextBox.setText("");
@@ -424,6 +422,7 @@ public class adminActionManager extends adminDefinitions {
             forImageFetchButton.setBorder(new EmptyBorder(0,0,0,0));
             forImageFetchButton.setBackground(color.getCenterPiece());
             forImageFetchButton.setFocusPainted(F);
+            forImageFetchButton.addActionListener(new ImageFetchActionListener());
 
             customRoundedPanel imageFetchButtonPanel = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, forImageFetchButton.getBackground(), new BorderLayout());
             imageFetchButtonPanel.setPreferredSize(productCodeTextFieldPanel.getPreferredSize());
@@ -518,6 +517,44 @@ public class adminActionManager extends adminDefinitions {
             orderPaneCen.add(forAddRemoveFeature, BorderLayout.CENTER);
 
             panelFinisher(orderPaneCen);
+        }
+    }
+
+    public static class ImageFetchActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "png"));
+            int result = fileChooser.showOpenDialog(null);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String fileName = selectedFile.getName(); // Get the file name
+                String destinationPath = "images/products/" + fileName; // Specify the destination path
+
+                try {
+                    // Create the directory if it doesn't exist
+                    File dir = new File("images/products");
+                    if (!dir.exists()) {
+                        dir.mkdirs(); // Create the directory structure
+                    }
+
+                    // Copy the file to the destination path
+                    Files.copy(selectedFile.toPath(), Paths.get(destinationPath), StandardCopyOption.REPLACE_EXISTING);
+                    productImage = fileName; // Store the file name for later use
+                    System.out.println("Image selected and copied: " + productImage);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Error copying the image file.",
+                            "File Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            } else {
+                System.out.println("No image selected. Default image will be used.");
+            }
         }
     }
 

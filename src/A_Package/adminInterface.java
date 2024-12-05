@@ -291,7 +291,7 @@ public class adminInterface extends adminDefinitions {
                 try {
                     LocalTime currentTime = LocalTime.now();
                     DateTimeFormatter consoleTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
-                    System.out.println("TimeLabel: " + currentTime.format(consoleTimeFormatter));
+                    System.out.println("Time: " + currentTime.format(consoleTimeFormatter));
                     Thread.sleep(60000); // Sleep for 1 minute
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();

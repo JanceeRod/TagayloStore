@@ -140,6 +140,8 @@ public class adminDefinitions {
     static customColorPallete color = new customColorPallete();
     static customFontGallery font = new customFontGallery();
 
+    static String productImage;
+
 
     //data structures
     public static LinkedHashMap<String, Integer> cafeInventory = new LinkedHashMap<>();
