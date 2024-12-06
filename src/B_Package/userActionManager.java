@@ -165,11 +165,12 @@ public class userActionManager extends userDefinitions {
 
                     int currentIndex = i;
 
-                    cancelProductPurchase[i] = new JButton();
+                    cancelProductPurchase[i] = new JButton("X");
                     cancelProductPurchase[i].setPreferredSize(new Dimension(20,20));
                     cancelProductPurchase[i].setBorder(BorderFactory.createEmptyBorder());
                     cancelProductPurchase[i].setLayout(new BorderLayout());
-                    cancelProductPurchase[i].setBackground(Color.GREEN);
+                    cancelProductPurchase[i].setContentAreaFilled(F);
+//                    cancelProductPurchase[i].setBackground(color.getCenterPane());
                     cancelProductPurchase[i].setFocusPainted(F);
                     cancelProductPurchase[i].addActionListener(new ActionListener() {
                         @Override

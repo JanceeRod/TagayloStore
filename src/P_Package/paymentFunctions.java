@@ -184,6 +184,7 @@ public class paymentFunctions extends paymentDefinitions {
 
                     // Disable the button if the change is negative, enable it otherwise
                     if (changeAmount < 0) {
+                        changeTextLabel.setText("Insufficient Amount");
                         confirmPaymentButton.setEnabled(false);
                     } else {
                         confirmPaymentButton.setEnabled(true);
