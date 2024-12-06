@@ -10,13 +10,12 @@ import java.util.*;
 import static P_Package.paymentDefinitions.customerOrders;
 
 public class TransactionManager {
-    private final Map<String, Transaction> transactionMap;
+    private static Map<String, Transaction> transactionMap = new LinkedHashMap<>();
 
     public TransactionManager(String CSVFilePath) {
-        transactionMap = new TreeMap<>(Comparator.reverseOrder());
+
         loadTransactions(CSVFilePath);
 
-//        printTransactionMap();
     }
 
     public void loadTransactions(String transactionHistoryFile) {
@@ -63,13 +62,30 @@ public class TransactionManager {
                 transaction.setCustomer(customer);
                 transaction.setPurchaseId(purchaseId);
 
-                transactionMap.put(transactionId, transaction);
-//                System.out.println("Transaction added to map: " + transactionId);
+                transactionMap.put(transactionId, transaction); // This will now work as the map is mutable
+
+                reverseTransactionMapOrder();
+
             }
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private void reverseTransactionMapOrder() {
+        Map<String, Transaction> reversedMap = new LinkedHashMap<>();
+        List<Map.Entry<String, Transaction>> entries = new ArrayList<>(transactionMap.entrySet());
+
+        // Add entries to the reversed map in reverse order
+        Collections.reverse(entries);
+
+        for (Map.Entry<String, Transaction> entry : entries) {
+            reversedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        // Now assign the reversed map back to the transactionMap
+        transactionMap = reversedMap;
     }
 
     public void printTransactionMap() {
@@ -88,7 +104,7 @@ public class TransactionManager {
     }
 
 
-    public double calculateGrandTotal(String transactionID, Map<String, Double> productPrices) {
+    public static double calculateGrandTotal(String transactionID, Map<String, Double> productPrices) {
         Transaction transaction = transactionMap.get(transactionID);
         if (transaction == null) {
             throw new IllegalArgumentException("Transaction ID not found.");

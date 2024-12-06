@@ -2,7 +2,6 @@ package A_Package;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -65,9 +64,9 @@ public class adminInterface extends adminDefinitions {
     public void instantiate() {
         clearCSVFile(inventory);
 
-        categoryDataMap = convertCategoriesToArrays(categories);
+        inventoryCategoryDataMap = convertCategoriesToArrays(categories);
 
-        writeAllArraysToMasterFile(categoryDataMap, masterfile);
+        writeAllArraysToMasterFile(inventoryCategoryDataMap, masterfile);
         globalInventory = saveToDataArray(masterfile);
 
         processArrayToHashMap(globalInventory, cafeInventory);
@@ -176,10 +175,12 @@ public class adminInterface extends adminDefinitions {
         leftRibbonPanel = customSwingCreate.createCustomPanel(85, 670, color.getLeftSide(), null);
         leftRibbonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
 
-        sideRibbonLabels = new String[]{"Home", "Orders", "Sales", "Inventory", "Categories"};
+        sideRibbonLabels = new String[]{"Inventory", "Orders", "Sales"};
         sideRibbonRoundedPanels = new customRoundedPanel[sideRibbonLabels.length];
         sideRibbonButtons = new JButton[sideRibbonLabels.length];
         label2_ = new JLabel[sideRibbonLabels.length];
+
+        String[] imagesNames = {"inventory.png", "orders.png", "sales.png"};
 
         for (int i = 0; i < sideRibbonButtons.length; i++) {
             sideRibbonButtons[i] = new JButton();
@@ -193,6 +194,45 @@ public class adminInterface extends adminDefinitions {
             sideRibbonRoundedPanels[i] = new customRoundedPanel(20);
             sideRibbonRoundedPanels[i].setBackground(Color.PINK);
             sideRibbonRoundedPanels[i].setBorder(BorderFactory.createEmptyBorder());
+            sideRibbonRoundedPanels[i].setLayout(new BorderLayout());
+
+            // Load and resize the image to fit the panel's dimensions
+            ImageIcon originalIcon = new ImageIcon("images/ui/" + imagesNames[i]);
+            Image originalImage = originalIcon.getImage();
+
+            // Assuming the panel has fixed dimensions (e.g., width = 100, height = 100)
+            int panelWidth = 55;  // Replace with the actual width of your panel
+            int panelHeight = 45; // Replace with the actual height of your panel
+
+            // Calculate scaled dimensions while maintaining aspect ratio
+            double imageWidth = originalImage.getWidth(null);
+            double imageHeight = originalImage.getHeight(null);
+
+            double panelAspectRatio = (double) panelWidth / panelHeight;
+            double imageAspectRatio = imageWidth / imageHeight;
+
+            int newWidth, newHeight;
+
+            if (panelAspectRatio > imageAspectRatio) {
+                // Panel is wider than the image, fit by height
+                newHeight = panelHeight;
+                newWidth = (int) (imageAspectRatio * newHeight);
+            } else {
+                // Panel is taller than the image, fit by width
+                newWidth = panelWidth;
+                newHeight = (int) (newWidth / imageAspectRatio);
+            }
+
+            // Scale the image
+            Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+            JLabel imageLabel = new JLabel(resizedIcon);
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+            sideRibbonRoundedPanels[i].add(imageLabel, BorderLayout.CENTER);
+
 
             label2_[i] = new JLabel();
             label2_[i].setText(sideRibbonLabels[i]);
@@ -300,7 +340,7 @@ public class adminInterface extends adminDefinitions {
                 try {
                     LocalTime currentTime = LocalTime.now();
                     DateTimeFormatter consoleTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss a");
-                    System.out.println("TimeLabel: " + currentTime.format(consoleTimeFormatter));
+                    System.out.println("Time: " + currentTime.format(consoleTimeFormatter));
                     Thread.sleep(60000); // Sleep for 1 minute
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();

@@ -24,12 +24,12 @@ public class adminDefinitions {
     static String formattedDefaultNo  = String.format("%.2f", defaultNo);
 
     public static customRoundedPanel[] mainPanelOnCenter_;
-    public static customRoundedPanel[] pillShape;
+    public static customRoundedPanel[] pillShapeButtonTabs;
 
     public static JLabel[] quantityLabel6s;
     public static JLabel[] productName6s;
     public static JLabel[] productPrice6s;
-    public static JLabel[] pSLabel;
+    public static JLabel[] pillShapeButtonTabsLabel;
 
     //Search
     static JLabel searchResult;
@@ -89,6 +89,11 @@ public class adminDefinitions {
     JPanel orderPaneBot;
     public static JPanel centerPaneOnRightPanel;
 
+    //TextField
+    static JTextField forProductNameTextBox;
+    static JTextField forProductCodeTextBox;
+    static JTextField forProductPriceTextBox;
+
     //Rounded Panel
     customRoundedPanel orderPaneTitleTab;
     static customRoundedPanel roundedPanelForCancelButton;
@@ -98,8 +103,8 @@ public class adminDefinitions {
     static JLabel[] cartLabelsNumbers;
 
     //Button
-    static JButton cancelButton;
-    static JButton proceedButton;
+    static JButton addProductFeature;
+    static JButton removeProductFeature;
 
     //Extras
     static JScrollPane scrollPane;
@@ -122,6 +127,7 @@ public class adminDefinitions {
 
     //Button
     static JButton[] perOrderButtons;
+    static JButton[] inventoryTabsButtons;
 
     //Extras
 
@@ -131,8 +137,10 @@ public class adminDefinitions {
 
 
     //graphics
-    static customColorPallete color = new customColorPallete();
+    public static customColorPallete color = new customColorPallete();
     static customFontGallery font = new customFontGallery();
+
+    static String productImage;
 
 
     //data structures
@@ -155,7 +163,10 @@ public class adminDefinitions {
 
 
     //new files
-    static Map<String, String[][]> categoryDataMap;
+    static Map<String, String[][]> inventoryCategoryDataMap;
     static List<Category> categories = manageCategories.getCategories();
     static String[][] globalInventory;
+
+    //Layouts
+    public static SpringLayout SpringForMenu = new SpringLayout();
 }

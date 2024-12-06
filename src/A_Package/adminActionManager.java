@@ -1,24 +1,577 @@
 package A_Package;
 
+import G_Package.customColorPallete;
 import G_Package.customRoundedPanel;
 import G_Package.customScrollBarUI;
 import B_Package.userOperations;
-import T_Package.TransactionManager;
+import G_Package.customSwingCreate;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static A_Package.adminOperations.getJTextField;
 import static A_Package.adminOperations.panelFinisher;
+import static C_Package.manageCategories.addProductToCategory;
+import static C_Package.manageCategories.saveInventoryToCSV;
 import static T_Package.TransactionManager.getPurchases;
+import static javax.swing.SwingConstants.CENTER;
 
 public class adminActionManager extends adminDefinitions {
+
+    public static class forRemoveProductButton implements ActionListener {
+        private String category;
+
+        public forRemoveProductButton(String category) {
+            this.setCategory(category);
+        }
+
+        private void setCategory(String category) {
+            this.category = category;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("Remove Product button clicked.");
+
+            String productCode = forProductCodeTextBox.getText().trim();
+
+            if (productCode.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Product code cannot be empty!", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            boolean isRemoved = removeProductFromCategory(inventoryCategoryDataMap, category, productCode);
+
+            if (isRemoved) {
+                JOptionPane.showMessageDialog(null, "Product has been removed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Product with the specified code does not exist!", "Removal Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            String[][] categoryData = inventoryCategoryDataMap.get(category);
+            if (categoryData != null) {
+                inventoryTable.tableModifier(category, categoryData);
+                System.out.println("Table updated for category: " + category);
+            } else {
+                System.out.println("No data found for category: " + category);
+            }
+
+            forProductCodeTextBox.setText("");
+
+            saveInventoryToCSV(inventoryCategoryDataMap);
+        }
+
+        public static boolean removeProductFromCategory(Map<String, String[][]> inventoryCategoryDataMap, String category, String productCode) {
+            if (!inventoryCategoryDataMap.containsKey(category)) {
+                System.out.println("Category " + category + " does not exist.");
+                return false;
+            }
+
+            String[][] currentData = inventoryCategoryDataMap.get(category);
+            for (int i = 0; i < currentData.length; i++) {
+                if (currentData[i][0].equals(productCode)) {
+                    String[][] updatedData = new String[currentData.length - 1][];
+                    for (int j = 0, k = 0; j < currentData.length; j++) {
+                        if (j != i) {
+                            updatedData[k++] = currentData[j];
+                        }
+                    }
+                    inventoryCategoryDataMap.put(category, updatedData);
+                    System.out.println("Product removed from category \"" + category + "\": Code: " + productCode);
+                    return true;
+                }
+            }
+
+            System.out.println("Product with code " + productCode + " does not exist in category " + category);
+            return false;
+        }
+
+    }
+
+    public static class forAddProductButton implements ActionListener {
+        private String category;
+
+        public forAddProductButton(String category) {
+            this.setCategory(category);
+        }
+
+        private void setCategory(String category) {
+            this.category = category;
+        }
+
+        String[] newProduct;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("Add Product button clicked.");
+
+            String productCode = forProductCodeTextBox.getText().trim();
+            String productName = forProductNameTextBox.getText().trim();
+            String productPrice = forProductPriceTextBox.getText().trim();
+
+            if (productCode.isEmpty() || productName.isEmpty() || productPrice.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "All fields must be filled out before adding the product!",
+                        "Input Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            if (isProductExist(productName, productCode)) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "A product with this code or name already exists!",
+                        "Duplicate Product Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+
+            // Create the new product entry
+            newProduct = new String[]{productCode, productName, productPrice, productImage};
+
+            // Add the product to the inventoryCategoryDataMap
+            addProductToCategory(inventoryCategoryDataMap, category, newProduct);
+            System.out.println("Product added successfully!");
+
+            // Write the updated inventoryCategoryDataMap back to the CSV
+            saveInventoryToCSV(inventoryCategoryDataMap);
+            System.out.println("Changes saved to CSV.");
+
+            // Show success message
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Product has been added successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+            System.out.println("Updated inventory:");
+             inventoryTable.printInventoryCategoryDataMap(inventoryCategoryDataMap);
+
+            // Clear input fields
+            forProductCodeTextBox.setText("");
+            forProductNameTextBox.setText("");
+            forProductPriceTextBox.setText("");
+            productImage = "";
+
+            System.out.println("Text fields cleared and ready for next input.");
+
+            // Update the inventory table
+            String[][] categoryData = inventoryCategoryDataMap.get(category);
+            if (categoryData != null) {
+                inventoryTable.tableModifier(category, categoryData);
+                System.out.println("Table updated for category: " + category);
+            } else {
+                System.out.println("No data found for category: " + category);
+            }
+
+            // Finalize panel updates
+            panelFinisher(centerContainerPanelUp);
+            panelFinisher(orderPaneCen);
+        }
+
+
+        private boolean isProductExist(String name, String code) {
+            for (String[] product : inventoryCategoryDataMap.get(category)) {
+                if (product[0].equals(code) || product[1].equals(name)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
+    public static class inventoryTable implements ActionListener {
+
+        private int buttonIndex;
+
+        public inventoryTable (int buttonIndex, int length) {
+            this.setButtonIndex(buttonIndex);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            List<String> categoryKeys = new ArrayList<>(inventoryCategoryDataMap.keySet());
+
+            if (buttonIndex >= 0 && buttonIndex < categoryKeys.size()) {
+                String selectedCategory = categoryKeys.get(buttonIndex);
+//				String formattedCategory = Operations.toTitleCase(selectedCategory);
+                String[][] categoryData = inventoryCategoryDataMap.get(selectedCategory);
+
+                if (categoryData != null) {
+                    tableModifier(selectedCategory, categoryData);
+                } else {
+                    System.out.println("No data found for category: " + selectedCategory);
+                }
+
+                for (int i = 0; i < categoryKeys.size(); i++) {
+                    if (i == buttonIndex) {
+                        pillShapeButtonTabs[i].setBackground(color.getChoice());
+                        pillShapeButtonTabsLabel[i].setText(userOperations.toTitleCase(categoryKeys.get(i)));
+                        pillShapeButtonTabsLabel[i].setFont(font.getProductNameBOLD());
+                        pillShapeButtonTabsLabel[i].setForeground(Color.white);
+                    } else {
+                        pillShapeButtonTabs[i].setBackground(centerPanelMainLayer.getBackground());
+                        pillShapeButtonTabsLabel[i].setText(userOperations.toTitleCase(categoryKeys.get(i)));
+                        pillShapeButtonTabsLabel[i].setFont(font.getProductNameREGULAR());
+                        pillShapeButtonTabsLabel[i].setForeground(customColorPallete.medyo_black);
+                    }
+                }
+            } else {
+                System.out.println("Invalid button index: " + buttonIndex);
+            }
+        }
+
+        private void setButtonIndex(int buttonIndex) {
+            this.buttonIndex = buttonIndex;
+        }
+
+
+        static SpringLayout forMainPanelOnCenters = new SpringLayout();
+        static SpringLayout forPerProductPanel = new SpringLayout();
+
+        public static void tableModifier(String category, String[][] menuArray) {
+            mainPanelOnCenter.removeAll();
+
+            mainPanelOnCenter.setBackground(color.getCenterPane());
+            mainPanelOnCenter.setLayout(new BorderLayout());
+
+            int orderWidth = centerPanelMainLayer.getWidth();
+            int orderHeight = 58;
+
+            int size = menuArray.length;
+
+            JPanel mainPanelOnCenters = new JPanel();
+            mainPanelOnCenters.setBackground(mainPanelOnCenter.getBackground());
+            mainPanelOnCenters.setLayout(forMainPanelOnCenters);
+            mainPanelOnCenters.setPreferredSize(new Dimension(orderWidth, size * (orderHeight + 10)));
+
+            mainPanelOnCenter.add(mainPanelOnCenters, BorderLayout.CENTER);
+
+            customRoundedPanel[] perProductPanel = new customRoundedPanel[size];
+            JLabel[] perProduct_productCode = new JLabel[size];
+            JLabel[] perProduct_productName = new JLabel[size];
+            JLabel[] perProduct_productPrice = new JLabel[size];
+
+            for (int i = 0; i < size; i++) {
+                perProductPanel[i] = new customRoundedPanel(25);
+                perProductPanel[i].setBackground(Color.WHITE);
+                perProductPanel[i].setBorder(new EmptyBorder(1, 10, 1, 10));
+                perProductPanel[i].setLayout(forPerProductPanel);
+                perProductPanel[i].setPreferredSize(new Dimension(555, orderHeight));
+
+                String imagePath = "images/products/" + menuArray[i][3];
+                File imageFile = new File(imagePath);
+
+                if (!imageFile.exists() || imageFile == null) {
+                    System.out.println("Image file not found: " + imagePath + ". Using default image.");
+                    imagePath = "images/products/default.png";
+                }
+
+                ImageIcon imageIcon = new ImageIcon(imagePath);
+
+                Image image = imageIcon.getImage();
+                Image resizedImage = image.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+                ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+                JLabel imageLabel = new JLabel(resizedIcon);
+
+                perProduct_productCode[i] = new JLabel();
+                perProduct_productCode[i].setText(menuArray[i][0]);
+                perProduct_productCode[i].setFont(font.getProductNameREGULAR());
+                perProduct_productCode[i].setForeground(color.getHeader());
+
+                perProduct_productName[i] = new JLabel();
+                perProduct_productName[i].setText(menuArray[i][1]);
+                perProduct_productName[i].setFont(font.getProductNameBOLD());
+                perProduct_productName[i].setForeground(color.getHeader());
+
+                perProduct_productPrice[i] = new JLabel();
+                perProduct_productPrice[i].setText("PHP " + menuArray[i][2] + ".00");
+                perProduct_productPrice[i].setFont(font.getProductPriceBOLD());
+                perProduct_productPrice[i].setForeground(color.getHeader());
+
+                perProductPanel[i].add(imageLabel);
+                perProductPanel[i].add(perProduct_productCode[i]);
+                perProductPanel[i].add(perProduct_productName[i]);
+                perProductPanel[i].add(perProduct_productPrice[i]);
+
+                forPerProductPanel.putConstraint(SpringLayout.WEST, imageLabel, 5, SpringLayout.WEST, perProductPanel[i]);
+                forPerProductPanel.putConstraint(SpringLayout.VERTICAL_CENTER, imageLabel, 0, SpringLayout.VERTICAL_CENTER, perProductPanel[i]);
+
+                forPerProductPanel.putConstraint(SpringLayout.WEST, perProduct_productCode[i], 70, SpringLayout.WEST, perProductPanel[i]);
+                forPerProductPanel.putConstraint(SpringLayout.NORTH, perProduct_productCode[i], 10, SpringLayout.NORTH, perProductPanel[i]);
+
+                forPerProductPanel.putConstraint(SpringLayout.WEST, perProduct_productName[i], 70, SpringLayout.WEST, perProductPanel[i]);
+                forPerProductPanel.putConstraint(SpringLayout.NORTH, perProduct_productName[i], 30, SpringLayout.NORTH, perProductPanel[i]);
+
+                forPerProductPanel.putConstraint(SpringLayout.EAST, perProduct_productPrice[i], -20, SpringLayout.EAST, perProductPanel[i]);
+                forPerProductPanel.putConstraint(SpringLayout.NORTH, perProduct_productPrice[i], 15, SpringLayout.NORTH, perProductPanel[i]);
+
+                mainPanelOnCenters.add(perProductPanel[i]);
+            }
+
+            for (int i = 0; i < size; i++) {
+                if (i == 0) {
+                    forMainPanelOnCenters.putConstraint(SpringLayout.NORTH, perProductPanel[i], 10, SpringLayout.NORTH, mainPanelOnCenters);
+                } else {
+                    forMainPanelOnCenters.putConstraint(SpringLayout.NORTH, perProductPanel[i], 10, SpringLayout.SOUTH, perProductPanel[i - 1]);
+                }
+                forMainPanelOnCenters.putConstraint(SpringLayout.WEST, perProductPanel[i], 10, SpringLayout.WEST, mainPanelOnCenters);
+                forMainPanelOnCenters.putConstraint(SpringLayout.EAST, perProductPanel[i], -10, SpringLayout.EAST, mainPanelOnCenters);
+            }
+
+            customScrollBarUI scrollBarUI2 = new customScrollBarUI();
+            scrollBarUI2.setCustomUI(color.getHeader(), Color.GREEN, color.getCenterPane());
+
+            JScrollPane scrollPane = new JScrollPane(mainPanelOnCenters);
+
+            scrollPane.setBorder(BorderFactory.createEmptyBorder());
+            scrollPane.getVerticalScrollBar().setUI(scrollBarUI2);
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+            mainPanelOnCenter.add(scrollPane, BorderLayout.CENTER);
+
+            panelFinisher(mainPanelOnCenter);
+
+            rightPanel(category, menuArray);
+        }
+
+        public static void printInventoryCategoryDataMap(Map<String, String[][]> inventoryCategoryDataMap) {
+            if (inventoryCategoryDataMap == null || inventoryCategoryDataMap.isEmpty()) {
+                System.out.println("The inventoryCategoryDataMap is empty or null.");
+                return;
+            }
+
+            for (Map.Entry<String, String[][]> entry : inventoryCategoryDataMap.entrySet()) {
+                String categoryName = entry.getKey();
+                String[][] data = entry.getValue();
+
+                System.out.println("Category: " + categoryName);
+
+                if (data == null || data.length == 0) {
+                    System.out.println("  No data available for this category.");
+                    continue;
+                }
+
+                for (int i = 0; i < data.length; i++) {
+                    System.out.print("  Row " + i + ": ");
+                    if (data[i] == null) {
+                        System.out.println("null");
+                        continue;
+                    }
+                    for (int j = 0; j < data[i].length; j++) {
+                        System.out.print(data[i][j] + (j < data[i].length - 1 ? ", " : ""));
+                    }
+                    System.out.println();
+                }
+            }
+        }
+
+
+        public static void rightPanel(String category, String[][] menuArray) {
+            orderPaneCen.removeAll();
+            orderPaneCen.setLayout(new BorderLayout());
+
+            orderPaneLabel.setText(category);
+
+            SpringLayout SL = new SpringLayout();
+
+            JPanel forAddRemoveFeature = new JPanel();
+            forAddRemoveFeature.setBackground(orderPaneCen.getBackground());
+            forAddRemoveFeature.setBorder(new EmptyBorder(20,12,0,12));
+            forAddRemoveFeature.setLayout(SL);
+
+            //----
+
+            JLabel forProductNameLabel = new JLabel("Product Name:");
+            forProductNameLabel.setFont(font.getProductNameREGULAR());
+
+            customRoundedPanel productNameTextFieldPanel = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
+
+            forProductNameTextBox = getJTextField("", 250, productNameTextFieldPanel);
+            productNameTextFieldPanel.add(forProductNameTextBox);
+
+            //----
+
+            JLabel forProductCodeLabel = new JLabel("Code:");
+            forProductCodeLabel.setFont(font.getProductNameREGULAR());
+
+            customRoundedPanel productCodeTextFieldPanel = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
+
+            forProductCodeTextBox = getJTextField("", 50, productCodeTextFieldPanel);
+            productCodeTextFieldPanel.add(forProductCodeTextBox);
+
+            //----
+
+            JLabel forProductPriceLabel = new JLabel("Price:");
+            forProductPriceLabel.setFont(font.getProductNameREGULAR());
+
+            customRoundedPanel productPriceTextFieldPanel = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, color.getSearch(), new BorderLayout());
+
+            forProductPriceTextBox = getJTextField("", 100, productPriceTextFieldPanel);
+            productPriceTextFieldPanel.add(forProductPriceTextBox);
+
+            //----
+
+            JButton forImageFetchButton = new JButton("Select an Image File");
+            forImageFetchButton.setFont(font.getProductNameBOLD());
+            forImageFetchButton.setBorder(new EmptyBorder(0,0,0,0));
+            forImageFetchButton.setBackground(color.getCenterPiece());
+            forImageFetchButton.setFocusPainted(F);
+            forImageFetchButton.addActionListener(new ImageFetchActionListener());
+
+            customRoundedPanel imageFetchButtonPanel = customSwingCreate.createCustomRoundedPanel(20, 0, 15, 1, 15, forImageFetchButton.getBackground(), new BorderLayout());
+            imageFetchButtonPanel.setPreferredSize(productCodeTextFieldPanel.getPreferredSize());
+            imageFetchButtonPanel.add(forImageFetchButton);
+
+            forAddRemoveFeature.add(imageFetchButtonPanel);
+
+            SL.putConstraint(SpringLayout.WEST, imageFetchButtonPanel, 10, SpringLayout.WEST, forAddRemoveFeature);
+            SL.putConstraint(SpringLayout.EAST, imageFetchButtonPanel, -10, SpringLayout.EAST, forAddRemoveFeature);
+            SL.putConstraint(SpringLayout.NORTH, imageFetchButtonPanel, 20, SpringLayout.SOUTH, productCodeTextFieldPanel);
+
+
+            // Constraints for Product Name label and text field
+            SL.putConstraint(SpringLayout.WEST, forProductNameLabel, 10, SpringLayout.WEST, forAddRemoveFeature);
+            SL.putConstraint(SpringLayout.NORTH, forProductNameLabel, 10, SpringLayout.NORTH, forAddRemoveFeature);
+
+            SL.putConstraint(SpringLayout.WEST, productNameTextFieldPanel, 10, SpringLayout.WEST, forAddRemoveFeature);
+            SL.putConstraint(SpringLayout.NORTH, productNameTextFieldPanel, 5, SpringLayout.SOUTH, forProductNameLabel);
+            SL.putConstraint(SpringLayout.EAST, productNameTextFieldPanel, -10, SpringLayout.EAST, forAddRemoveFeature);
+
+            // Constraints for Product Code label and text field
+            SL.putConstraint(SpringLayout.WEST, forProductCodeLabel, 10, SpringLayout.WEST, forAddRemoveFeature);
+            SL.putConstraint(SpringLayout.NORTH, forProductCodeLabel, 20, SpringLayout.SOUTH, productNameTextFieldPanel);
+
+            SL.putConstraint(SpringLayout.WEST, productCodeTextFieldPanel, 10, SpringLayout.WEST, forAddRemoveFeature);
+            SL.putConstraint(SpringLayout.NORTH, productCodeTextFieldPanel, 5, SpringLayout.SOUTH, forProductCodeLabel);
+            SL.putConstraint(SpringLayout.EAST, productCodeTextFieldPanel, -250, SpringLayout.EAST, forAddRemoveFeature);
+
+            // Constraints for Product Price label and text field
+            SL.putConstraint(SpringLayout.WEST, forProductPriceLabel, 30, SpringLayout.EAST, productCodeTextFieldPanel);
+            SL.putConstraint(SpringLayout.NORTH, forProductPriceLabel, 0, SpringLayout.NORTH, forProductCodeLabel);
+
+            SL.putConstraint(SpringLayout.WEST, productPriceTextFieldPanel, 30, SpringLayout.EAST, productCodeTextFieldPanel);
+            SL.putConstraint(SpringLayout.NORTH, productPriceTextFieldPanel, 5, SpringLayout.SOUTH, forProductPriceLabel);
+            SL.putConstraint(SpringLayout.EAST, productPriceTextFieldPanel, -10, SpringLayout.EAST, forAddRemoveFeature);
+
+            forAddRemoveFeature.add(forProductNameLabel);
+            forAddRemoveFeature.add(productNameTextFieldPanel);
+            forAddRemoveFeature.add(forProductCodeLabel);
+            forAddRemoveFeature.add(productCodeTextFieldPanel);
+            forAddRemoveFeature.add(forProductPriceLabel);
+            forAddRemoveFeature.add(productPriceTextFieldPanel);
+
+            JLabel removeProductLabel = new JLabel("Remove Product");
+            removeProductLabel.setFont(font.getProductNameBOLD());
+            removeProductLabel.setHorizontalAlignment(CENTER);
+            removeProductLabel.setForeground(Color.WHITE);
+
+            customRoundedPanel removeProductPanel = customSwingCreate.createCustomRoundedPanel(25, 0,0,0,0, color.getCenterPiece(), new BorderLayout());
+            removeProductPanel.add(removeProductLabel, BorderLayout.CENTER);
+
+            removeProductFeature = new JButton();
+            removeProductFeature.setPreferredSize(new Dimension(155, 40));
+            removeProductFeature.setBackground(forAddRemoveFeature.getBackground());
+            removeProductFeature.setBorder(BorderFactory.createEmptyBorder());
+            removeProductFeature.setLayout(new GridLayout(1,1));
+            removeProductFeature.setFocusPainted(F);
+            removeProductFeature.setEnabled(T);
+            removeProductFeature.add(removeProductPanel);
+            removeProductFeature.addActionListener(new adminActionManager.forRemoveProductButton(category));
+
+            JLabel addProductLabel = new JLabel("Add Product");
+            addProductLabel.setFont(font.getProductNameBOLD());
+            addProductLabel.setHorizontalAlignment(CENTER);
+            addProductLabel.setForeground(Color.WHITE);
+
+            customRoundedPanel addProductPanel = customSwingCreate.createCustomRoundedPanel(25, 0,0,0,0, color.getHeader(), new BorderLayout());
+            addProductPanel.add(addProductLabel, BorderLayout.CENTER);
+
+            addProductFeature = new JButton();
+            addProductFeature.setPreferredSize(new Dimension(155, 40));
+            addProductFeature.setBackground(forAddRemoveFeature.getBackground());
+            addProductFeature.setBorder(BorderFactory.createEmptyBorder());
+            addProductFeature.setLayout(new GridLayout(1,1));
+            addProductFeature.setFocusPainted(F);
+            addProductFeature.setEnabled(T);
+            addProductFeature.add(addProductPanel);
+            addProductFeature.addActionListener(new adminActionManager.forAddProductButton(category));
+
+            JPanel forAddRemoveButtons = new JPanel();
+            forAddRemoveButtons.setLayout(new BorderLayout());
+            forAddRemoveButtons.setBackground(forAddRemoveFeature.getBackground());
+            forAddRemoveButtons.add(removeProductFeature, BorderLayout.WEST);
+            forAddRemoveButtons.add(addProductFeature, BorderLayout.EAST);
+
+            forAddRemoveFeature.add(forAddRemoveButtons);
+
+            SL.putConstraint(SpringLayout.WEST, forAddRemoveButtons, 10, SpringLayout.WEST, forAddRemoveFeature);
+            SL.putConstraint(SpringLayout.EAST, forAddRemoveButtons, -10, SpringLayout.EAST, forAddRemoveFeature);
+            SL.putConstraint(SpringLayout.SOUTH, forAddRemoveButtons, -10, SpringLayout.SOUTH, forAddRemoveFeature);
+
+            orderPaneCen.add(forAddRemoveFeature, BorderLayout.CENTER);
+
+            panelFinisher(orderPaneCen);
+        }
+    }
+
+    public static class ImageFetchActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "png"));
+            int result = fileChooser.showOpenDialog(null);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String fileName = selectedFile.getName(); // Get the file name
+                String destinationPath = "images/products/" + fileName; // Specify the destination path
+
+                try {
+                    // Create the directory if it doesn't exist
+                    File dir = new File("images/products");
+                    if (!dir.exists()) {
+                        dir.mkdirs(); // Create the directory structure
+                    }
+
+                    // Copy the file to the destination path
+                    Files.copy(selectedFile.toPath(), Paths.get(destinationPath), StandardCopyOption.REPLACE_EXISTING);
+                    productImage = fileName; // Store the file name for later use
+                    System.out.println("Image selected and copied: " + productImage);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Error copying the image file.",
+                            "File Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            } else {
+                System.out.println("No image selected. Default image will be used.");
+            }
+        }
+    }
 
     public static class viewTransaction implements ActionListener {
         private String transactionID;
@@ -89,26 +642,21 @@ public class adminActionManager extends adminDefinitions {
             orderPaneCen.add(dateTimeLabelValue);
             orderPaneCen.add(purchasesLabel);
 
-
-            // Transaction ID
             layout.putConstraint(SpringLayout.WEST, transactionIDLabel, 20, SpringLayout.WEST, orderPaneCen);
             layout.putConstraint(SpringLayout.NORTH, transactionIDLabel, 10, SpringLayout.NORTH, orderPaneCen);
             layout.putConstraint(SpringLayout.EAST, transactionIDValue, -25, SpringLayout.EAST, orderPaneCen); // Right-aligned
             layout.putConstraint(SpringLayout.NORTH, transactionIDValue, 10, SpringLayout.NORTH, orderPaneCen);
 
-            // Customer
             layout.putConstraint(SpringLayout.WEST, customerLabel, 20, SpringLayout.WEST, orderPaneCen);
             layout.putConstraint(SpringLayout.NORTH, customerLabel, 10, SpringLayout.SOUTH, transactionIDLabel);
             layout.putConstraint(SpringLayout.EAST, customerValue, -25, SpringLayout.EAST, orderPaneCen); // Right-aligned
             layout.putConstraint(SpringLayout.NORTH, customerValue, 10, SpringLayout.SOUTH, transactionIDValue);
 
-            // Date & Time
             layout.putConstraint(SpringLayout.WEST, dateTimeLabel, 20, SpringLayout.WEST, orderPaneCen);
             layout.putConstraint(SpringLayout.NORTH, dateTimeLabel, 10, SpringLayout.SOUTH, customerLabel);
             layout.putConstraint(SpringLayout.EAST, dateTimeLabelValue, -25, SpringLayout.EAST, orderPaneCen); // Right-aligned
             layout.putConstraint(SpringLayout.NORTH, dateTimeLabelValue, 10, SpringLayout.SOUTH, customerValue);
 
-            // Purchases
             layout.putConstraint(SpringLayout.WEST, purchasesLabel, 20, SpringLayout.WEST, orderPaneCen);
             layout.putConstraint(SpringLayout.NORTH, purchasesLabel, 20, SpringLayout.SOUTH, dateTimeLabel);
 
@@ -128,6 +676,8 @@ public class adminActionManager extends adminDefinitions {
 
                 JLabel quantityLabel = new JLabel(quantity + "x");
                 quantityLabel.setFont(font.getProductNameBOLD());
+                quantityLabel.setPreferredSize(new Dimension(20, quantityLabel.getPreferredSize().height));
+                quantityLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
                 JLabel productNameLabel = new JLabel(productName);
                 productNameLabel.setFont(font.getProductNameBOLD());
@@ -179,7 +729,8 @@ public class adminActionManager extends adminDefinitions {
             changeValue.setFont(font.getProductNameBOLD());
 
             JLabel endOfPurchasesLabel = new JLabel("-- End of Purchase --");
-            endOfPurchasesLabel.setFont(font.getProductNameBOLD());
+            endOfPurchasesLabel.setForeground(Color.GRAY);
+            endOfPurchasesLabel.setFont(font.getProductNameREGULAR());
             endOfPurchasesLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
             orderPaneCen.add(grandtotalLabel);
@@ -190,26 +741,22 @@ public class adminActionManager extends adminDefinitions {
             orderPaneCen.add(changeValue);
             orderPaneCen.add(endOfPurchasesLabel);
 
-            // Layout constraints for summary section
 
             int verticalSpacing = 20; // Spacing between summary rows
             int rightMargin = 25;     // Right-side margin for alignment
 
-            // Grandtotal alignment
             layout.putConstraint(SpringLayout.EAST, grandtotalValue, -rightMargin, SpringLayout.EAST, orderPaneCen);
             layout.putConstraint(SpringLayout.NORTH, grandtotalValue, yOffset + verticalSpacing, SpringLayout.NORTH, orderPaneCen);
 
             layout.putConstraint(SpringLayout.EAST, grandtotalLabel, -10, SpringLayout.WEST, grandtotalValue);
             layout.putConstraint(SpringLayout.NORTH, grandtotalLabel, yOffset + verticalSpacing, SpringLayout.NORTH, orderPaneCen);
 
-            // Amount in Cash alignment
             layout.putConstraint(SpringLayout.EAST, amountInCashValue, -rightMargin, SpringLayout.EAST, orderPaneCen);
             layout.putConstraint(SpringLayout.NORTH, amountInCashValue, yOffset + verticalSpacing * 2, SpringLayout.NORTH, orderPaneCen);
 
             layout.putConstraint(SpringLayout.EAST, amountInCashLabel, -10, SpringLayout.WEST, amountInCashValue);
             layout.putConstraint(SpringLayout.NORTH, amountInCashLabel, yOffset + verticalSpacing * 2, SpringLayout.NORTH, orderPaneCen);
 
-            // Change alignment
             layout.putConstraint(SpringLayout.EAST, changeValue, -rightMargin, SpringLayout.EAST, orderPaneCen);
             layout.putConstraint(SpringLayout.NORTH, changeValue, yOffset + verticalSpacing * 3, SpringLayout.NORTH, orderPaneCen);
 
@@ -240,11 +787,11 @@ public class adminActionManager extends adminDefinitions {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            List<String> categoryKeys = new ArrayList<>(categoryDataMap.keySet());
+            List<String> categoryKeys = new ArrayList<>(inventoryCategoryDataMap.keySet());
 
             if (buttonIndex >= 0 && buttonIndex < categoryKeys.size()) {
                 String selectedCategory = categoryKeys.get(buttonIndex);
-                String[][] categoryData = categoryDataMap.get(selectedCategory);
+                String[][] categoryData = inventoryCategoryDataMap.get(selectedCategory);
 
                 if (categoryData != null) {
                     tableModifier(categoryData);
@@ -254,15 +801,15 @@ public class adminActionManager extends adminDefinitions {
 
                 for (int i = 0; i < categoryKeys.size(); i++) {
                     if (i == buttonIndex) {
-                        pillShape[i].setBackground(color.getChoice());
-                        pSLabel[i].setText(userOperations.toTitleCase(categoryKeys.get(i)));
-                        pSLabel[i].setFont(font.getProductNameBOLD());
-                        pSLabel[i].setForeground(Color.DARK_GRAY);
+                        pillShapeButtonTabs[i].setBackground(color.getChoice());
+                        pillShapeButtonTabsLabel[i].setText(userOperations.toTitleCase(categoryKeys.get(i)));
+                        pillShapeButtonTabsLabel[i].setFont(font.getProductNameBOLD());
+                        pillShapeButtonTabsLabel[i].setForeground(Color.DARK_GRAY);
                     } else {
-                        pillShape[i].setBackground(centerPanelMainLayer.getBackground());
-                        pSLabel[i].setText(userOperations.toTitleCase(categoryKeys.get(i)));
-                        pSLabel[i].setFont(font.getProductNameREGULAR());
-                        pSLabel[i].setForeground(Color.GRAY);
+                        pillShapeButtonTabs[i].setBackground(centerPanelMainLayer.getBackground());
+                        pillShapeButtonTabsLabel[i].setText(userOperations.toTitleCase(categoryKeys.get(i)));
+                        pillShapeButtonTabsLabel[i].setFont(font.getProductNameREGULAR());
+                        pillShapeButtonTabsLabel[i].setForeground(Color.GRAY);
                     }
                 }
             } else {
@@ -358,8 +905,8 @@ public class adminActionManager extends adminDefinitions {
 
                 roundedPanelForCancelButton.setBackground(Color.GRAY);
                 roundedPanelForProceedButton.setBackground(Color.GRAY);
-                cancelButton.setEnabled(F);
-                proceedButton.setEnabled(F);
+                addProductFeature.setEnabled(F);
+                removeProductFeature.setEnabled(F);
                 orderRecord.clear();
                 System.out.println("Order is CANCELLED");
             }
@@ -432,8 +979,8 @@ public class adminActionManager extends adminDefinitions {
                     productPrice6s[i].setText("₱" + productPrice[i] + ".00");
                 }
 
-                cancelButton.setEnabled(T);
-                proceedButton.setEnabled(T);
+                addProductFeature.setEnabled(T);
+                removeProductFeature.setEnabled(T);
 
                 roundedPanelForCancelButton.setBackground(color.getLeftSide());
                 roundedPanelForProceedButton.setBackground(color.getLeftSide());
@@ -525,7 +1072,8 @@ public class adminActionManager extends adminDefinitions {
         public void actionPerformed(ActionEvent e) {
             switch (buttonIndex) {
                 case 0 -> {
-                    adminSideButtonFunctions.homeButtonToggle();
+                    adminSideButtonFunctions.inventoryButtonToggle();
+                    inventoryTabsButtons[0].doClick();
                     adminOperations.buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
                 }
                 case 1 -> {
@@ -534,14 +1082,6 @@ public class adminActionManager extends adminDefinitions {
                 }
                 case 2 -> {
                     adminSideButtonFunctions.salesButtonToggle();
-                    adminOperations.buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
-                }
-                case 3 -> {
-                    adminSideButtonFunctions.inventoryButtonToggle();
-                    adminOperations.buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
-                }
-                case 4 -> {
-                    adminSideButtonFunctions.categoriesButtonToggle();
                     adminOperations.buttonColorReset(sideRibbonRoundedPanels, buttonIndex, color.getInactiveButton(), color.getChoice());
                 }
             }

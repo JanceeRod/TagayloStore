@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -70,91 +71,6 @@ public class userSideButtonFunctions extends userDefinitions {
 
             centerPanelMainLayer.add(button2_[j]);
         }
-        panelFinisher(centerContainerPanelUp);
-    }
-
-    public void inventoryButtonToggle() {
-        centerPanelMainLayer.removeAll();
-        mainPanelOnCenter.removeAll();
-
-        centerPanelMainLayer.setBackground(color.getCenterPiece());
-        centerPanelMainLayer.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        centerPanelMainLayer.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-
-        int[] arrayLengths = new int[arrayOf2DArrays.size()];
-        int i = 0;
-        for (Map.Entry<String, String[][]> entry : arrayOf2DArrays.entrySet()) {
-            String[][] array2D = entry.getValue();
-
-            int length = array2D.length;
-            arrayLengths[i] = length;
-            i++;
-        }
-
-        int size = arrayOf2DArrays.size();
-        button2_ = new JButton[size];
-        pillShape = new customRoundedPanel[size];
-        pSLabel = new JLabel[size];
-        for (int j = 0; j < button2_.length; j++) {
-            button2_[j] = new JButton();
-            button2_[j].setBackground(centerPanelMainLayer.getBackground());
-            button2_[j].setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            button2_[j].setEnabled(T);
-            button2_[j].setPreferredSize(new Dimension(75, 34));
-            button2_[j].addActionListener(new menuTable(j, arrayLengths[j]));
-
-            pillShape[j] = new customRoundedPanel(25);
-            pillShape[j].setBackground(centerPanelMainLayer.getBackground());
-            pillShape[j].setBorder(new EmptyBorder(0, 0, 0, 0));
-            pillShape[j].setLayout(new GridLayout(1,1));
-            button2_[j].add(pillShape[j]);
-
-            pSLabel[j] = new JLabel();
-            Set<String> arrayNames = arrayOf2DArrays.keySet();
-            if (j < arrayNames.size()) {
-                String arrayName = (String) arrayNames.toArray()[j];
-                pSLabel[j].setText(arrayName);
-            }
-            pSLabel[j].setHorizontalAlignment(SwingConstants.CENTER);
-            pSLabel[j].setFont(font.getProductNameREGULAR());
-            pSLabel[j].setForeground(Color.GRAY);
-
-            pillShape[j].add(pSLabel[j]);
-
-            centerPanelMainLayer.add(button2_[j]);
-        }
-
-        updateIndicator();
-        panelFinisher(centerContainerPanelUp);
-    }
-
-    public void customersButtonToggle() {
-        centerPanelMainLayer.removeAll();
-        mainPanelOnCenter.removeAll();
-
-        updateIndicator();
-
-        centerPanelMainLayer.setBackground(Color.MAGENTA);
-        panelFinisher(centerContainerPanelUp);
-    }
-
-    public void cashierButtonToggle() {
-        centerPanelMainLayer.removeAll();
-        mainPanelOnCenter.removeAll();
-
-        updateIndicator();
-
-        centerPanelMainLayer.setBackground(Color.BLUE);
-        panelFinisher(centerContainerPanelUp);
-    }
-
-    public void salesButtonToggle() {
-        centerPanelMainLayer.removeAll();
-        mainPanelOnCenter.removeAll();
-
-        updateIndicator();
-
-        centerPanelMainLayer.setBackground(Color.ORANGE);
         panelFinisher(centerContainerPanelUp);
     }
 
@@ -252,9 +168,67 @@ public class userSideButtonFunctions extends userDefinitions {
                 panel5_[i].setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
                 panel5_[i].setLayout(new BorderLayout(1,1));
 
-                ImageIcon imageIcon = new ImageIcon("images/products/" + menuArray[i][3]);
-                JLabel imageLabel = new JLabel(imageIcon);
-                panel5_[i].add(imageLabel, BorderLayout.CENTER);
+                String imagePath = "images/products/" + menuArray[i][3];
+                File imageFile = new File(imagePath);
+
+                if (!imageFile.exists() || imageFile == null) {
+                    System.out.println("Image file not found: " + imagePath + ". Using default image.");
+                    imagePath = "images/products/default.png";
+                }
+
+                JPanel panelForImage = new JPanel();
+                panelForImage.setBackground(Color.WHITE);
+                panelForImage.setBorder(new EmptyBorder(10, 10, 10, 10));
+                panelForImage.setLayout(new BorderLayout());
+
+                ImageIcon imageIcon = new ImageIcon(imagePath);
+                Image image = imageIcon.getImage();
+
+                JLabel imageLabel = new JLabel();
+                panelForImage.add(imageLabel, BorderLayout.CENTER);
+
+                // Add a ComponentListener to handle resizing
+                panelForImage.addComponentListener(new ComponentAdapter() {
+                    @Override
+                    public void componentResized(ComponentEvent e) {
+                        int panelWidth = panelForImage.getWidth();
+                        int panelHeight = panelForImage.getHeight();
+
+                        if (panelWidth > 0 && panelHeight > 0) {
+                            // Calculate the new dimensions while maintaining the aspect ratio
+                            double imageWidth = image.getWidth(null);
+                            double imageHeight = image.getHeight(null);
+
+                            double panelAspectRatio = (double) panelWidth / panelHeight;
+                            double imageAspectRatio = imageWidth / imageHeight;
+
+                            int newWidth, newHeight;
+
+                            if (panelAspectRatio > imageAspectRatio) {
+                                // Panel is wider than the image, fit by height
+                                newHeight = panelHeight;
+                                newWidth = (int) (imageAspectRatio * newHeight);
+                            } else {
+                                // Panel is taller than the image, fit by width
+                                newWidth = panelWidth;
+                                newHeight = (int) (newWidth / imageAspectRatio);
+                            }
+
+                            // Scale the image dynamically
+                            Image resizedImage = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+                            ImageIcon resizedIcon = new ImageIcon(resizedImage);
+                            imageLabel.setIcon(resizedIcon);
+
+                            // Center the image in the panel
+                            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+                        }
+                    }
+                });
+
+
+                panel5_[i].add(panelForImage, BorderLayout.CENTER);
+
 
                 productName[i] = new JLabel();
                 productName[i].setText(menuArray[i][1]);

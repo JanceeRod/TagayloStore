@@ -1,11 +1,25 @@
 package A_Package;
 
+import G_Package.customRoundedPanel;
+
 import javax.swing.*;
 import java.awt.*;
 
 import static javax.swing.SwingConstants.CENTER;
 
 public class adminOperations extends adminDefinitions {
+
+    public static JTextField getJTextField(String text, int textBoxWidth, customRoundedPanel colorReference) {
+        JTextField textBox = new JTextField(text);
+        textBox.setPreferredSize(new Dimension(textBoxWidth, 29));
+        textBox.setCaretPosition(0);
+        textBox.setFont(font.getProductNameBOLD());
+        textBox.setBackground(colorReference.getBackground());
+        textBox.setForeground(Color.GRAY);
+        textBox.setHorizontalAlignment(SwingConstants.LEFT);
+        textBox.setBorder(BorderFactory.createEmptyBorder());
+        return textBox;
+    }
 
     public static void panelFinisher(JPanel panel) {
         panel.revalidate();
