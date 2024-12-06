@@ -13,6 +13,52 @@ public class manageCategories {
         loadCategoriesFromCSV();
     }
 
+    public static void saveInventoryToCSV(Map<String, String[][]> inventoryCategoryDataMap) {
+        // Create a map of category codes to file names based on categories list
+        Map<String, String> categoryFileMap = new HashMap<>();
+        for (Category category : categories) {
+            String fileNameWithoutExtension = category.getFileName().replace(".csv", "");
+            categoryFileMap.put(fileNameWithoutExtension, category.getFileName());
+
+            System.out.println(category.getFileName());
+        }
+
+        debugPrintCategoryFileMap(categoryFileMap);
+
+        // Iterate over inventoryCategoryDataMap to write data to files
+        for (Map.Entry<String, String[][]> entry : inventoryCategoryDataMap.entrySet()) {
+            String category = entry.getKey();
+            String[][] products = entry.getValue();
+
+            String fileName = categoryFileMap.get(category);
+            if (fileName == null) {
+                System.out.println("No file mapped for category: " + category);
+                continue; // Skip if no file is associated
+            }
+
+            // Write the products to the file
+            File file = new File(category + ".csv");
+            try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
+                for (String[] product : products) {
+                    pw.println(String.join(",", product));
+                }
+                System.out.println("Updated CSV file for category: " + category + " -> " + fileName);
+            } catch (IOException e) {
+                System.out.println("Error writing to file: " + file.getAbsolutePath());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void debugPrintCategoryFileMap(Map<String, String> categoryFileMap) {
+        System.out.println("Contents of categoryFileMap:");
+        for (Map.Entry<String, String> entry : categoryFileMap.entrySet()) {
+            System.out.println("  Category Code: " + entry.getKey() + " -> File Name: " + entry.getValue());
+        }
+    }
+
+
+
     public static void addProductToCategory(Map<String, String[][]> inventoryCategoryDataMap, String category, String[] newProduct) {
         if (!inventoryCategoryDataMap.containsKey(category)) {
             System.out.println("Category " + category + " does not exist. Adding a new category.");

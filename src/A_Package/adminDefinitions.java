@@ -137,7 +137,7 @@ public class adminDefinitions {
 
 
     //graphics
-    static customColorPallete color = new customColorPallete();
+    public static customColorPallete color = new customColorPallete();
     static customFontGallery font = new customFontGallery();
 
     static String productImage;

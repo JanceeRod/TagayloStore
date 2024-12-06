@@ -25,6 +25,7 @@ import java.util.Map;
 import static A_Package.adminOperations.getJTextField;
 import static A_Package.adminOperations.panelFinisher;
 import static C_Package.manageCategories.addProductToCategory;
+import static C_Package.manageCategories.saveInventoryToCSV;
 import static T_Package.TransactionManager.getPurchases;
 import static javax.swing.SwingConstants.CENTER;
 
@@ -69,6 +70,8 @@ public class adminActionManager extends adminDefinitions {
             }
 
             forProductCodeTextBox.setText("");
+
+            saveInventoryToCSV(inventoryCategoryDataMap);
         }
 
         public static boolean removeProductFromCategory(Map<String, String[][]> inventoryCategoryDataMap, String category, String productCode) {
@@ -118,9 +121,6 @@ public class adminActionManager extends adminDefinitions {
             String productCode = forProductCodeTextBox.getText().trim();
             String productName = forProductNameTextBox.getText().trim();
             String productPrice = forProductPriceTextBox.getText().trim();
-            if (productImage == null || productImage.isEmpty()) {
-                productImage = "default.png";  // Use default if no image was selected
-            }
 
             if (productCode.isEmpty() || productName.isEmpty() || productPrice.isEmpty()) {
                 JOptionPane.showMessageDialog(
@@ -142,11 +142,18 @@ public class adminActionManager extends adminDefinitions {
                 return;
             }
 
+            // Create the new product entry
             newProduct = new String[]{productCode, productName, productPrice, productImage};
 
+            // Add the product to the inventoryCategoryDataMap
             addProductToCategory(inventoryCategoryDataMap, category, newProduct);
             System.out.println("Product added successfully!");
 
+            // Write the updated inventoryCategoryDataMap back to the CSV
+            saveInventoryToCSV(inventoryCategoryDataMap);
+            System.out.println("Changes saved to CSV.");
+
+            // Show success message
             JOptionPane.showMessageDialog(
                     null,
                     "Product has been added successfully!",
@@ -155,18 +162,17 @@ public class adminActionManager extends adminDefinitions {
             );
 
             System.out.println("Updated inventory:");
-//            inventoryTable.printInventoryCategoryDataMap(inventoryCategoryDataMap);
+             inventoryTable.printInventoryCategoryDataMap(inventoryCategoryDataMap);
 
+            // Clear input fields
             forProductCodeTextBox.setText("");
             forProductNameTextBox.setText("");
             forProductPriceTextBox.setText("");
-
-            productCode = "";
-            productName = "";
-            productPrice = "";
+            productImage = "";
 
             System.out.println("Text fields cleared and ready for next input.");
 
+            // Update the inventory table
             String[][] categoryData = inventoryCategoryDataMap.get(category);
             if (categoryData != null) {
                 inventoryTable.tableModifier(category, categoryData);
@@ -175,9 +181,11 @@ public class adminActionManager extends adminDefinitions {
                 System.out.println("No data found for category: " + category);
             }
 
+            // Finalize panel updates
             panelFinisher(centerContainerPanelUp);
             panelFinisher(orderPaneCen);
         }
+
 
         private boolean isProductExist(String name, String code) {
             for (String[] product : inventoryCategoryDataMap.get(category)) {
@@ -265,18 +273,25 @@ public class adminActionManager extends adminDefinitions {
             for (int i = 0; i < size; i++) {
                 perProductPanel[i] = new customRoundedPanel(25);
                 perProductPanel[i].setBackground(Color.WHITE);
-                perProductPanel[i].setBorder(new EmptyBorder(1, 0, 1, 10));
+                perProductPanel[i].setBorder(new EmptyBorder(1, 10, 1, 10));
                 perProductPanel[i].setLayout(forPerProductPanel);
                 perProductPanel[i].setPreferredSize(new Dimension(555, orderHeight));
 
-                ImageIcon imageIcon = new ImageIcon("images/products/" + menuArray[i][3]);
+                String imagePath = "images/products/" + menuArray[i][3];
+                File imageFile = new File(imagePath);
+
+                if (!imageFile.exists() || imageFile == null) {
+                    System.out.println("Image file not found: " + imagePath + ". Using default image.");
+                    imagePath = "images/products/default.png";
+                }
+
+                ImageIcon imageIcon = new ImageIcon(imagePath);
 
                 Image image = imageIcon.getImage();
                 Image resizedImage = image.getScaledInstance(48, 48, Image.SCALE_SMOOTH);
                 ImageIcon resizedIcon = new ImageIcon(resizedImage);
 
                 JLabel imageLabel = new JLabel(resizedIcon);
-                imageLabel.setPreferredSize(new Dimension(89, 89));
 
                 perProduct_productCode[i] = new JLabel();
                 perProduct_productCode[i].setText(menuArray[i][0]);
@@ -301,10 +316,10 @@ public class adminActionManager extends adminDefinitions {
                 forPerProductPanel.putConstraint(SpringLayout.WEST, imageLabel, 5, SpringLayout.WEST, perProductPanel[i]);
                 forPerProductPanel.putConstraint(SpringLayout.VERTICAL_CENTER, imageLabel, 0, SpringLayout.VERTICAL_CENTER, perProductPanel[i]);
 
-                forPerProductPanel.putConstraint(SpringLayout.WEST, perProduct_productCode[i], 90, SpringLayout.WEST, perProductPanel[i]);
+                forPerProductPanel.putConstraint(SpringLayout.WEST, perProduct_productCode[i], 70, SpringLayout.WEST, perProductPanel[i]);
                 forPerProductPanel.putConstraint(SpringLayout.NORTH, perProduct_productCode[i], 10, SpringLayout.NORTH, perProductPanel[i]);
 
-                forPerProductPanel.putConstraint(SpringLayout.WEST, perProduct_productName[i], 90, SpringLayout.WEST, perProductPanel[i]);
+                forPerProductPanel.putConstraint(SpringLayout.WEST, perProduct_productName[i], 70, SpringLayout.WEST, perProductPanel[i]);
                 forPerProductPanel.putConstraint(SpringLayout.NORTH, perProduct_productName[i], 30, SpringLayout.NORTH, perProductPanel[i]);
 
                 forPerProductPanel.putConstraint(SpringLayout.EAST, perProduct_productPrice[i], -20, SpringLayout.EAST, perProductPanel[i]);

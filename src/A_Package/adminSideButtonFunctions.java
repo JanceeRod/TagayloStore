@@ -3,6 +3,7 @@ package A_Package;
 import G_Package.customRoundedPanel;
 import G_Package.customScrollBarUI;
 import G_Package.customSwingCreate;
+import S_Package.salesBarChart;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,20 +17,6 @@ import static A_Package.adminOperations.panelFinisher;
 import static javax.swing.SwingConstants.CENTER;
 
 public class adminSideButtonFunctions extends adminDefinitions {
-
-    public static void homeButtonToggle() {
-        centerPanelMainLayer.removeAll();
-        mainPanelOnCenter.removeAll();
-
-        mainPanelOnCenter.setBackground(color.getCenterPane());
-
-        orderPaneCen.removeAll();
-
-        adminOperations.updateIndicator("Oten");
-
-        centerPanelMainLayer.setBackground(Color.BLUE);
-        panelFinisher(centerContainerPanelUp);
-    }
 
     public static void transactionHistoryButtonToggle() {
         centerPanelMainLayer.removeAll();
@@ -157,68 +144,80 @@ public class adminSideButtonFunctions extends adminDefinitions {
         mainPanelOnCenter.removeAll();
         orderPaneCen.removeAll();
 
-        mainPanelOnCenter.setBackground(Color.RED);
-
-        orderPaneLabel.setText("QUICK ACTIONS");
-
-        JLabel title = customSwingCreate.createCustomLabel("SALES", Color.white, font.getProductPriceBOLD(), 0, 0, 0, 0, 0, 0, 0, 0, CENTER);
-        centerPanelMainLayer.add(title);
+        orderPaneLabel.setText("SALES DETAILS");
 
         centerPanelMainLayer.setBackground(color.getCenterPiece());
+        centerPanelMainLayer.setLayout(new BorderLayout());
 
-        int size = manager.getTransactionCount();
-        int orderWidth = centerPanelMainLayer.getWidth();
-        int orderHeight = 58;
+        mainPanelOnCenter.setBackground(color.getCenterPane());
 
-        SpringLayout SL = new SpringLayout();
+        JLabel title = customSwingCreate.createCustomLabel(
+                "SALES CHARTS", Color.WHITE, font.getProductPriceBOLD(),
+                0, 0, 0, 0, 0, 0, 0, 0, CENTER
+        );
+        centerPanelMainLayer.add(title, BorderLayout.CENTER);
+
+        int size = 4; // Number of panels
+        int panelHeight = 350; // Height of each sales chart panel
+        int panelGap = 10; // Gap between panels
+        int orderWidth = centerPanelMainLayer.getWidth(); // Get the width of the main container
+
+        SpringLayout layout = new SpringLayout();
         mainPanelOnCenters = new JPanel();
         mainPanelOnCenters.setBackground(mainPanelOnCenter.getBackground());
-        mainPanelOnCenters.setLayout(SL);
-        mainPanelOnCenters.setPreferredSize(new Dimension(orderWidth, size * (orderHeight + 10)));
+        mainPanelOnCenters.setLayout(layout);
 
-        customRoundedPanel[] salesChartPanels = new customRoundedPanel[4];
+        // Calculate preferred size based on the number of panels
+        mainPanelOnCenters.setPreferredSize(new Dimension(orderWidth, size * (panelHeight + panelGap) + panelGap));
 
-        for (int i = 0; i < 4; i++) {
+        customRoundedPanel[] salesChartPanels = new customRoundedPanel[size];
+
+        // Create and add panels to mainPanelOnCenters
+        for (int i = 0; i < size; i++) {
             salesChartPanels[i] = new customRoundedPanel(25);
-            salesChartPanels[i].setBackground(Color.BLUE);
+            salesChartPanels[i].setBackground(Color.WHITE);
             salesChartPanels[i].setBorder(BorderFactory.createEmptyBorder());
-
-            salesChartPanels[i].setPreferredSize(new Dimension(mainPanelOnCenter.getWidth() - 50, 150));
+            salesChartPanels[i].setPreferredSize(new Dimension(0, panelHeight)); // Width dynamically adjusted by layout
 
             mainPanelOnCenters.add(salesChartPanels[i]);
 
             if (i == 0) {
-                // Attach the first panel to the top of the container
-                SL.putConstraint(SpringLayout.NORTH, salesChartPanels[i], 10, SpringLayout.NORTH, mainPanelOnCenter);
+                layout.putConstraint(SpringLayout.NORTH, salesChartPanels[i], panelGap, SpringLayout.NORTH, mainPanelOnCenters);
             } else {
-                // Attach subsequent panels below the previous one
-                SL.putConstraint(SpringLayout.NORTH, salesChartPanels[i], 10, SpringLayout.SOUTH, salesChartPanels[i - 1]);
+                layout.putConstraint(SpringLayout.NORTH, salesChartPanels[i], panelGap, SpringLayout.SOUTH, salesChartPanels[i - 1]);
             }
 
-            // Center the panels horizontally
-            SL.putConstraint(SpringLayout.HORIZONTAL_CENTER, salesChartPanels[i], 0, SpringLayout.HORIZONTAL_CENTER, mainPanelOnCenter);
+            layout.putConstraint(SpringLayout.WEST, salesChartPanels[i], panelGap, SpringLayout.WEST, mainPanelOnCenters);
+            layout.putConstraint(SpringLayout.EAST, salesChartPanels[i], -panelGap, SpringLayout.EAST, mainPanelOnCenters);
         }
 
-        customScrollBarUI scrollBarUI2 = new customScrollBarUI();
-        scrollBarUI2.setCustomUI(color.getHeader(), Color.GREEN, color.getCenterPane());
+        // Add salesBarChart to salesChartPanels[0]
+        JPanel salesChartPanel = salesChartPanels[0];
+        salesBarChart barChart = new salesBarChart(salesChartPanel);
+        salesBarChart.displaySalesChart(); // Load and display the bar chart data
+
+        // Create a scrollable pane
+        customScrollBarUI scrollBarUI = new customScrollBarUI();
+        scrollBarUI.setCustomUI(color.getHeader(), Color.GREEN, color.getCenterPane());
 
         JScrollPane scrollPane = new JScrollPane(mainPanelOnCenters);
-
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.getVerticalScrollBar().setUI(scrollBarUI2);
+        scrollPane.getVerticalScrollBar().setUI(scrollBarUI);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        mainPanelOnCenter.add(scrollPane);
+        // Add the scrollPane to mainPanelOnCenter
+        mainPanelOnCenter.setLayout(new BorderLayout());
+        mainPanelOnCenter.add(scrollPane, BorderLayout.CENTER);
 
-//        new salesBarChart(mainPanelOnCenter);
-//        salesBarChart.displaySalesChart();
-
+        // Finalize panels
         panelFinisher(orderPaneCen);
         panelFinisher(centerContainerPanelUp);
     }
 
-    public static void inventoryButtonToggle() {
+
+
+    public static void inventoryButtonToggle()  {
         centerPanelMainLayer.removeAll();
         mainPanelOnCenter.removeAll();
         orderPaneCen.removeAll();
