@@ -157,7 +157,7 @@ public class adminSideButtonFunctions extends adminDefinitions {
         );
         centerPanelMainLayer.add(title, BorderLayout.CENTER);
 
-        int size = 4; // Number of panels
+        int size = 5; // Number of panels
         int panelHeight = 350; // Height of each sales chart panel
         int panelGap = 10; // Gap between panels
         int orderWidth = centerPanelMainLayer.getWidth(); // Get the width of the main container
@@ -172,12 +172,23 @@ public class adminSideButtonFunctions extends adminDefinitions {
 
         customRoundedPanel[] salesChartPanels = new customRoundedPanel[size];
 
+        JPanel[] afterSalesChartPanels = new JPanel[size];
+
+        JPanel[] chart = new JPanel[size];
+        String[] filter = {"last5Days", "2024", "2023", "2022", "yearly"};
+
         // Create and add panels to mainPanelOnCenters
         for (int i = 0; i < size; i++) {
             salesChartPanels[i] = new customRoundedPanel(25);
             salesChartPanels[i].setBackground(Color.WHITE);
-            salesChartPanels[i].setBorder(BorderFactory.createEmptyBorder());
+            salesChartPanels[i].setBorder(new EmptyBorder(0, 15, 0, 15));
             salesChartPanels[i].setPreferredSize(new Dimension(0, panelHeight)); // Width dynamically adjusted by layout
+            salesChartPanels[i].setLayout(new BorderLayout());
+
+            afterSalesChartPanels[i] = new JPanel();
+            afterSalesChartPanels[i].setBackground(Color.GREEN);
+
+            salesChartPanels[i].add(afterSalesChartPanels[i]);
 
             mainPanelOnCenters.add(salesChartPanels[i]);
 
@@ -189,12 +200,11 @@ public class adminSideButtonFunctions extends adminDefinitions {
 
             layout.putConstraint(SpringLayout.WEST, salesChartPanels[i], panelGap, SpringLayout.WEST, mainPanelOnCenters);
             layout.putConstraint(SpringLayout.EAST, salesChartPanels[i], -panelGap, SpringLayout.EAST, mainPanelOnCenters);
-        }
 
-        // Add salesBarChart to salesChartPanels[0]
-        JPanel salesChartPanel = salesChartPanels[0];
-        salesBarChart barChart = new salesBarChart(salesChartPanel);
-        salesBarChart.displaySalesChart(); // Load and display the bar chart data
+            chart[i] = afterSalesChartPanels[i];
+            salesBarChart barChart = new salesBarChart(chart[i], filter[i]);
+            salesBarChart.displaySalesChart();
+        }
 
         // Create a scrollable pane
         customScrollBarUI scrollBarUI = new customScrollBarUI();
